@@ -13,7 +13,7 @@ service = build('youtube','v3', developerKey=api_key)
 
 nextPageToken = None
 
-with open('tradwife.csv', 'w') as results:
+with open('tradwife.csv', 'w', newline='', encoding='utf-8') as results:
     csvwrite = csv.writer(results)
     csvwrite.writerow(['Video ID', 'Title', 'Channel', 'Published At'])
     while True:
