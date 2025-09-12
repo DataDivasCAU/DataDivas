@@ -1,0 +1,72 @@
+{
+  "firstElection": [
+    {
+      "party": "CDU",
+      "posts": 712
+    },
+    {
+      "party": "CSU",
+      "posts": 275
+    },
+    {
+      "party": "FDP",
+      "posts": 477
+    },
+    {
+      "party": "AfD",
+      "posts": 901
+    },
+    {
+      "party": "SPD",
+      "posts": 420
+    },
+    {
+      "party": "Gruene",
+      "posts": 396
+    },
+    {
+      "party": "Linke",
+      "posts": 608
+    },
+    {
+      "party": "BSW",
+      "posts": 0
+    }
+  ],
+  "secondElection": [
+    {
+      "party": "CDU",
+      "posts": 685
+    },
+    {
+      "party": "CSU",
+      "posts": 218
+    },
+    {
+      "party": "FDP",
+      "posts": 601
+    },
+    {
+      "party": "AfD",
+      "posts": 1309
+    },
+    {
+      "party": "SPD",
+      "posts": 1131
+    },
+    {
+      "party": "Gruene",
+      "posts": 472
+    },
+    {
+      "party": "Linke",
+      "posts": 809
+    },
+    {
+      "party": "BSW",
+      "posts": 288
+    }
+  ],
+  "firstElectionParty": "",
+  "secondElectionParty": ""
+}

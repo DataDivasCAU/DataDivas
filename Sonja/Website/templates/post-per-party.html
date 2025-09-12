@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamische Tabelle + Tortendiagramm</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <h1 class="text-2xl font-bold mb-4">Posts per Party</h1>
+
+  <!-- Dropdown -->
+  <div class="mb-4 space-x-2">
+    <label for="dataset" class="font-medium">Wahlperiode:</label>
+    <select id="dataset" class="border rounded p-2">
+      <option value="firstElection">First Election</option>
+      <option value="secondElection">Second Election</option>
+      <option value="both">Beide Wahlen</option>
+    </select>
+  </div>
+
+  <!-- Tabelle -->
+  <div class="overflow-x-auto shadow rounded-2xl mb-8">
+    <table id="partyTable" class="min-w-full border-collapse bg-white">
+      <thead>
+        <tr class="bg-gray-100 text-left" id="tableHead"></tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot id="tableFoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- Chart -->
+  <div class="max-w-xl">
+    <canvas id="pieChart"></canvas>
+  </div>
+
+  <script>
+    let json = {};
+    let currentPeriod = "firstElection";
+    let chart;
+    let sortState = { key: null, dir: 1 }; // 1 = asc, -1 = desc
+
+    // Tabellenkopf dynamisch mit Sortierfunktion
+    function renderHeader(columns) {
+      const thead = document.getElementById("tableHead");
+      thead.innerHTML = "";
+      columns.forEach(col => {
+        const th = document.createElement("th");
+        th.className = "px-4 py-2 border-b cursor-pointer select-none";
+        th.dataset.sort = col.key;
+        th.textContent = col.label + " " + (sortState.key === col.key ? (sortState.dir === 1 ? "▲" : "▼") : "▲▼");
+        th.addEventListener("click", () => {
+          if (sortState.key === col.key) {
+            sortState.dir *= -1;
+          } else {
+            sortState.key = col.key;
+            sortState.dir = 1;
+          }
+          refresh();
+        });
+        thead.appendChild(th);
+      });
+    }
+
+    function renderTable(rows) {
+      const tbody = document.querySelector("#partyTable tbody");
+      const tfoot = document.getElementById("tableFoot");
+      tbody.innerHTML = "";
+      tfoot.innerHTML = "";
+
+      if (currentPeriod === "both") {
+        const map1 = new Map((json.firstElection || []).map(r => [r.party, r.posts]));
+        const map2 = new Map((json.secondElection || []).map(r => [r.party, r.posts]));
+        const parties = [...new Set([...map1.keys(), ...map2.keys()])];
+
+        if (parties.length === 0) {
+          renderHeader([{ key: "none", label: "Keine Daten verfügbar" }]);
+          return;
+        }
+
+        renderHeader([
+          { key: "party", label: "Partei" },
+          { key: "first", label: "First Election" },
+          { key: "second", label: "Second Election" }
+        ]);
+
+        let data = parties.map(p => ({
+          party: p,
+          first: map1.get(p) || 0,
+          second: map2.get(p) || 0
+        }));
+
+        // Sortieren
+        if (sortState.key) {
+          data.sort((a, b) => {
+            const va = a[sortState.key];
+            const vb = b[sortState.key];
+            if (va < vb) return -1 * sortState.dir;
+            if (va > vb) return  1 * sortState.dir;
+            return 0;
+          });
+        }
+
+        let sum1 = 0, sum2 = 0;
+        data.forEach(row => {
+          sum1 += row.first; sum2 += row.second;
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-gray-50 transition-colors";
+          tr.innerHTML = `
+            <td class="px-4 py-2 border-b font-medium">${row.party}</td>
+            <td class="px-4 py-2 border-b">${row.first}</td>
+            <td class="px-4 py-2 border-b">${row.second}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        tfoot.innerHTML = `
+          <tr class="bg-gray-50 font-semibold">
+            <td class="px-4 py-2 border-t">Summe</td>
+            <td class="px-4 py-2 border-t">${sum1}</td>
+            <td class="px-4 py-2 border-t">${sum2}</td>
+          </tr>
+        `;
+      } else {
+        if (!rows || rows.length === 0) {
+          renderHeader([{ key: "none", label: "Keine Daten verfügbar" }]);
+          return;
+        }
+
+        renderHeader([
+          { key: "party", label: "Partei" },
+          { key: "posts", label: "Posts" }
+        ]);
+
+        let data = rows.slice();
+
+        if (sortState.key) {
+          data.sort((a, b) => {
+            const va = a[sortState.key];
+            const vb = b[sortState.key];
+            if (va < vb) return -1 * sortState.dir;
+            if (va > vb) return  1 * sortState.dir;
+            return 0;
+          });
+        }
+
+        let sum = 0;
+        data.forEach(row => {
+          sum += row.posts;
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-gray-50 transition-colors";
+          tr.innerHTML = `
+            <td class="px-4 py-2 border-b font-medium">${row.party}</td>
+            <td class="px-4 py-2 border-b">${row.posts}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        tfoot.innerHTML = `
+          <tr class="bg-gray-50 font-semibold">
+            <td class="px-4 py-2 border-t">Summe</td>
+            <td class="px-4 py-2 border-t">${sum}</td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderChart(rows) {
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      if (chart) chart.destroy();
+
+      if (currentPeriod === "both") return;
+
+      if (!rows || rows.length === 0) return;
+      const labels = rows.map(r => r.party);
+      const values = rows.map(r => r.posts);
+      const total = values.reduce((a, b) => a + b, 0);
+
+      chart = new Chart(ctx, {
+        type: "pie",
+        data: { labels, datasets: [{ data: values, backgroundColor: ["#2563eb","#16a34a","#dc2626","#f59e0b","#7c3aed","#0891b2","#d946ef","#6b7280"] }] },
+        options: {
+          plugins: {
+            legend: { position: "right" },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw;
+                  const percent = ((value / total) * 100).toFixed(1);
+                  return `${context.label}: ${value} (${percent}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function refresh() {
+      if (currentPeriod === "both") {
+        renderTable([]);
+        renderChart([]);
+      } else {
+        const rows = json[currentPeriod] || [];
+        renderTable(rows);
+        renderChart(rows);
+      }
+    }
+
+    document.getElementById("dataset").addEventListener("change", e => {
+      currentPeriod = e.target.value;
+      refresh();
+    });
+
+    fetch("/data.json")
+      .then(res => res.json())
+      .then(data => { json = data; refresh(); })
+      .catch(err => console.error("Fehler beim Laden von /data.json:", err));
+  </script>
+</body>
+</html>
