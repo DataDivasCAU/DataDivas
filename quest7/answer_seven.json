@@ -1,0 +1,47 @@
+{
+     "2020": {
+          "videos": 2,
+          "views": 725796,
+          "likes": 12657
+     },
+     "2021": {
+          "videos": 2,
+          "views": 609189,
+          "likes": 6190
+     },
+     "2022": {
+          "videos": 2,
+          "views": 514651,
+          "likes": 15390
+     },
+     "2023": {
+          "videos": 48,
+          "views": 22202690,
+          "likes": 1244655
+     },
+     "2024_first_third": {
+          "videos": 33,
+          "views": 10751468,
+          "likes": 591883
+     },
+     "2024_second_third": {
+          "videos": 58,
+          "views": 27729825,
+          "likes": 1293452
+     },
+     "2024_third_third": {
+          "videos": 50,
+          "views": 3632941,
+          "likes": 140073
+     },
+     "2025_first_third": {
+          "videos": 80,
+          "views": 13996635,
+          "likes": 475216
+     },
+     "2025_second_third": {
+          "videos": 186,
+          "views": 21510502,
+          "likes": 1007704
+     }
+}
