@@ -1,0 +1,14 @@
+{
+  "conservative": {
+    "CDU": "UCKyWIEse3u7ExKfAWuDMVnw",
+    "CSU": "UC5AagLvRz7ejBrONZVaA13Q",
+    "FDP": "UC-sMkrfoQDH-xzMxPNckGFw",
+    "AfD": "UCq2rogaxLtQFrYG3X3KYNww"
+  },
+  "progressive": {
+    "SPD": "UCSmbK1WtpYn2sOGLvSSXkKw",
+    "Gruene": "UC7TAA2WYlPfb6eDJCeX4u0w",
+    "Linke": "UCA95T5bSGxNOAODBdbR2rYQ",
+    "BSW": "UCTCb4Fm41JkTtdwd0CXu4xw"
+  }
+}

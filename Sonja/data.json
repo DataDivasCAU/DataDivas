@@ -1,72 +1,32 @@
 {
-  "firstElection": [
-    {
-      "party": "CDU",
-      "posts": 712
-    },
-    {
-      "party": "CSU",
-      "posts": 275
-    },
-    {
-      "party": "FDP",
-      "posts": 477
-    },
-    {
-      "party": "AfD",
-      "posts": 901
-    },
-    {
-      "party": "SPD",
-      "posts": 420
-    },
-    {
-      "party": "Gruene",
-      "posts": 396
-    },
-    {
-      "party": "Linke",
-      "posts": 608
-    },
-    {
-      "party": "BSW",
-      "posts": 0
-    }
-  ],
-  "secondElection": [
-    {
-      "party": "CDU",
-      "posts": 685
-    },
-    {
-      "party": "CSU",
-      "posts": 218
-    },
-    {
-      "party": "FDP",
-      "posts": 601
-    },
-    {
-      "party": "AfD",
-      "posts": 1309
-    },
-    {
-      "party": "SPD",
-      "posts": 1131
-    },
-    {
-      "party": "Gruene",
-      "posts": 472
-    },
-    {
-      "party": "Linke",
-      "posts": 809
-    },
-    {
-      "party": "BSW",
-      "posts": 288
-    }
-  ],
-  "firstElectionParty": "",
-  "secondElectionParty": ""
+  "firstElection": {
+    "CDU": 712,
+    "CSU": 275,
+    "FDP": 477,
+    "AfD": 901,
+    "SPD": 420,
+    "Gruene": 396,
+    "Linke": 608,
+    "BSW": 0
+  },
+  "secondElection": {
+    "CDU": 688,
+    "CSU": 218,
+    "FDP": 602,
+    "AfD": 1311,
+    "SPD": 1133,
+    "Gruene": 472,
+    "Linke": 812,
+    "BSW": 291
+  },
+  "diffPost": {
+    "SPD": 713,
+    "FDP": 125,
+    "CDU": -24,
+    "Gruene": 76,
+    "Linke": 204,
+    "BSW": 291,
+    "AfD": 410,
+    "CSU": -57
+  }
 }
