@@ -59,25 +59,19 @@ def channel_stats_all():
 @app.route("/export-excel")
 def export_excel():
     try:
-        # ⬇️ HIER war dein Fehler: jetzt laden wir die Dateien ...
-        posts_data    = load_json(DATA_PATH)
-        election_data = load_json(ELECTION_PATH)
-
-        # ... und übergeben DICTIONARIES an build_workbook (kein String!)
+        posts_data    = load_json(DATA_PATH)      # <- dict
+        election_data = load_json(ELECTION_PATH)  # <- dict
         xlsx_io: BytesIO = build_workbook(posts_data, election_data)
         xlsx_io.seek(0)
-
         return send_file(
             xlsx_io,
-            mimetype=(
-                "application/vnd.openxmlformats-officedocument."
-                "spreadsheetml.sheet"
-            ),
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             as_attachment=True,
             download_name="posts-per-party_all.xlsx",
         )
     except Exception as e:
         abort(500, description=f"Export-Fehler: {type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
     # App aus dem Ordner starten, in dem app.py liegt:

@@ -71,7 +71,7 @@ def fetch_channel_statistics(party: Party) -> Dict[str, Any]:
 
     return {
         "party": party.value,
-        "channel_id": channel_id,
+        # "channel_id": channel_id,
         "subscribers": int(stats.get("subscriberCount", 0)),
         "views": int(stats.get("viewCount", 0)),
         "videos_total": int(stats.get("videoCount", 0)),

@@ -10,19 +10,21 @@
 <body class="bg-gray-50 p-6">
   <div class="max-w-5xl mx-auto">
     <header class="flex items-end justify-between mb-6 gap-4">
-      <h1 class="text-2xl font-bold">Posts per Party</h1>
+      <div>
+        <h1 class="text-2xl font-bold">Posts per Party</h1>
+        <div id="subtitle" class="text-sm text-gray-500 mt-1">Ansicht: 2025</div>
+      </div>
 
       <div class="flex items-center gap-3">
         <label for="dataset" class="font-medium">Wahlperiode:</label>
         <select id="dataset" class="border rounded p-2 bg-white">
-          <option value="firstElection">Wahl 2025</option>
-          <option value="secondElection">Wahl 2021</option>
+          <option value="first">Wahl 2025</option>
+          <option value="second">Wahl 2021</option>
           <option value="both">Beide Wahlen</option>
         </select>
 
-        <!-- API-Export -->
         <a id="btnExport"
-           href="{{ url_for('export_excel') }}"
+           href="/export-excel"
            class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
           Export als Excel
         </a>
@@ -40,41 +42,44 @@
       </table>
     </div>
 
-    <!-- Chart -->
+    <!-- Chart (nur bei Single-Ansicht) -->
     <section class="max-w-xl">
+      <div id="chartTitle"><b>Posts 2025 (Pie)</b></div>
       <canvas id="pieChart"></canvas>
     </section>
   </div>
 
   <script defer>
-    let json = {};
-    let currentPeriod = "firstElection"; // firstElection | secondElection | both
+    let dataStore = {
+      posts2025: [], // [{party, posts, electionCount}]
+      posts2021: [],
+      election2025: new Map(),
+      election2021: new Map(),
+      diffElection: new Map(),
+    };
+
+    // first|second|both (first=2025, second=2021)
+    let currentPeriod = "first";
     let chart;
-    let sortState = { key: null, dir: 1 }; // 1 = asc, -1 = desc
+    let sortState = { key: null, dir: 1 };
 
     // === Parteifarben ===
     const PARTY_COLORS = new Map([
       ["cdu", "#000000"], ["csu", "#000000"],
-      ["spd", "#E3000F"],
-      ["fdp", "#FFED00"],
+      ["spd", "#E3000F"], ["fdp", "#FFED00"],
       ["gruene", "#1AA037"], ["grüne", "#1AA037"],
       ["die linke", "#BE3075"], ["linke", "#BE3075"],
-      ["afd", "#009EE0"],
-      ["bsw", "#00B3A4"],
+      ["afd", "#009EE0"], ["bsw", "#00B3A4"],
       ["sonstige", "#9CA3AF"],
     ]);
-
     const norm = (p) => String(p).toLowerCase();
     const pretty = (p) => {
-      const m = {
-        gruene: "Grüne", grüne: "Grüne", linke: "Linke",
-        cdu: "CDU", csu: "CSU", spd: "SPD", fdp: "FDP",
-        afd: "AfD", bsw: "BSW"
-      };
+      const m = { gruene:"Grüne", grüne:"Grüne", linke:"Linke",
+                  cdu:"CDU", csu:"CSU", spd:"SPD", fdp:"FDP",
+                  afd:"AfD", bsw:"BSW" };
       const k = norm(p);
       return m[k] || p;
     };
-
     const fmtPct = (v) =>
       `${(Number(v) || 0).toLocaleString("de-DE", { maximumFractionDigits: 2 })}%`;
 
@@ -91,17 +96,7 @@
       return "#9CA3AF";
     }
 
-    // ---- Helpers für neues Format ----
-    function objectToRows(obj) {
-      // { "CDU": 712, "CSU": 275, ... } -> [{party:"CDU", posts:712}, ...]
-      if (!obj || typeof obj !== "object") return [];
-      return Object.entries(obj).map(([k, v]) => ({
-        party: pretty(k),
-        posts: Number(v) || 0
-      }));
-    }
-
-    // ---- Daten laden: Posts + Stimmen (über Flask-Routen) ----
+    // ---- Daten laden ----
     Promise.all([
       fetch("/data.json"),
       fetch("/election.json")
@@ -112,38 +107,29 @@
         return [await pRes.json(), await eRes.json()];
       })
       .then(([postsData, electData]) => {
-        // Posts können als Array ODER Objekt kommen
-        const fP = postsData.firstElection;
-        const sP = postsData.secondElection;
+        // POSTS: neues Schema
+        const p2025 = postsData.electionPosts2025 || {};
+        const p2021 = postsData.electionPosts2021 || {};
+        const rows2025 = Object.entries(p2025).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
+        const rows2021 = Object.entries(p2021).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
 
-        json.firstElection  = Array.isArray(fP)
-          ? (fP || []).map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }))
-          : objectToRows(fP);
-
-        json.secondElection = Array.isArray(sP)
-          ? (sP || []).map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }))
-          : objectToRows(sP);
-
-        // Optional: diffPost mitladen (für spätere Nutzung)
-        json.diffPostRows = postsData.diffPost ? objectToRows(postsData.diffPost) : [];
-
-        // Stimmen (Prozente) -> Maps Partei -> Prozent
+        // ELECTION: 2025/2021 (+ optional diffElection)
         const e25 = (electData.election2025 && electData.election2025[0]) || {};
         const e21 = (electData.election2021 && electData.election2021[0]) || {};
-        json.electionMap = {
-          first:  new Map(Object.entries(e25).map(([k, v]) => [pretty(k), Number(v) || 0])),
-          second: new Map(Object.entries(e21).map(([k, v]) => [pretty(k), Number(v) || 0])),
-        };
+        const dE  = electData.diffElection || {};
+        dataStore.election2025 = new Map(Object.entries(e25).map(([k,v]) => [pretty(k), Number(v)||0]));
+        dataStore.election2021 = new Map(Object.entries(e21).map(([k,v]) => [pretty(k), Number(v)||0]));
+        dataStore.diffElection = new Map(Object.entries(dE).map(([k,v]) => [pretty(k), Number(v)||0]));
 
-        // electionCount in die Zeilen mergen
-        json.firstElection  = addElectionCount(json.firstElection,  json.electionMap.first);
-        json.secondElection = addElectionCount(json.secondElection, json.electionMap.second);
+        // electionCount mergen
+        dataStore.posts2025 = mergeElection(rows2025, dataStore.election2025);
+        dataStore.posts2021 = mergeElection(rows2021, dataStore.election2021);
 
         refresh();
       })
       .catch(err => console.error("Ladefehler:", err));
 
-    function addElectionCount(rows, map) {
+    function mergeElection(rows, map) {
       const parties = new Set([...rows.map(r => r.party), ...map.keys()]);
       return [...parties].map(p => {
         const r = rows.find(x => x.party === p) || { party: p, posts: 0 };
@@ -162,100 +148,24 @@
         th.textContent = col.label + " " +
           (sortState.key === col.key ? (sortState.dir === 1 ? "▲" : "▼") : "▲▼");
         th.addEventListener("click", () => {
-          if (sortState.key === col.key) {
-            sortState.dir *= -1;
-          } else {
-            sortState.key = col.key;
-            sortState.dir = 1;
-          }
+          if (sortState.key === col.key) sortState.dir *= -1;
+          else { sortState.key = col.key; sortState.dir = 1; }
           refresh();
         });
         thead.appendChild(th);
       });
     }
 
-    function renderTable(rows) {
-      const tbody = document.querySelector("#partyTable tbody");
-      const tfoot = document.getElementById("tableFoot");
-      tbody.innerHTML = "";
-      tfoot.innerHTML = "";
-
-      if (currentPeriod === "both") {
-        const p1 = new Map((json.firstElection  || []).map(r => [r.party, r.posts]));
-        const p2 = new Map((json.secondElection || []).map(r => [r.party, r.posts]));
-        const e1 = json.electionMap?.first  || new Map();
-        const e2 = json.electionMap?.second || new Map();
-        const parties = [...new Set([...p1.keys(), ...p2.keys(), ...e1.keys(), ...e2.keys()])];
-
-        renderHeader([
-          { key: "party",          label: "Partei" },
-          { key: "firstPosts",     label: "First Posts" },
-          { key: "firstElection",  label: "First Election (%)" },
-          { key: "secondPosts",    label: "Second Posts" },
-          { key: "secondElection", label: "Second Election (%)" },
-        ]);
-
-        let data = parties.map(p => ({
-          party: p,
-          firstPosts:     p1.get(p) || 0,
-          firstElection:  e1.get(p) || 0,
-          secondPosts:    p2.get(p) || 0,
-          secondElection: e2.get(p) || 0,
-        }));
-
-        if (sortState.key) {
-          data.sort((a, b) => {
-            const va = a[sortState.key], vb = b[sortState.key];
-            if (va < vb) return -1 * sortState.dir;
-            if (va > vb) return  1 * sortState.dir;
-            return 0;
-          });
-        }
-
-        let sumFirstPosts = 0, sumSecondPosts = 0;
-        data.forEach(row => {
-          sumFirstPosts  += row.firstPosts;
-          sumSecondPosts += row.secondPosts;
-
-          const tr = document.createElement("tr");
-          tr.className = "hover:bg-gray-50 transition-colors";
-          tr.innerHTML = `
-            <td class="px-4 py-2 border-b font-medium">
-              <span class="inline-block w-3 h-3 rounded-sm align-middle mr-2"
-                    style="background:${getPartyColor(row.party)}"></span>
-              ${row.party}
-            </td>
-            <td class="px-4 py-2 border-b">${row.firstPosts}</td>
-            <td class="px-4 py-2 border-b">${fmtPct(row.firstElection)}</td>
-            <td class="px-4 py-2 border-b">${row.secondPosts}</td>
-            <td class="px-4 py-2 border-b">${fmtPct(row.secondElection)}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        tfoot.innerHTML = `
-          <tr class="bg-gray-50 font-semibold">
-            <td class="px-4 py-2 border-t">Summe</td>
-            <td class="px-4 py-2 border-t">${sumFirstPosts}</td>
-            <td class="px-4 py-2 border-t">—</td>
-            <td class="px-4 py-2 border-t">${sumSecondPosts}</td>
-            <td class="px-4 py-2 border-t">—</td>
-          </tr>
-        `;
-        return;
-      }
-
-      // Single-Periode
-      if (!rows || rows.length === 0) {
-        renderHeader([{ key: "none", label: "Keine Daten verfügbar" }]);
-        return;
-      }
-
+    function renderTableSingle(rows, year) {
       renderHeader([
         { key: "party",         label: "Partei" },
-        { key: "posts",         label: "Posts" },
-        { key: "electionCount", label: "Election (%)" },
+        { key: "posts",         label: `Posts ${year}` },
+        { key: "electionCount", label: `Election ${year} (%)` },
       ]);
+
+      const tbody = document.querySelector("#partyTable tbody");
+      const tfoot = document.getElementById("tableFoot");
+      tbody.innerHTML = ""; tfoot.innerHTML = "";
 
       let data = rows.slice();
       if (sortState.key) {
@@ -270,7 +180,6 @@
       let sumPosts = 0;
       data.forEach(row => {
         sumPosts += row.posts;
-
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-50 transition-colors";
         tr.innerHTML = `
@@ -285,7 +194,7 @@
         tbody.appendChild(tr);
       });
 
-      document.getElementById("tableFoot").innerHTML = `
+      tfoot.innerHTML = `
         <tr class="bg-gray-50 font-semibold">
           <td class="px-4 py-2 border-t">Summe</td>
           <td class="px-4 py-2 border-t">${sumPosts}</td>
@@ -294,10 +203,102 @@
       `;
     }
 
-    function renderChart(rows) {
+    function renderTableBoth() {
+      const p25 = new Map((dataStore.posts2025 || []).map(r => [r.party, r.posts]));
+      const p21 = new Map((dataStore.posts2021 || []).map(r => [r.party, r.posts]));
+      const e25 = dataStore.election2025 || new Map();
+      const e21 = dataStore.election2021 || new Map();
+      const dE  = dataStore.diffElection || new Map();
+      const parties = [...new Set([...p25.keys(), ...p21.keys(), ...e25.keys(), ...e21.keys(), ...dE.keys()])];
+
+      renderHeader([
+        { key: "party",          label: "Partei" },
+        { key: "posts2025",      label: "Posts 2025" },
+        { key: "election2025",   label: "Election 2025 (%)" },
+        { key: "posts2021",      label: "Posts 2021" },
+        { key: "election2021",   label: "Election 2021 (%)" },
+        { key: "diffPosts",      label: "Diff Posts (25–21)" },
+        { key: "diffElection",   label: "Diff Election (pp)" },
+      ]);
+
+      const tbody = document.querySelector("#partyTable tbody");
+      const tfoot = document.getElementById("tableFoot");
+      tbody.innerHTML = ""; tfoot.innerHTML = "";
+
+      let data = parties.map(p => {
+        const v25 = p25.get(p) || 0;
+        const v21 = p21.get(p) || 0;
+        const e_25 = e25.get(p) || 0;
+        const e_21 = e21.get(p) || 0;
+        const de = dE.has(p) ? dE.get(p) : (e_25 - e_21);
+        return {
+          party: p,
+          posts2025: v25,
+          election2025: e_25,
+          posts2021: v21,
+          election2021: e_21,
+          diffPosts: v25 - v21,
+          diffElection: de
+        };
+      });
+
+      if (sortState.key) {
+        data.sort((a, b) => {
+          const va = a[sortState.key], vb = b[sortState.key];
+          if (va < vb) return -1 * sortState.dir;
+          if (va > vb) return  1 * sortState.dir;
+          return 0;
+        });
+      }
+
+      let sum25 = 0, sum21 = 0;
+      data.forEach(row => {
+        sum25 += row.posts2025;
+        sum21 += row.posts2021;
+
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50 transition-colors";
+        tr.innerHTML = `
+          <td class="px-4 py-2 border-b font-medium">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-2"
+                  style="background:${getPartyColor(row.party)}"></span>
+            ${row.party}
+          </td>
+          <td class="px-4 py-2 border-b">${row.posts2025}</td>
+          <td class="px-4 py-2 border-b">${fmtPct(row.election2025)}</td>
+          <td class="px-4 py-2 border-b">${row.posts2021}</td>
+          <td class="px-4 py-2 border-b">${fmtPct(row.election2021)}</td>
+          <td class="px-4 py-2 border-b ${row.diffPosts>=0?'text-green-700':'text-red-700'}">
+            ${row.diffPosts >= 0 ? '+'+row.diffPosts : row.diffPosts}
+          </td>
+          <td class="px-4 py-2 border-b ${row.diffElection>=0?'text-green-700':'text-red-700'}">
+            ${(row.diffElection>=0?'+':'')}${row.diffElection.toLocaleString("de-DE",{maximumFractionDigits:2})} pp
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const totalDiff = sum25 - sum21;
+
+      tfoot.innerHTML = `
+        <tr class="bg-gray-50 font-semibold">
+          <td class="px-4 py-2 border-t">Summe</td>
+          <td class="px-4 py-2 border-t">${sum25}</td>
+          <td class="px-4 py-2 border-t">—</td>
+          <td class="px-4 py-2 border-t">${sum21}</td>
+          <td class="px-4 py-2 border-t">—</td>
+          <td class="px-4 py-2 border-t ${totalDiff>=0?'text-green-700':'text-red-700'}">
+            ${totalDiff>=0?'+':''}${totalDiff}
+          </td>
+          <td class="px-4 py-2 border-t">—</td>
+        </tr>
+      `;
+    }
+
+    function renderChartSingle(rows, year) {
       const ctx = document.getElementById("pieChart").getContext("2d");
       if (chart) chart.destroy();
-      if (currentPeriod === "both" || !rows || rows.length === 0) return;
+      if (!rows || rows.length === 0) return;
 
       const labels = rows.map(r => r.party);
       const values = rows.map(r => r.posts);
@@ -322,27 +323,36 @@
           }
         }
       });
+
+      document.getElementById("chartTitle").innerHTML = `<b>Posts ${year} (Pie)</b>`;
     }
 
     function refresh() {
+      const subtitle = document.getElementById("subtitle");
       if (currentPeriod === "both") {
-        renderTable([]);
-        renderChart([]);
+        subtitle.textContent = "Ansicht: 2025 vs. 2021";
+        renderTableBoth();
+        if (chart) chart.destroy();
+        document.getElementById("chartTitle").innerHTML = "<b>—</b>";
+        return;
+      }
+
+      if (currentPeriod === "first") {
+        subtitle.textContent = "Ansicht: 2025";
+        renderTableSingle(dataStore.posts2025, 2025);
+        renderChartSingle(dataStore.posts2025, 2025);
       } else {
-        const rows = json[currentPeriod] || [];
-        renderTable(rows);
-        renderChart(rows);
+        subtitle.textContent = "Ansicht: 2021";
+        renderTableSingle(dataStore.posts2021, 2021);
+        renderChartSingle(dataStore.posts2021, 2021);
       }
     }
 
-    // UI-Event
     document.getElementById("dataset").addEventListener("change", (e) => {
-      currentPeriod = e.target.value;
+      const v = e.target.value;
+      currentPeriod = (v === "both") ? "both" : (v === "second" ? "second" : "first");
       refresh();
     });
-
-    // Export-Link: lädt die Datei direkt von der API
-    document.getElementById("btnExport").addEventListener("click", () => {});
   </script>
 </body>
 </html>
