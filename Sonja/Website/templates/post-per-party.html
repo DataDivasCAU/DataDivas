@@ -20,7 +20,7 @@
           <option value="both">Beide Wahlen</option>
         </select>
 
-        <!-- API-Export (lädt /export-excel) -->
+        <!-- API-Export -->
         <a id="btnExport"
            href="{{ url_for('export_excel') }}"
            class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
@@ -91,6 +91,16 @@
       return "#9CA3AF";
     }
 
+    // ---- Helpers für neues Format ----
+    function objectToRows(obj) {
+      // { "CDU": 712, "CSU": 275, ... } -> [{party:"CDU", posts:712}, ...]
+      if (!obj || typeof obj !== "object") return [];
+      return Object.entries(obj).map(([k, v]) => ({
+        party: pretty(k),
+        posts: Number(v) || 0
+      }));
+    }
+
     // ---- Daten laden: Posts + Stimmen (über Flask-Routen) ----
     Promise.all([
       fetch("/data.json"),
@@ -102,11 +112,20 @@
         return [await pRes.json(), await eRes.json()];
       })
       .then(([postsData, electData]) => {
-        // Posts -> Arrays [{party, posts}]
-        json.firstElection = (postsData.firstElection || [])
-          .map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }));
-        json.secondElection = (postsData.secondElection || [])
-          .map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }));
+        // Posts können als Array ODER Objekt kommen
+        const fP = postsData.firstElection;
+        const sP = postsData.secondElection;
+
+        json.firstElection  = Array.isArray(fP)
+          ? (fP || []).map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }))
+          : objectToRows(fP);
+
+        json.secondElection = Array.isArray(sP)
+          ? (sP || []).map(r => ({ party: pretty(r.party), posts: Number(r.posts) || 0 }))
+          : objectToRows(sP);
+
+        // Optional: diffPost mitladen (für spätere Nutzung)
+        json.diffPostRows = postsData.diffPost ? objectToRows(postsData.diffPost) : [];
 
         // Stimmen (Prozente) -> Maps Partei -> Prozent
         const e25 = (electData.election2025 && electData.election2025[0]) || {};
@@ -322,13 +341,8 @@
       refresh();
     });
 
-    // Export-Button zeigt auf die API; wenn du den aktuellen Filter im Dateinamen willst,
-    // könntest du hier dynamisch den href anpassen – Funktioniert aber auch so:
-    document.getElementById("btnExport").addEventListener("click", (e) => {
-      // Standard: Link öffnet Download – kein JS nötig.
-      // Falls du verhindern willst, dass die Seite navigiert:
-      // e.preventDefault(); window.open("{{ url_for('export_excel') }}", "_blank");
-    });
+    // Export-Link: lädt die Datei direkt von der API
+    document.getElementById("btnExport").addEventListener("click", () => {});
   </script>
 </body>
 </html>
