@@ -1,0 +1,22 @@
+{
+  "electionPosts2021": {
+    "CDU": 712,
+    "CSU": 275,
+    "FDP": 477,
+    "AfD": 901,
+    "SPD": 420,
+    "Gruene": 396,
+    "Linke": 608,
+    "BSW": 0
+  },
+  "electionPosts2025": {
+    "CDU": 689,
+    "CSU": 218,
+    "FDP": 602,
+    "AfD": 1311,
+    "SPD": 1133,
+    "Gruene": 472,
+    "Linke": 812,
+    "BSW": 291
+  }
+}

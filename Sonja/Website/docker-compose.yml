@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: posts-per-party
+    volumes:
+      - .:/app              # Live-Code aus deinem Projekt
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    command: flask run --host=0.0.0.0 --port=8000 --reload

@@ -5,10 +5,8 @@ from typing import Dict, Any, Optional, List
 import json
 import requests
 
-# ================== Config ==================
-API_KEY = "AIzaSyDduHuCkuL2YArj3SKsFXg3TWGSZFWExyQ"   # ⚠️ nicht committen!
+API_KEY = "AIzaSyDduHuCkuL2YArj3SKsFXg3TWGSZFWExyQ"
 BASE = "https://www.googleapis.com/youtube/v3"
-# ===========================================
 
 class Party(str, Enum):
     CDU = "CDU"

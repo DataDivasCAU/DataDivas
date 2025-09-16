@@ -15,7 +15,7 @@
         <div id="subtitle" class="text-sm text-gray-500 mt-1">Ansicht: 2025</div>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 flex-wrap">
         <label for="dataset" class="font-medium">Wahlperiode:</label>
         <select id="dataset" class="border rounded p-2 bg-white">
           <option value="first">Wahl 2025</option>
@@ -23,6 +23,7 @@
           <option value="both">Beide Wahlen</option>
         </select>
 
+        <!-- Export-Button -->
         <a id="btnExport"
            href="/export-excel"
            class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
@@ -43,27 +44,49 @@
     </div>
 
     <!-- Chart (nur bei Single-Ansicht) -->
-    <section class="max-w-xl">
+    <section class="max-w-xl mb-12">
       <div id="chartTitle"><b>Posts 2025 (Pie)</b></div>
       <canvas id="pieChart"></canvas>
+    </section>
+
+    <!-- Karten-Buttons -->
+    <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Karte: Data JSON -->
+      <a href="/data.json"
+         class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
+        <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Daten (JSON)</h2>
+        <p class="text-gray-600">Rohdaten zu Posts pro Partei als JSON.</p>
+      </a>
+
+      <!-- Karte: Election JSON -->
+      <a href="/election.json"
+         class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
+        <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Wahldaten</h2>
+        <p class="text-gray-600">Wahlergebnisse der Parteien in JSON-Form.</p>
+      </a>
+
+      <!-- Karte: Stats -->
+      <a href="/load_yt_current_data_of_parties"
+         class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
+        <h2 class="text-xl font-bold text-indigo-700 mb-2">📈 Stats</h2>
+        <p class="text-gray-600">Lade aktuelle YouTube-Statistiken der Parteien.</p>
+      </a>
     </section>
   </div>
 
   <script defer>
     let dataStore = {
-      posts2025: [], // [{party, posts, electionCount}]
+      posts2025: [],
       posts2021: [],
       election2025: new Map(),
       election2021: new Map(),
       diffElection: new Map(),
     };
 
-    // first|second|both (first=2025, second=2021)
     let currentPeriod = "first";
     let chart;
     let sortState = { key: null, dir: 1 };
 
-    // === Parteifarben ===
     const PARTY_COLORS = new Map([
       ["cdu", "#000000"], ["csu", "#000000"],
       ["spd", "#E3000F"], ["fdp", "#FFED00"],
@@ -96,7 +119,6 @@
       return "#9CA3AF";
     }
 
-    // ---- Daten laden ----
     Promise.all([
       fetch("/data.json"),
       fetch("/election.json")
@@ -107,13 +129,11 @@
         return [await pRes.json(), await eRes.json()];
       })
       .then(([postsData, electData]) => {
-        // POSTS: neues Schema
         const p2025 = postsData.electionPosts2025 || {};
         const p2021 = postsData.electionPosts2021 || {};
         const rows2025 = Object.entries(p2025).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
         const rows2021 = Object.entries(p2021).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
 
-        // ELECTION: 2025/2021 (+ optional diffElection)
         const e25 = (electData.election2025 && electData.election2025[0]) || {};
         const e21 = (electData.election2021 && electData.election2021[0]) || {};
         const dE  = electData.diffElection || {};
@@ -121,7 +141,6 @@
         dataStore.election2021 = new Map(Object.entries(e21).map(([k,v]) => [pretty(k), Number(v)||0]));
         dataStore.diffElection = new Map(Object.entries(dE).map(([k,v]) => [pretty(k), Number(v)||0]));
 
-        // electionCount mergen
         dataStore.posts2025 = mergeElection(rows2025, dataStore.election2025);
         dataStore.posts2021 = mergeElection(rows2021, dataStore.election2021);
 
@@ -137,7 +156,6 @@
       });
     }
 
-    // Tabellenkopf mit Sortierung
     function renderHeader(columns) {
       const thead = document.getElementById("tableHead");
       thead.innerHTML = "";
