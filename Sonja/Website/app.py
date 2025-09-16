@@ -12,8 +12,8 @@ app = Flask(__name__)
 
 # Pfade stabil relativ zur app.py
 BASE = Path(__file__).resolve().parent
-DATA_PATH     = "DataDivas/Sonja/data.json"
-ELECTION_PATH = "DataDivas/Sonja/election.json"
+DATA_PATH     = "data/data.json"
+ELECTION_PATH = "data/election.json"
 
 def load_json(path: str):
     """Hilfsfunktion: JSON-Datei laden und als Python-Dict zurückgeben."""

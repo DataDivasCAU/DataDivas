@@ -1,0 +1,33 @@
+{
+  "election2025": [
+    {
+      "CDU": 22.6,
+      "CSU": 6.0,
+      "AfD": 20.8,
+      "SPD": 16.4,
+      "Gruene": 11.6,
+      "Linke": 8.8,
+      "BSW": 4.98
+    }
+  ],
+  "election2021": [
+    {
+      "CDU": 19.0,
+      "CSU": 5.2,
+      "AfD": 10.4,
+      "SPD": 25.7,
+      "Gruene": 14.7,
+      "Linke": 4.9,
+      "BSW": 0.0
+    }
+  ],
+  "diffElection": {
+    "SPD": -9.3,
+    "CDU": 3.6,
+    "Gruene": -3.1,
+    "Linke": 3.9,
+    "BSW": 5.0,
+    "AfD": 10.4,
+    "CSU": 0.8
+  }
+}
