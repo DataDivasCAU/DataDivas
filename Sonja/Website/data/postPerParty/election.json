@@ -7,7 +7,8 @@
       "SPD": 16.4,
       "Gruene": 11.6,
       "Linke": 8.8,
-      "BSW": 4.98
+      "BSW": 4.98,
+      "FDP": 4.3
     }
   ],
   "election2021": [
@@ -18,7 +19,8 @@
       "SPD": 25.7,
       "Gruene": 14.7,
       "Linke": 4.9,
-      "BSW": 0.0
+      "BSW": 0.0,
+      "FDP": 11.4
     }
   ],
   "diffElection": {
@@ -28,6 +30,7 @@
     "Linke": 3.9,
     "BSW": 5.0,
     "AfD": 10.4,
-    "CSU": 0.8
+    "CSU": 0.8,
+    "FDP": -6.9
   }
 }

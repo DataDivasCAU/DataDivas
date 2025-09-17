@@ -34,37 +34,33 @@ def index():
 def post_per_party():
     return render_template("post-per-party.html")
 
-@app.route("/quest1")
-def quest1():
-    return render_template("post-per-party.html")
+@app.route("/antivax-yt")
+def antivax():
+    return render_template("antivax.html")
 
 @app.route("/afd")
 def afd():
     return render_template("afd.html")
 
 @app.route("/fridaysForFuture")
-def quest3():
-    return render_template("post-per-party.html")
+def fridaysForFuture():
+    return render_template("fridaysForFuture.html")
 
 @app.route("/meToo")
-def quest4():
-    return render_template("post-per-party.html")
+def meToo():
+    return render_template("meToo.html")
 
 @app.route("/wagenknecht")
 def wagenknecht():
     return render_template("wagenknecht.html")
 
-@app.route("/quest7")
-def quest7():
-    return render_template("post-per-party.html")
+@app.route("/tradwife")
+def tradwife():
+    return render_template("tradwife.html")
 
 @app.route("/impressum")
 def impressum():
     return render_template("impressum.html")
-
-@app.route("/impressum")
-def notFound():
-    return render_template("notFound.html")
 
 @app.route("/data.json")
 def get_data():
@@ -104,6 +100,20 @@ def export_excel():
     except Exception as e:
         abort(500, description=f"Export-Fehler: {type(e).__name__}: {e}")
 
+# ----------------- ERROR HANDLER -----------------
+
+@app.errorhandler(404)
+def handle_404(e):
+    # Alle unbekannten URLs → notFound.html
+    return render_template("notFound.html", message=getattr(e, "description", "")), 404
+
+@app.errorhandler(Exception)
+def handle_any_error(e):
+    # ALLE anderen Fehler → 500 (oder Fehlercode, falls vorhanden) + notFound.html
+    app.logger.exception("Unerwarteter Fehler")
+    code = getattr(e, "code", 500)
+    msg = getattr(e, "description", str(e))
+    return render_template("notFound.html", message=msg), code
 
 if __name__ == "__main__":
     # App aus dem Ordner starten, in dem app.py liegt:
