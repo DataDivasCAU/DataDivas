@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamische Tabelle + Tortendiagramm</title>
+  <title>Dynamische Tabelle + Pie + Scatter</title>
   <script src="https://cdn.tailwindcss.com" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body class="bg-gray-50 p-6">
-  <div class="max-w-5xl mx-auto">
+  <div class="max-w-6xl mx-auto">
     <header class="flex items-end justify-between mb-6 gap-4">
-      <div>
+      <div class="min-w-0">
         <h1 class="text-2xl font-bold">Posts per Party</h1>
         <div id="subtitle" class="text-sm text-gray-500 mt-1">Ansicht: 2025</div>
       </div>
 
       <div class="flex items-center gap-3 flex-wrap">
+        <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
+
         <label for="dataset" class="font-medium">Wahlperiode:</label>
         <select id="dataset" class="border rounded p-2 bg-white">
           <option value="first">Wahl 2025</option>
@@ -23,7 +25,6 @@
           <option value="both">Beide Wahlen</option>
         </select>
 
-        <!-- Export-Button -->
         <a id="btnExport"
            href="/export-excel"
            class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
@@ -43,29 +44,37 @@
       </table>
     </div>
 
-    <!-- Chart (nur bei Single-Ansicht) -->
-    <section class="max-w-xl mb-12">
-      <div id="chartTitle"><b>Posts 2025 (Pie)</b></div>
-      <canvas id="pieChart"></canvas>
+    <!-- Charts -->
+    <section class="grid gap-8 lg:grid-cols-2">
+      <!-- Pie nur bei Single-Ansicht -->
+      <div class="max-w-xl">
+        <div id="chartTitle" class="mb-2 font-semibold">Posts 2025 (Pie)</div>
+        <canvas id="pieChart"></canvas>
+      </div>
+
+      <!-- Scatter nur bei "both" -->
+      <div class="max-w-xl">
+        <div id="scatterTitle" class="mb-2 font-semibold hidden">
+          ΔPosts 2025–2021 vs. ΔElection (pp)
+        </div>
+        <canvas id="scatterChart"></canvas>
+      </div>
     </section>
 
     <!-- Karten-Buttons -->
-    <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Karte: Data JSON -->
+    <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
       <a href="/data.json"
          class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
         <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Daten (JSON)</h2>
         <p class="text-gray-600">Rohdaten zu Posts pro Partei als JSON.</p>
       </a>
 
-      <!-- Karte: Election JSON -->
       <a href="/election.json"
          class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
         <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Wahldaten</h2>
         <p class="text-gray-600">Wahlergebnisse der Parteien in JSON-Form.</p>
       </a>
 
-      <!-- Karte: Stats -->
       <a href="/load_yt_current_data_of_parties"
          class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
         <h2 class="text-xl font-bold text-indigo-700 mb-2">📈 Stats</h2>
@@ -84,9 +93,10 @@
     };
 
     let currentPeriod = "first";
-    let chart;
+    let pieChart, scatterChart;
     let sortState = { key: null, dir: 1 };
 
+    // === Parteifarben ===
     const PARTY_COLORS = new Map([
       ["cdu", "#000000"], ["csu", "#000000"],
       ["spd", "#E3000F"], ["fdp", "#FFED00"],
@@ -105,8 +115,7 @@
     };
     const fmtPct = (v) =>
       `${(Number(v) || 0).toLocaleString("de-DE", { maximumFractionDigits: 2 })}%`;
-
-    function getPartyColor(label) {
+    const getPartyColor = (label) => {
       const k = norm(label);
       if (PARTY_COLORS.has(k)) return PARTY_COLORS.get(k);
       if (k.includes("gruen") || k.includes("grün")) return "#1AA037";
@@ -117,23 +126,23 @@
       if (k.includes("afd")) return "#009EE0";
       if (k.includes("bsw")) return "#00B3A4";
       return "#9CA3AF";
-    }
+    };
 
-    Promise.all([
-      fetch("/data.json"),
-      fetch("/election.json")
-    ])
+    // ---- Daten laden ----
+    Promise.all([ fetch("/data.json"), fetch("/election.json") ])
       .then(async ([pRes, eRes]) => {
         if (!pRes.ok) throw new Error(`data.json HTTP ${pRes.status}`);
         if (!eRes.ok) throw new Error(`election.json HTTP ${eRes.status}`);
         return [await pRes.json(), await eRes.json()];
       })
       .then(([postsData, electData]) => {
+        // POSTS: neues Schema
         const p2025 = postsData.electionPosts2025 || {};
         const p2021 = postsData.electionPosts2021 || {};
         const rows2025 = Object.entries(p2025).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
         const rows2021 = Object.entries(p2021).map(([party, posts]) => ({ party: pretty(party), posts: Number(posts)||0 }));
 
+        // ELECTION
         const e25 = (electData.election2025 && electData.election2025[0]) || {};
         const e21 = (electData.election2021 && electData.election2021[0]) || {};
         const dE  = electData.diffElection || {};
@@ -141,6 +150,7 @@
         dataStore.election2021 = new Map(Object.entries(e21).map(([k,v]) => [pretty(k), Number(v)||0]));
         dataStore.diffElection = new Map(Object.entries(dE).map(([k,v]) => [pretty(k), Number(v)||0]));
 
+        // electionCount mergen
         dataStore.posts2025 = mergeElection(rows2025, dataStore.election2025);
         dataStore.posts2021 = mergeElection(rows2021, dataStore.election2021);
 
@@ -156,6 +166,7 @@
       });
     }
 
+    // Tabellenkopf mit Sortierung
     function renderHeader(columns) {
       const thead = document.getElementById("tableHead");
       thead.innerHTML = "";
@@ -189,9 +200,7 @@
       if (sortState.key) {
         data.sort((a, b) => {
           const va = a[sortState.key], vb = b[sortState.key];
-          if (va < vb) return -1 * sortState.dir;
-          if (va > vb) return  1 * sortState.dir;
-          return 0;
+          return (va < vb ? -1 : va > vb ? 1 : 0) * sortState.dir;
         });
       }
 
@@ -263,9 +272,7 @@
       if (sortState.key) {
         data.sort((a, b) => {
           const va = a[sortState.key], vb = b[sortState.key];
-          if (va < vb) return -1 * sortState.dir;
-          if (va > vb) return  1 * sortState.dir;
-          return 0;
+          return (va < vb ? -1 : va > vb ? 1 : 0) * sortState.dir;
         });
       }
 
@@ -297,7 +304,6 @@
       });
 
       const totalDiff = sum25 - sum21;
-
       tfoot.innerHTML = `
         <tr class="bg-gray-50 font-semibold">
           <td class="px-4 py-2 border-t">Summe</td>
@@ -311,11 +317,14 @@
           <td class="px-4 py-2 border-t">—</td>
         </tr>
       `;
+
+      // Scatter rendern
+      renderScatter(data);
     }
 
-    function renderChartSingle(rows, year) {
+    function renderPie(rows, year) {
       const ctx = document.getElementById("pieChart").getContext("2d");
-      if (chart) chart.destroy();
+      if (pieChart) pieChart.destroy();
       if (!rows || rows.length === 0) return;
 
       const labels = rows.map(r => r.party);
@@ -323,7 +332,7 @@
       const total = values.reduce((a, b) => a + b, 0);
       const backgroundColor = labels.map(getPartyColor);
 
-      chart = new Chart(ctx, {
+      pieChart = new Chart(ctx, {
         type: "pie",
         data: { labels, datasets: [{ data: values, backgroundColor }] },
         options: {
@@ -342,27 +351,101 @@
         }
       });
 
-      document.getElementById("chartTitle").innerHTML = `<b>Posts ${year} (Pie)</b>`;
+      document.getElementById("chartTitle").textContent = `Posts ${year} (Pie)`;
+    }
+
+    function renderScatter(rowsBoth) {
+      const canvas = document.getElementById("scatterChart").getContext("2d");
+      const titleEl = document.getElementById("scatterTitle");
+      if (scatterChart) scatterChart.destroy();
+
+      // Punkte bauen
+      const points = rowsBoth.map(r => ({
+        x: r.diffPosts,
+        y: r.diffElection,
+        r: 5,
+        party: r.party,
+        backgroundColor: getPartyColor(r.party),
+        borderColor: getPartyColor(r.party),
+      }));
+
+      if (points.length === 0) { titleEl.classList.add("hidden"); return; }
+      titleEl.classList.remove("hidden");
+
+      // Achsgrenzen mit Puffer
+      const xs = points.map(p => p.x), ys = points.map(p => p.y);
+      const pad = (arr, p=0.1) => {
+        const min = Math.min(...arr), max = Math.max(...arr);
+        const span = max - min || 1;
+        return [min - span*p, max + span*p];
+      };
+      const [xmin, xmax] = pad(xs, 0.15);
+      const [ymin, ymax] = pad(ys, 0.15);
+
+      scatterChart = new Chart(canvas, {
+        type: "scatter",
+        data: {
+          datasets: [{
+            label: "Parteien",
+            data: points.map(p => ({ x: p.x, y: p.y, party: p.party })),
+            pointBackgroundColor: points.map(p => p.backgroundColor),
+            pointBorderColor: points.map(p => p.borderColor),
+            pointRadius: 5,
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const d = ctx.raw;
+                  const sign = (n)=> (n>=0?`+${n}`:`${n}`);
+                  return `${d.party}: ΔPosts ${sign(d.x)}, ΔElection ${sign(Number(d.y).toFixed(2))} pp`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: "Diff Posts (2025–2021)" },
+              min: xmin, max: xmax, grid: { color: "#e5e7eb" },
+              ticks: { precision: 0 }
+            },
+            y: {
+              title: { display: true, text: "Diff Election (pp)" },
+              min: ymin, max: ymax, grid: { color: "#e5e7eb" }
+            }
+          }
+        }
+      });
     }
 
     function refresh() {
       const subtitle = document.getElementById("subtitle");
+      const scatterTitle = document.getElementById("scatterTitle");
+
       if (currentPeriod === "both") {
         subtitle.textContent = "Ansicht: 2025 vs. 2021";
         renderTableBoth();
-        if (chart) chart.destroy();
-        document.getElementById("chartTitle").innerHTML = "<b>—</b>";
+        // Pie ausblenden
+        if (pieChart) { pieChart.destroy(); pieChart = null; }
+        document.getElementById("chartTitle").textContent = "—";
         return;
       }
+
+      // Scatter ausblenden
+      if (scatterChart) { scatterChart.destroy(); scatterChart = null; }
+      scatterTitle.classList.add("hidden");
 
       if (currentPeriod === "first") {
         subtitle.textContent = "Ansicht: 2025";
         renderTableSingle(dataStore.posts2025, 2025);
-        renderChartSingle(dataStore.posts2025, 2025);
+        renderPie(dataStore.posts2025, 2025);
       } else {
         subtitle.textContent = "Ansicht: 2021";
         renderTableSingle(dataStore.posts2021, 2021);
-        renderChartSingle(dataStore.posts2021, 2021);
+        renderPie(dataStore.posts2021, 2021);
       }
     }
 

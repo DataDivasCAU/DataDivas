@@ -18,5 +18,15 @@
     "Gruene": 472,
     "Linke": 812,
     "BSW": 291
+  },
+  "diffPosts2025": {
+    "CDU": -23,
+    "CSU": -57,
+    "FDP": 125,
+    "AfD": 410,
+    "SPD": 1133,
+    "Gruene": 76,
+    "Linke": 204,
+    "BSW": 291
   }
 }
