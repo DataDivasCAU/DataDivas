@@ -12,4 +12,5 @@
     ```bash
     docker compose up --build
     ```
+for initial build run: [Windows](/initialStart.bat) or [Linux/Mac](/initialStart.sh)
 or run this script instead: [Windows](/start.bat) or [Linux/Mac](/start.sh)
