@@ -6,7 +6,7 @@ import json
 from party import Party, fetch_channel_statistics
 
 # ⬅️ externe Export-Funktion (Datei liegt neben app.py)
-from Templates.election_export_xlsx import build_workbook
+from templates.election_export_xlsx import build_workbook
 
 app = Flask(__name__)
 
