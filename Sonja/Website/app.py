@@ -34,6 +34,30 @@ def index():
 def post_per_party():
     return render_template("post-per-party.html")
 
+@app.route("/quest1")
+def quest1():
+    return render_template("post-per-party.html")
+
+@app.route("/quest2")
+def quest2():
+    return render_template("post-per-party.html")
+
+@app.route("/quest3")
+def quest3():
+    return render_template("post-per-party.html")
+
+@app.route("/quest4")
+def quest4():
+    return render_template("post-per-party.html")
+
+@app.route("/quest5")
+def quest5():
+    return render_template("post-per-party.html")
+
+@app.route("/quest7")
+def quest7():
+    return render_template("post-per-party.html")
+
 @app.route("/data.json")
 def get_data():
     return jsonify(load_json(DATA_PATH))
