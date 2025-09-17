@@ -7,7 +7,7 @@
     ```bash
     cd newDataDiva/DataDivas/Sonja/Website
     ```
-   📂 [Open project folder](./DataDivas/Sonja/Website)  
+   📂 [Open project folder](./Sonja/Website)  
 3. Start the Docker environment (including build):  
     ```bash
     docker compose up --build

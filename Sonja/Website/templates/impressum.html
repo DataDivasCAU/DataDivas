@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impressum</title>
+  <meta name="description" content="Impressum und Quellenangaben" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
+  <header class="border-b bg-white/70 backdrop-blur">
+    <div class="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl sm:text-2xl font-bold">Impressum</h1>
+      <a href="/" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold shadow hover:bg-indigo-700 transition">
+        ⬅︎ Zur Startseite
+      </a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-8 space-y-8">
+    <!-- Verantwortlich -->
+     <section class="rounded-2xl bg-white shadow p-6">
+        <h2 class="text-lg font-bold text-indigo-700 mb-3">Verantwortlich nach § 5 TMG</h2>
+        <ul class="space-y-3 leading-relaxed">
+            <li>
+            <span class="font-semibold">Name:</span> Sonja Waldenspuhl<br/>
+            <span class="font-semibold">E-Mail:</span>
+            <a href="mailto:sonja@example.com" class="text-indigo-700 hover:underline">sonja@example.com</a>
+            </li>
+            <li>
+            <span class="font-semibold">Name:</span> Maja Kahl<br/>
+            <span class="font-semibold">E-Mail:</span>
+            <a href="mailto:maja@example.com" class="text-indigo-700 hover:underline">maja@example.com</a>
+            </li>
+            <li>
+            <span class="font-semibold">Name:</span> Diana Kuznecov<br/>
+            <span class="font-semibold">E-Mail:</span>
+            <a href="mailto:diana@example.com" class="text-indigo-700 hover:underline">diana@example.com</a>
+            </li>
+            <li>
+            <span class="font-semibold">Name:</span> Carolin Delfs<br/>
+            <span class="font-semibold">E-Mail:</span>
+            <a href="mailto:carolin@example.com" class="text-indigo-700 hover:underline">carolin@example.com</a>
+            </li>
+        </ul>
+        <p class="mt-4">
+            <span class="font-semibold">Universität:</span>
+            Christian-Albrechts-Universität zu Kiel
+        </p>
+    </section>
+
+    <!-- Datenquellen / APIs -->
+    <section class="rounded-2xl bg-white shadow p-6">
+      <h2 class="text-lg font-bold text-indigo-700 mb-3">Datenquellen &amp; APIs</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>
+          <span class="font-semibold">YouTube Data API (v3):</span>
+          <a class="text-indigo-700 hover:underline" href="https://developers.google.com/youtube/v3" rel="noopener noreferrer" target="_blank">
+            https://developers.google.com/youtube/v3
+          </a>
+        </li>
+        <li>
+          <span class="font-semibold">Wikipedia / MediaWiki API:</span>
+          <a class="text-indigo-700 hover:underline" href="https://www.mediawiki.org/wiki/API:Main_page" rel="noopener noreferrer" target="_blank">
+            https://www.mediawiki.org/wiki/API:Main_page
+          </a>
+        </li>
+        <li>
+          <span class="font-semibold">Reddit API:</span>
+          <a class="text-indigo-700 hover:underline" href="https://www.reddit.com/dev/api/" rel="noopener noreferrer" target="_blank">
+            https://www.reddit.com/dev/api/
+          </a>
+        </li>
+        <li>
+          <span class="font-semibold">Bundestagswahl 2025 – Bundeswahlleiterin:</span>
+          <a class="text-indigo-700 hover:underline" href="https://www.bundeswahlleiterin.de/bundestagswahlen/2025/ergebnisse/bund-99.html" rel="noopener noreferrer" target="_blank">
+            https://www.bundeswahlleiterin.de/bundestagswahlen/2025/ergebnisse/bund-99.html
+          </a>
+        </li>
+      </ul>
+      <p class="mt-4 text-sm text-gray-600">
+        Hinweise: Die genannten Marken und Logos sind Eigentum der jeweiligen Rechteinhaber. Bei der Verwendung externer APIs gelten deren Nutzungsbedingungen und Quoten.
+      </p>
+    </section>
+
+    <!-- Haftung -->
+    <section class="rounded-2xl bg-white shadow p-6">
+      <h2 class="text-lg font-bold text-indigo-700 mb-3">Haftungsausschluss</h2>
+      <p class="leading-relaxed">
+        Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit
+        und Aktualität der Inhalte übernehmen wir jedoch keine Gewähr. Bei Verlinkungen auf externe Websites
+        Dritter haben wir keinen Einfluss auf deren Inhalte; hierfür ist stets der jeweilige Anbieter verantwortlich.
+      </p>
+    </section>
+
+    <!-- Letzte Aktualisierung -->
+    <section class="rounded-2xl bg-white shadow p-6">
+      <h2 class="text-lg font-bold text-indigo-700 mb-3">Stand</h2>
+      <p>Letzte Aktualisierung: <span class="font-mono">16.09.2025</span></p>
+    </section>
+  </main>
+
+  <footer class="mt-8 py-8 text-center text-sm text-gray-500">
+    © <span id="y"></span> Beispielprojekt — Alle Rechte vorbehalten.
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
