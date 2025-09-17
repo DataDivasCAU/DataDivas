@@ -12,8 +12,8 @@ app = Flask(__name__)
 
 # Pfade stabil relativ zur app.py
 BASE = Path(__file__).resolve().parent
-DATA_PATH     = "data/data.json"
-ELECTION_PATH = "data/election.json"
+DATA_PATH     = "data/PostPerParty/data.json"
+ELECTION_PATH = "data/PostPerParty/election.json"
 
 def load_json(path: str):
     """Hilfsfunktion: JSON-Datei laden und als Python-Dict zurückgeben."""
@@ -38,25 +38,33 @@ def post_per_party():
 def quest1():
     return render_template("post-per-party.html")
 
-@app.route("/quest2")
-def quest2():
-    return render_template("post-per-party.html")
+@app.route("/afd")
+def afd():
+    return render_template("afd.html")
 
-@app.route("/quest3")
+@app.route("/fridaysForFuture")
 def quest3():
     return render_template("post-per-party.html")
 
-@app.route("/quest4")
+@app.route("/meToo")
 def quest4():
     return render_template("post-per-party.html")
 
-@app.route("/quest5")
-def quest5():
-    return render_template("post-per-party.html")
+@app.route("/wagenknecht")
+def wagenknecht():
+    return render_template("wagenknecht.html")
 
 @app.route("/quest7")
 def quest7():
     return render_template("post-per-party.html")
+
+@app.route("/impressum")
+def impressum():
+    return render_template("impressum.html")
+
+@app.route("/impressum")
+def notFound():
+    return render_template("notFound.html")
 
 @app.route("/data.json")
 def get_data():
