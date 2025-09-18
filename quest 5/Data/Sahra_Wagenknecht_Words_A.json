@@ -1,47 +1,11 @@
 [
   {
-    "words":"wagenknecht",
-    "numbers":117
-  },
-  {
-    "words":"nicht",
-    "numbers":67
-  },
-  {
-    "words":"und",
-    "numbers":60
-  },
-  {
-    "words":"ist",
-    "numbers":56
-  },
-  {
     "words":"frau wagenknecht",
     "numbers":52
   },
   {
-    "words":"ich",
-    "numbers":51
-  },
-  {
-    "words":"das",
-    "numbers":50
-  },
-  {
     "words":"frieden",
     "numbers":35
-  },
-  {
-    "words":"eine",
-    "numbers":34
-  },
-  {
-    "words":"der",
-    "numbers":29
-  },
-  {
-    "words":"auf",
-    "numbers":28
   },
   {
     "words":"danke",
@@ -52,24 +16,16 @@
     "numbers":22
   },
   {
-    "words":"zu",
-    "numbers":21
-  },
-  {
     "words":"krieg",
     "numbers":19
-  },
-  {
-    "words":"recht",
-    "numbers":18
   },
   {
     "words":"deutschland",
     "numbers":18
   },
   {
-    "words":"auch",
-    "numbers":16
+    "words":"recht",
+    "numbers":18
   },
   {
     "words":"menschen",
@@ -88,11 +44,11 @@
     "numbers":13
   },
   {
-    "words":"brauchen",
+    "words":"politiker",
     "numbers":13
   },
   {
-    "words":"politiker",
+    "words":"brauchen",
     "numbers":13
   },
   {
@@ -100,15 +56,11 @@
     "numbers":12
   },
   {
-    "words":"wir brauchen",
+    "words":"bundestag",
     "numbers":11
   },
   {
-    "words":"haben",
-    "numbers":11
-  },
-  {
-    "words":"für",
+    "words":"kein",
     "numbers":11
   },
   {
@@ -120,7 +72,15 @@
     "numbers":11
   },
   {
-    "words":"bundestag",
+    "words":"haben",
+    "numbers":11
+  },
+  {
+    "words":"für",
+    "numbers":11
+  },
+  {
+    "words":"wir brauchen",
     "numbers":11
   },
   {
@@ -128,23 +88,7 @@
     "numbers":11
   },
   {
-    "words":"kein",
-    "numbers":11
-  },
-  {
-    "words":"sie",
-    "numbers":11
-  },
-  {
-    "words":"maischberger",
-    "numbers":10
-  },
-  {
     "words":"demokratie",
-    "numbers":10
-  },
-  {
-    "words":"dass",
     "numbers":10
   },
   {
@@ -152,11 +96,15 @@
     "numbers":10
   },
   {
-    "words":"noch",
-    "numbers":9
+    "words":"maischberger",
+    "numbers":10
   },
   {
-    "words":"diese",
+    "words":"dass",
+    "numbers":10
+  },
+  {
+    "words":"noch",
     "numbers":9
   },
   {
@@ -168,12 +116,24 @@
     "numbers":9
   },
   {
+    "words":"wir",
+    "numbers":9
+  },
+  {
     "words":"vielen",
     "numbers":9
   },
   {
-    "words":"wir",
+    "words":"diese",
     "numbers":9
+  },
+  {
+    "words":"ein",
+    "numbers":8
+  },
+  {
+    "words":"vergessen",
+    "numbers":8
   },
   {
     "words":"sahra",
@@ -188,7 +148,11 @@
     "numbers":8
   },
   {
-    "words":"ein",
+    "words":"das bsw",
+    "numbers":8
+  },
+  {
+    "words":"nur",
     "numbers":8
   },
   {
@@ -200,19 +164,7 @@
     "numbers":8
   },
   {
-    "words":"vergessen",
-    "numbers":8
-  },
-  {
-    "words":"nur",
-    "numbers":8
-  },
-  {
     "words":"einer",
-    "numbers":8
-  },
-  {
-    "words":"das bsw",
     "numbers":8
   },
   {
@@ -224,19 +176,11 @@
     "numbers":7
   },
   {
+    "words":"keinen",
+    "numbers":7
+  },
+  {
     "words":"müssen",
-    "numbers":7
-  },
-  {
-    "words":"scholz",
-    "numbers":7
-  },
-  {
-    "words":"außenminister",
-    "numbers":7
-  },
-  {
-    "words":"punkt",
     "numbers":7
   },
   {
@@ -244,11 +188,19 @@
     "numbers":7
   },
   {
+    "words":"punkt",
+    "numbers":7
+  },
+  {
+    "words":"außenminister",
+    "numbers":7
+  },
+  {
     "words":"waffen",
     "numbers":7
   },
   {
-    "words":"keinen",
+    "words":"scholz",
     "numbers":7
   },
   {
@@ -256,59 +208,7 @@
     "numbers":7
   },
   {
-    "words":"gebracht",
-    "numbers":6
-  },
-  {
-    "words":"gespräch",
-    "numbers":6
-  },
-  {
-    "words":"deutsche",
-    "numbers":6
-  },
-  {
-    "words":"den",
-    "numbers":6
-  },
-  {
-    "words":"bsw",
-    "numbers":6
-  },
-  {
-    "words":"bravo",
-    "numbers":6
-  },
-  {
-    "words":"punkt gebracht",
-    "numbers":6
-  },
-  {
-    "words":"sahra wagenknecht",
-    "numbers":6
-  },
-  {
-    "words":"richtig",
-    "numbers":6
-  },
-  {
-    "words":"bleiben",
-    "numbers":6
-  },
-  {
-    "words":"nichts",
-    "numbers":6
-  },
-  {
-    "words":"anstand",
-    "numbers":6
-  },
-  {
-    "words":"einen",
-    "numbers":6
-  },
-  {
-    "words":"wichtig",
+    "words":"alle",
     "numbers":6
   },
   {
@@ -316,15 +216,11 @@
     "numbers":6
   },
   {
-    "words":"hat",
+    "words":"einen",
     "numbers":6
   },
   {
     "words":"respekt",
-    "numbers":6
-  },
-  {
-    "words":"wahrheit",
     "numbers":6
   },
   {
@@ -336,11 +232,55 @@
     "numbers":6
   },
   {
+    "words":"gebracht",
+    "numbers":6
+  },
+  {
     "words":"kämpfen",
     "numbers":6
   },
   {
-    "words":"alle",
+    "words":"den",
+    "numbers":6
+  },
+  {
+    "words":"sahra wagenknecht",
+    "numbers":6
+  },
+  {
+    "words":"punkt gebracht",
+    "numbers":6
+  },
+  {
+    "words":"anstand",
+    "numbers":6
+  },
+  {
+    "words":"bravo",
+    "numbers":6
+  },
+  {
+    "words":"wahrheit",
+    "numbers":6
+  },
+  {
+    "words":"bsw",
+    "numbers":6
+  },
+  {
+    "words":"richtig",
+    "numbers":6
+  },
+  {
+    "words":"bleiben",
+    "numbers":6
+  },
+  {
+    "words":"wichtig",
+    "numbers":6
+  },
+  {
+    "words":"gespräch",
     "numbers":6
   },
   {
@@ -348,31 +288,19 @@
     "numbers":6
   },
   {
-    "words":"baerbock",
-    "numbers":5
+    "words":"nichts",
+    "numbers":6
   },
   {
-    "words":"bei",
-    "numbers":5
+    "words":"deutsche",
+    "numbers":6
+  },
+  {
+    "words":"hat",
+    "numbers":6
   },
   {
     "words":"kriegstreiber",
-    "numbers":5
-  },
-  {
-    "words":"pistorius",
-    "numbers":5
-  },
-  {
-    "words":"russland",
-    "numbers":5
-  },
-  {
-    "words":"vielen dank",
-    "numbers":5
-  },
-  {
-    "words":"unglaublich",
     "numbers":5
   },
   {
@@ -380,7 +308,47 @@
     "numbers":5
   },
   {
-    "words":"keinen krieg",
+    "words":"weiter",
+    "numbers":5
+  },
+  {
+    "words":"unglaublich",
+    "numbers":5
+  },
+  {
+    "words":"nicht mehr",
+    "numbers":5
+  },
+  {
+    "words":"baerbock",
+    "numbers":5
+  },
+  {
+    "words":"unerträglich",
+    "numbers":5
+  },
+  {
+    "words":"volk",
+    "numbers":5
+  },
+  {
+    "words":"rentner",
+    "numbers":5
+  },
+  {
+    "words":"starke",
+    "numbers":5
+  },
+  {
+    "words":"daneben",
+    "numbers":5
+  },
+  {
+    "words":"frieden und",
+    "numbers":5
+  },
+  {
+    "words":"ampel",
     "numbers":5
   },
   {
@@ -396,11 +364,15 @@
     "numbers":5
   },
   {
-    "words":"starke",
+    "words":"russland",
     "numbers":5
   },
   {
-    "words":"außenministerin",
+    "words":"pistorius",
+    "numbers":5
+  },
+  {
+    "words":"vielen dank",
     "numbers":5
   },
   {
@@ -408,155 +380,27 @@
     "numbers":5
   },
   {
-    "words":"daneben",
-    "numbers":5
-  },
-  {
-    "words":"volk",
-    "numbers":5
-  },
-  {
-    "words":"unerträglich",
-    "numbers":5
-  },
-  {
-    "words":"nicht mehr",
-    "numbers":5
-  },
-  {
-    "words":"frieden und",
-    "numbers":5
-  },
-  {
-    "words":"ampel",
-    "numbers":5
-  },
-  {
-    "words":"weiter",
-    "numbers":5
-  },
-  {
     "words":"großartig",
     "numbers":5
   },
   {
-    "words":"rentner",
+    "words":"keinen krieg",
     "numbers":5
   },
   {
-    "words":"kriegspolitik",
-    "numbers":4
+    "words":"bei",
+    "numbers":5
   },
   {
-    "words":"gerne",
-    "numbers":4
-  },
-  {
-    "words":"wagenknecht für",
-    "numbers":4
-  },
-  {
-    "words":"zwangsgebühr",
-    "numbers":4
-  },
-  {
-    "words":"straße",
-    "numbers":4
-  },
-  {
-    "words":"deutlich",
-    "numbers":4
-  },
-  {
-    "words":"journalisten",
-    "numbers":4
-  },
-  {
-    "words":"sind",
-    "numbers":4
-  },
-  {
-    "words":"spd",
-    "numbers":4
-  },
-  {
-    "words":"kindergarten",
-    "numbers":4
-  },
-  {
-    "words":"politikern",
-    "numbers":4
-  },
-  {
-    "words":"menschenverstand",
-    "numbers":4
-  },
-  {
-    "words":"dankeschön",
-    "numbers":4
-  },
-  {
-    "words":"genau",
-    "numbers":4
-  },
-  {
-    "words":"gearbeitet",
-    "numbers":4
-  },
-  {
-    "words":"straßen",
-    "numbers":4
-  },
-  {
-    "words":"gesellschaft",
-    "numbers":4
-  },
-  {
-    "words":"mann",
-    "numbers":4
-  },
-  {
-    "words":"halten",
-    "numbers":4
-  },
-  {
-    "words":"moderatoren",
-    "numbers":4
-  },
-  {
-    "words":"milliarden",
-    "numbers":4
-  },
-  {
-    "words":"recht hat",
-    "numbers":4
-  },
-  {
-    "words":"wagenknecht ich",
-    "numbers":4
-  },
-  {
-    "words":"immer",
-    "numbers":4
-  },
-  {
-    "words":"aufgeben",
-    "numbers":4
-  },
-  {
-    "words":"bundeskanzler",
-    "numbers":4
+    "words":"außenministerin",
+    "numbers":5
   },
   {
     "words":"lüders ist",
     "numbers":4
   },
   {
-    "words":"lassen",
-    "numbers":4
-  },
-  {
-    "words":"diplomatie",
+    "words":"kriegspolitik",
     "numbers":4
   },
   {
@@ -564,11 +408,11 @@
     "numbers":4
   },
   {
-    "words":"schaffen",
+    "words":"genau",
     "numbers":4
   },
   {
-    "words":"gerechtigkeit",
+    "words":"diplomatie",
     "numbers":4
   },
   {
@@ -576,7 +420,79 @@
     "numbers":4
   },
   {
+    "words":"gerne",
+    "numbers":4
+  },
+  {
+    "words":"gearbeitet",
+    "numbers":4
+  },
+  {
+    "words":"halten",
+    "numbers":4
+  },
+  {
+    "words":"gesellschaft",
+    "numbers":4
+  },
+  {
+    "words":"straße",
+    "numbers":4
+  },
+  {
+    "words":"wagenknecht ich",
+    "numbers":4
+  },
+  {
+    "words":"politikern",
+    "numbers":4
+  },
+  {
+    "words":"kindergarten",
+    "numbers":4
+  },
+  {
+    "words":"spd",
+    "numbers":4
+  },
+  {
+    "words":"mann",
+    "numbers":4
+  },
+  {
+    "words":"journalisten",
+    "numbers":4
+  },
+  {
+    "words":"milliarden",
+    "numbers":4
+  },
+  {
+    "words":"zwangsgebühr",
+    "numbers":4
+  },
+  {
+    "words":"schaffen",
+    "numbers":4
+  },
+  {
     "words":"blackrock",
+    "numbers":4
+  },
+  {
+    "words":"menschenverstand",
+    "numbers":4
+  },
+  {
+    "words":"deutlich",
+    "numbers":4
+  },
+  {
+    "words":"aufgeben",
+    "numbers":4
+  },
+  {
+    "words":"moderatoren",
     "numbers":4
   },
   {
@@ -584,207 +500,47 @@
     "numbers":4
   },
   {
+    "words":"recht hat",
+    "numbers":4
+  },
+  {
+    "words":"sind",
+    "numbers":4
+  },
+  {
     "words":"weiterhin",
     "numbers":4
   },
   {
-    "words":"kriegsgebiete",
-    "numbers":3
+    "words":"lassen",
+    "numbers":4
   },
   {
-    "words":"gemacht",
-    "numbers":3
+    "words":"straßen",
+    "numbers":4
   },
   {
-    "words":"kämpfen sie",
-    "numbers":3
+    "words":"wagenknecht für",
+    "numbers":4
   },
   {
-    "words":"zwischenrufen",
-    "numbers":3
+    "words":"gerechtigkeit",
+    "numbers":4
   },
   {
-    "words":"gesprochen",
-    "numbers":3
+    "words":"dankeschön",
+    "numbers":4
   },
   {
-    "words":"leider",
-    "numbers":3
+    "words":"bundeskanzler",
+    "numbers":4
   },
   {
-    "words":"allein",
-    "numbers":3
-  },
-  {
-    "words":"sieht",
-    "numbers":3
-  },
-  {
-    "words":"sachlich",
-    "numbers":3
-  },
-  {
-    "words":"dohnanyi",
-    "numbers":3
-  },
-  {
-    "words":"natürlich",
-    "numbers":3
-  },
-  {
-    "words":"wähler",
-    "numbers":3
-  },
-  {
-    "words":"zum",
-    "numbers":3
-  },
-  {
-    "words":"waffenlieferungen",
-    "numbers":3
-  },
-  {
-    "words":"michael",
-    "numbers":3
-  },
-  {
-    "words":"tolle",
-    "numbers":3
+    "words":"immer",
+    "numbers":4
   },
   {
     "words":"neuwahlen",
-    "numbers":3
-  },
-  {
-    "words":"gauweiler",
-    "numbers":3
-  },
-  {
-    "words":"politikerin",
-    "numbers":3
-  },
-  {
-    "words":"aufgewachsen",
-    "numbers":3
-  },
-  {
-    "words":"unsere",
-    "numbers":3
-  },
-  {
-    "words":"von",
-    "numbers":3
-  },
-  {
-    "words":"geschichte",
-    "numbers":3
-  },
-  {
-    "words":"gefährlich",
-    "numbers":3
-  },
-  {
-    "words":"wollen",
-    "numbers":3
-  },
-  {
-    "words":"danke frau",
-    "numbers":3
-  },
-  {
-    "words":"politisch",
-    "numbers":3
-  },
-  {
-    "words":"haltung",
-    "numbers":3
-  },
-  {
-    "words":"das ist",
-    "numbers":3
-  },
-  {
-    "words":"europa",
-    "numbers":3
-  },
-  {
-    "words":"deutschen",
-    "numbers":3
-  },
-  {
-    "words":"alles",
-    "numbers":3
-  },
-  {
-    "words":"rentenversicherung",
-    "numbers":3
-  },
-  {
-    "words":"nein",
-    "numbers":3
-  },
-  {
-    "words":"worte",
-    "numbers":3
-  },
-  {
-    "words":"olaf",
-    "numbers":3
-  },
-  {
-    "words":"verantwortung",
-    "numbers":3
-  },
-  {
-    "words":"absolut",
-    "numbers":3
-  },
-  {
-    "words":"oder",
-    "numbers":3
-  },
-  {
-    "words":"jedes",
-    "numbers":3
-  },
-  {
-    "words":"tassen",
-    "numbers":3
-  },
-  {
-    "words":"unterbricht",
-    "numbers":3
-  },
-  {
-    "words":"bravo frau",
-    "numbers":3
-  },
-  {
-    "words":"die wahrheit",
-    "numbers":3
-  },
-  {
-    "words":"danke für",
-    "numbers":3
-  },
-  {
-    "words":"peinlich",
-    "numbers":3
-  },
-  {
-    "words":"wissen",
-    "numbers":3
-  },
-  {
-    "words":"lauterbach",
-    "numbers":3
-  },
-  {
-    "words":"keiner",
-    "numbers":3
-  },
-  {
-    "words":"gezogen",
     "numbers":3
   },
   {
@@ -792,43 +548,11 @@
     "numbers":3
   },
   {
-    "words":"bevölkerung",
+    "words":"sieht",
     "numbers":3
   },
   {
-    "words":"starke rede",
-    "numbers":3
-  },
-  {
-    "words":"die richtigen",
-    "numbers":3
-  },
-  {
-    "words":"muslim",
-    "numbers":3
-  },
-  {
-    "words":"geboren",
-    "numbers":3
-  },
-  {
-    "words":"unterstützen",
-    "numbers":3
-  },
-  {
-    "words":"als kanzler",
-    "numbers":3
-  },
-  {
-    "words":"gesunden menschenverstand",
-    "numbers":3
-  },
-  {
-    "words":"mit gesunden",
-    "numbers":3
-  },
-  {
-    "words":"aussagen",
+    "words":"tolle",
     "numbers":3
   },
   {
@@ -840,35 +564,15 @@
     "numbers":3
   },
   {
-    "words":"standhaft",
+    "words":"jedes",
     "numbers":3
   },
   {
-    "words":"wo",
+    "words":"wähler",
     "numbers":3
   },
   {
-    "words":"kiesewetter",
-    "numbers":3
-  },
-  {
-    "words":"arbeit",
-    "numbers":3
-  },
-  {
-    "words":"wählen",
-    "numbers":3
-  },
-  {
-    "words":"seine",
-    "numbers":3
-  },
-  {
-    "words":"gemeinsam",
-    "numbers":3
-  },
-  {
-    "words":"die deutsche",
+    "words":"deutschen",
     "numbers":3
   },
   {
@@ -876,55 +580,11 @@
     "numbers":3
   },
   {
-    "words":"herzlichen",
+    "words":"gauweiler",
     "numbers":3
   },
   {
-    "words":"wagenknecht und",
-    "numbers":3
-  },
-  {
-    "words":"geblieben",
-    "numbers":3
-  },
-  {
-    "words":"herr hallervorden",
-    "numbers":3
-  },
-  {
-    "words":"richtigen",
-    "numbers":3
-  },
-  {
-    "words":"rente",
-    "numbers":3
-  },
-  {
-    "words":"alleine",
-    "numbers":3
-  },
-  {
-    "words":"geld",
-    "numbers":3
-  },
-  {
-    "words":"hut",
-    "numbers":3
-  },
-  {
-    "words":"hören",
-    "numbers":3
-  },
-  {
-    "words":"brauchen sie",
-    "numbers":3
-  },
-  {
-    "words":"neuauszählung",
-    "numbers":3
-  },
-  {
-    "words":"gegen",
+    "words":"zum",
     "numbers":3
   },
   {
@@ -932,11 +592,155 @@
     "numbers":3
   },
   {
-    "words":"assange",
+    "words":"von",
     "numbers":3
   },
   {
-    "words":"friedensgespräche",
+    "words":"keiner",
+    "numbers":3
+  },
+  {
+    "words":"danke für",
+    "numbers":3
+  },
+  {
+    "words":"leider",
+    "numbers":3
+  },
+  {
+    "words":"natürlich",
+    "numbers":3
+  },
+  {
+    "words":"absolut",
+    "numbers":3
+  },
+  {
+    "words":"gemeinsam",
+    "numbers":3
+  },
+  {
+    "words":"unterbricht",
+    "numbers":3
+  },
+  {
+    "words":"gegen",
+    "numbers":3
+  },
+  {
+    "words":"hut",
+    "numbers":3
+  },
+  {
+    "words":"die wahrheit",
+    "numbers":3
+  },
+  {
+    "words":"starke rede",
+    "numbers":3
+  },
+  {
+    "words":"aussagen",
+    "numbers":3
+  },
+  {
+    "words":"brauchen sie",
+    "numbers":3
+  },
+  {
+    "words":"worte",
+    "numbers":3
+  },
+  {
+    "words":"bravo frau",
+    "numbers":3
+  },
+  {
+    "words":"danke frau",
+    "numbers":3
+  },
+  {
+    "words":"rentenversicherung",
+    "numbers":3
+  },
+  {
+    "words":"michael",
+    "numbers":3
+  },
+  {
+    "words":"sachlich",
+    "numbers":3
+  },
+  {
+    "words":"europa",
+    "numbers":3
+  },
+  {
+    "words":"alles",
+    "numbers":3
+  },
+  {
+    "words":"tassen",
+    "numbers":3
+  },
+  {
+    "words":"wissen",
+    "numbers":3
+  },
+  {
+    "words":"haltung",
+    "numbers":3
+  },
+  {
+    "words":"kiesewetter",
+    "numbers":3
+  },
+  {
+    "words":"gemacht",
+    "numbers":3
+  },
+  {
+    "words":"kämpfen sie",
+    "numbers":3
+  },
+  {
+    "words":"politikerin",
+    "numbers":3
+  },
+  {
+    "words":"die deutsche",
+    "numbers":3
+  },
+  {
+    "words":"aufgewachsen",
+    "numbers":3
+  },
+  {
+    "words":"alleine",
+    "numbers":3
+  },
+  {
+    "words":"rente",
+    "numbers":3
+  },
+  {
+    "words":"herzlichen",
+    "numbers":3
+  },
+  {
+    "words":"wo",
+    "numbers":3
+  },
+  {
+    "words":"das ist",
+    "numbers":3
+  },
+  {
+    "words":"neuauszählung",
+    "numbers":3
+  },
+  {
+    "words":"arbeit",
     "numbers":3
   },
   {
@@ -944,23 +748,163 @@
     "numbers":3
   },
   {
-    "words":"wagenknecht bringt",
+    "words":"allein",
+    "numbers":3
+  },
+  {
+    "words":"herr hallervorden",
+    "numbers":3
+  },
+  {
+    "words":"peinlich",
+    "numbers":3
+  },
+  {
+    "words":"bevölkerung",
+    "numbers":3
+  },
+  {
+    "words":"geblieben",
+    "numbers":3
+  },
+  {
+    "words":"als kanzler",
+    "numbers":3
+  },
+  {
+    "words":"assange",
+    "numbers":3
+  },
+  {
+    "words":"geschichte",
+    "numbers":3
+  },
+  {
+    "words":"oder",
+    "numbers":3
+  },
+  {
+    "words":"wollen",
+    "numbers":3
+  },
+  {
+    "words":"waffenlieferungen",
+    "numbers":3
+  },
+  {
+    "words":"muslim",
+    "numbers":3
+  },
+  {
+    "words":"hören",
+    "numbers":3
+  },
+  {
+    "words":"geboren",
+    "numbers":3
+  },
+  {
+    "words":"unterstützen",
+    "numbers":3
+  },
+  {
+    "words":"olaf",
+    "numbers":3
+  },
+  {
+    "words":"kriegsgebiete",
+    "numbers":3
+  },
+  {
+    "words":"wählen",
+    "numbers":3
+  },
+  {
+    "words":"unsere",
+    "numbers":3
+  },
+  {
+    "words":"standhaft",
+    "numbers":3
+  },
+  {
+    "words":"politisch",
+    "numbers":3
+  },
+  {
+    "words":"seine",
+    "numbers":3
+  },
+  {
+    "words":"wagenknecht und",
+    "numbers":3
+  },
+  {
+    "words":"gesprochen",
+    "numbers":3
+  },
+  {
+    "words":"friedensgespräche",
+    "numbers":3
+  },
+  {
+    "words":"nein",
+    "numbers":3
+  },
+  {
+    "words":"zwischenrufen",
+    "numbers":3
+  },
+  {
+    "words":"die richtigen",
+    "numbers":3
+  },
+  {
+    "words":"dohnanyi",
+    "numbers":3
+  },
+  {
+    "words":"geld",
+    "numbers":3
+  },
+  {
+    "words":"gezogen",
+    "numbers":3
+  },
+  {
+    "words":"mit gesunden",
+    "numbers":3
+  },
+  {
+    "words":"richtigen",
+    "numbers":3
+  },
+  {
+    "words":"lauterbach",
+    "numbers":3
+  },
+  {
+    "words":"verantwortung",
+    "numbers":3
+  },
+  {
+    "words":"gesunden menschenverstand",
+    "numbers":3
+  },
+  {
+    "words":"gefährlich",
+    "numbers":3
+  },
+  {
+    "words":"stabil",
     "numbers":2
   },
   {
-    "words":"außenpolitik",
+    "words":"arbeiten",
     "numbers":2
   },
   {
-    "words":"gedanken",
-    "numbers":2
-  },
-  {
-    "words":"und seine",
-    "numbers":2
-  },
-  {
-    "words":"wirecard",
+    "words":"gaza",
     "numbers":2
   },
   {
@@ -968,19 +912,7 @@
     "numbers":2
   },
   {
-    "words":"öffentlichkeit",
-    "numbers":2
-  },
-  {
-    "words":"warum",
-    "numbers":2
-  },
-  {
-    "words":"das volk",
-    "numbers":2
-  },
-  {
-    "words":"herrn",
+    "words":"und deutlich",
     "numbers":2
   },
   {
@@ -988,31 +920,15 @@
     "numbers":2
   },
   {
-    "words":"bedauerlich",
+    "words":"george orwell",
     "numbers":2
   },
   {
-    "words":"unsere politiker",
+    "words":"öffentlichkeit",
     "numbers":2
   },
   {
-    "words":"und deutlich",
-    "numbers":2
-  },
-  {
-    "words":"lächerlicher",
-    "numbers":2
-  },
-  {
-    "words":"ist wirklich",
-    "numbers":2
-  },
-  {
-    "words":"stabil",
-    "numbers":2
-  },
-  {
-    "words":"soll",
+    "words":"friedensdemonstrationen",
     "numbers":2
   },
   {
@@ -1020,23 +936,99 @@
     "numbers":2
   },
   {
-    "words":"abgeordnete",
+    "words":"bedauerlich",
     "numbers":2
   },
   {
-    "words":"rechnung",
+    "words":"öffentlich",
     "numbers":2
   },
   {
-    "words":"erinnere",
+    "words":"weitere",
     "numbers":2
   },
   {
-    "words":"mut",
+    "words":"beitrag",
     "numbers":2
   },
   {
-    "words":"wollen keinen",
+    "words":"bald",
+    "numbers":2
+  },
+  {
+    "words":"macht",
+    "numbers":2
+  },
+  {
+    "words":"großem",
+    "numbers":2
+  },
+  {
+    "words":"waffenlieferung",
+    "numbers":2
+  },
+  {
+    "words":"sondern",
+    "numbers":2
+  },
+  {
+    "words":"aggressionen",
+    "numbers":2
+  },
+  {
+    "words":"herrn",
+    "numbers":2
+  },
+  {
+    "words":"ausgehen",
+    "numbers":2
+  },
+  {
+    "words":"ist einfach",
+    "numbers":2
+  },
+  {
+    "words":"überzeugung",
+    "numbers":2
+  },
+  {
+    "words":"altparteien",
+    "numbers":2
+  },
+  {
+    "words":"lang",
+    "numbers":2
+  },
+  {
+    "words":"fabio",
+    "numbers":2
+  },
+  {
+    "words":"die",
+    "numbers":2
+  },
+  {
+    "words":"rechtliche",
+    "numbers":2
+  },
+  {
+    "words":"diskussion",
+    "numbers":2
+  },
+  {
+    "words":"deutschland hat",
+    "numbers":2
+  },
+  {
+    "words":"verantwortung gezogen",
+    "numbers":2
+  },
+  {
+    "words":"gedanken",
+    "numbers":2
+  },
+  {
+    "words":"vergessen nicht",
     "numbers":2
   },
   {
@@ -1048,19 +1040,19 @@
     "numbers":2
   },
   {
+    "words":"krieg und",
+    "numbers":2
+  },
+  {
     "words":"im bundestag",
     "numbers":2
   },
   {
-    "words":"unterbrechung",
+    "words":"herr scholz",
     "numbers":2
   },
   {
-    "words":"ständig",
-    "numbers":2
-  },
-  {
-    "words":"und auf",
+    "words":"mut",
     "numbers":2
   },
   {
@@ -1068,15 +1060,11 @@
     "numbers":2
   },
   {
-    "words":"beitrag",
-    "numbers":2
-  },
-  {
     "words":"machen",
     "numbers":2
   },
   {
-    "words":"vergessen nicht",
+    "words":"habe auch",
     "numbers":2
   },
   {
@@ -1084,11 +1072,11 @@
     "numbers":2
   },
   {
-    "words":"ist frau",
+    "words":"wir wollen",
     "numbers":2
   },
   {
-    "words":"diplomatische verhandlungen",
+    "words":"ist frau",
     "numbers":2
   },
   {
@@ -1096,11 +1084,35 @@
     "numbers":2
   },
   {
-    "words":"politiklandschaft",
+    "words":"rechnung",
     "numbers":2
   },
   {
-    "words":"wir wollen",
+    "words":"diplomatische verhandlungen",
+    "numbers":2
+  },
+  {
+    "words":"brandt",
+    "numbers":2
+  },
+  {
+    "words":"herrn scholz",
+    "numbers":2
+  },
+  {
+    "words":"und auf",
+    "numbers":2
+  },
+  {
+    "words":"ständig",
+    "numbers":2
+  },
+  {
+    "words":"unterbrechung",
+    "numbers":2
+  },
+  {
+    "words":"wollen keinen",
     "numbers":2
   },
   {
@@ -1108,11 +1120,39 @@
     "numbers":2
   },
   {
-    "words":"fremdschähmen",
+    "words":"ist wirklich",
     "numbers":2
   },
   {
-    "words":"seele",
+    "words":"genauso",
+    "numbers":2
+  },
+  {
+    "words":"außenpolitik",
+    "numbers":2
+  },
+  {
+    "words":"lächerlicher",
+    "numbers":2
+  },
+  {
+    "words":"warum",
+    "numbers":2
+  },
+  {
+    "words":"wirecard",
+    "numbers":2
+  },
+  {
+    "words":"abgeordnete",
+    "numbers":2
+  },
+  {
+    "words":"sabotage",
+    "numbers":2
+  },
+  {
+    "words":"erinnere",
     "numbers":2
   },
   {
@@ -1124,11 +1164,11 @@
     "numbers":2
   },
   {
-    "words":"genauso",
+    "words":"anzusprechen",
     "numbers":2
   },
   {
-    "words":"anzusprechen",
+    "words":"freue",
     "numbers":2
   },
   {
@@ -1136,11 +1176,7 @@
     "numbers":2
   },
   {
-    "words":"absolut richtig",
-    "numbers":2
-  },
-  {
-    "words":"unmenschlich",
+    "words":"seele",
     "numbers":2
   },
   {
@@ -1148,11 +1184,11 @@
     "numbers":2
   },
   {
-    "words":"jetzt",
+    "words":"nicht aufgeben",
     "numbers":2
   },
   {
-    "words":"nicht aufgeben",
+    "words":"ist das",
     "numbers":2
   },
   {
@@ -1164,10 +1200,6 @@
     "numbers":2
   },
   {
-    "words":"spaß",
-    "numbers":2
-  },
-  {
     "words":"klartext",
     "numbers":2
   },
@@ -1176,135 +1208,23 @@
     "numbers":2
   },
   {
-    "words":"freue",
+    "words":"großstädten",
     "numbers":2
   },
   {
-    "words":"ist das",
+    "words":"erschreckend",
     "numbers":2
   },
   {
-    "words":"freiheit",
+    "words":"den bundestag",
     "numbers":2
   },
   {
-    "words":"weitere",
+    "words":"engagement",
     "numbers":2
   },
   {
-    "words":"mitgemacht",
-    "numbers":2
-  },
-  {
-    "words":"plakaten",
-    "numbers":2
-  },
-  {
-    "words":"gesunder",
-    "numbers":2
-  },
-  {
-    "words":"deswegen",
-    "numbers":2
-  },
-  {
-    "words":"palmer",
-    "numbers":2
-  },
-  {
-    "words":"wir haben",
-    "numbers":2
-  },
-  {
-    "words":"berlin",
-    "numbers":2
-  },
-  {
-    "words":"beugehaftforderung",
-    "numbers":2
-  },
-  {
-    "words":"für ungeimpfte",
-    "numbers":2
-  },
-  {
-    "words":"ungeimpfte",
-    "numbers":2
-  },
-  {
-    "words":"beugehaft",
-    "numbers":2
-  },
-  {
-    "words":"unverschämtheit",
-    "numbers":2
-  },
-  {
-    "words":"ganz",
-    "numbers":2
-  },
-  {
-    "words":"medienfreiheit",
-    "numbers":2
-  },
-  {
-    "words":"eigentlich",
-    "numbers":2
-  },
-  {
-    "words":"taurus",
-    "numbers":2
-  },
-  {
-    "words":"fakten",
-    "numbers":2
-  },
-  {
-    "words":"forderungen",
-    "numbers":2
-  },
-  {
-    "words":"einsame",
-    "numbers":2
-  },
-  {
-    "words":"jugoslavien",
-    "numbers":2
-  },
-  {
-    "words":"linken",
-    "numbers":2
-  },
-  {
-    "words":"merkwürdiger",
-    "numbers":2
-  },
-  {
-    "words":"merkwürdig",
-    "numbers":2
-  },
-  {
-    "words":"zusammenbruch",
-    "numbers":2
-  },
-  {
-    "words":"wagenknecht sie",
-    "numbers":2
-  },
-  {
-    "words":"fabio",
-    "numbers":2
-  },
-  {
-    "words":"aus",
-    "numbers":2
-  },
-  {
-    "words":"einzahlen",
-    "numbers":2
-  },
-  {
-    "words":"demokratisches",
+    "words":"zurücktreten",
     "numbers":2
   },
   {
@@ -1312,11 +1232,19 @@
     "numbers":2
   },
   {
-    "words":"zahlen",
+    "words":"demokratisches",
     "numbers":2
   },
   {
-    "words":"zurücktreten",
+    "words":"einzahlen",
+    "numbers":2
+  },
+  {
+    "words":"freiheit",
+    "numbers":2
+  },
+  {
+    "words":"zahlen",
     "numbers":2
   },
   {
@@ -1332,19 +1260,15 @@
     "numbers":2
   },
   {
-    "words":"der politik",
-    "numbers":2
-  },
-  {
     "words":"signal",
     "numbers":2
   },
   {
-    "words":"russischen",
+    "words":"aus",
     "numbers":2
   },
   {
-    "words":"gebracht frau",
+    "words":"russischen",
     "numbers":2
   },
   {
@@ -1357,10 +1281,6 @@
   },
   {
     "words":"orbán",
-    "numbers":2
-  },
-  {
-    "words":"vote",
     "numbers":2
   },
   {
@@ -1388,55 +1308,15 @@
     "numbers":2
   },
   {
-    "words":"umfassende",
+    "words":"der politik",
     "numbers":2
   },
   {
-    "words":"zusammenfassung",
+    "words":"vote",
     "numbers":2
   },
   {
-    "words":"verboten",
-    "numbers":2
-  },
-  {
-    "words":"arbeitsplätze",
-    "numbers":2
-  },
-  {
-    "words":"den bundestag",
-    "numbers":2
-  },
-  {
-    "words":"sabotage",
-    "numbers":2
-  },
-  {
-    "words":"großstädten",
-    "numbers":2
-  },
-  {
-    "words":"friedensdemonstrationen",
-    "numbers":2
-  },
-  {
-    "words":"arbeiten",
-    "numbers":2
-  },
-  {
-    "words":"gaza",
-    "numbers":2
-  },
-  {
-    "words":"lang",
-    "numbers":2
-  },
-  {
-    "words":"überzeugung",
-    "numbers":2
-  },
-  {
-    "words":"macht",
+    "words":"ganz",
     "numbers":2
   },
   {
@@ -1444,39 +1324,15 @@
     "numbers":2
   },
   {
-    "words":"großem",
+    "words":"spaß",
     "numbers":2
   },
   {
-    "words":"hervorragende",
+    "words":"politiklandschaft",
     "numbers":2
   },
   {
-    "words":"waffenlieferung",
-    "numbers":2
-  },
-  {
-    "words":"aggressionen",
-    "numbers":2
-  },
-  {
-    "words":"totalausfall",
-    "numbers":2
-  },
-  {
-    "words":"steuergesetzgebung",
-    "numbers":2
-  },
-  {
-    "words":"maischberger nicht",
-    "numbers":2
-  },
-  {
-    "words":"drüber",
-    "numbers":2
-  },
-  {
-    "words":"ausgehen",
+    "words":"unmenschlich",
     "numbers":2
   },
   {
@@ -1484,35 +1340,39 @@
     "numbers":2
   },
   {
-    "words":"ist einfach",
+    "words":"drüber",
     "numbers":2
   },
   {
-    "words":"altparteien",
+    "words":"maischberger nicht",
     "numbers":2
   },
   {
-    "words":"engagement",
+    "words":"steuergesetzgebung",
     "numbers":2
   },
   {
-    "words":"söhne",
+    "words":"totalausfall",
     "numbers":2
   },
   {
-    "words":"analyse",
+    "words":"arbeitsplätze",
     "numbers":2
   },
   {
-    "words":"kanzlerkandidat",
+    "words":"aktivieren",
     "numbers":2
   },
   {
-    "words":"persönlichkeiten",
+    "words":"zusammenbruch",
     "numbers":2
   },
   {
-    "words":"reaktionen",
+    "words":"ja",
+    "numbers":2
+  },
+  {
+    "words":"leiden",
     "numbers":2
   },
   {
@@ -1520,11 +1380,43 @@
     "numbers":2
   },
   {
-    "words":"scheuklappen",
+    "words":"verboten",
     "numbers":2
   },
   {
-    "words":"journalismus",
+    "words":"einsame",
+    "numbers":2
+  },
+  {
+    "words":"berlin",
+    "numbers":2
+  },
+  {
+    "words":"wir haben",
+    "numbers":2
+  },
+  {
+    "words":"müssten",
+    "numbers":2
+  },
+  {
+    "words":"deswegen",
+    "numbers":2
+  },
+  {
+    "words":"gebracht frau",
+    "numbers":2
+  },
+  {
+    "words":"wagenknecht sie",
+    "numbers":2
+  },
+  {
+    "words":"keine kriege",
+    "numbers":2
+  },
+  {
+    "words":"ungepiksten",
     "numbers":2
   },
   {
@@ -1544,6 +1436,10 @@
     "numbers":2
   },
   {
+    "words":"propaganda",
+    "numbers":2
+  },
+  {
     "words":"getroffen",
     "numbers":2
   },
@@ -1552,15 +1448,11 @@
     "numbers":2
   },
   {
-    "words":"leiden",
-    "numbers":2
-  },
-  {
     "words":"grinst",
     "numbers":2
   },
   {
-    "words":"ungepiksten",
+    "words":"orwell",
     "numbers":2
   },
   {
@@ -1568,7 +1460,7 @@
     "numbers":2
   },
   {
-    "words":"ja",
+    "words":"scheuklappen",
     "numbers":2
   },
   {
@@ -1580,7 +1472,7 @@
     "numbers":2
   },
   {
-    "words":"erschreckend",
+    "words":"jetzt",
     "numbers":2
   },
   {
@@ -1592,283 +1484,11 @@
     "numbers":2
   },
   {
-    "words":"aktivieren",
+    "words":"kanzlerkandidat",
     "numbers":2
   },
   {
-    "words":"schaffen ohne",
-    "numbers":2
-  },
-  {
-    "words":"gefallen",
-    "numbers":2
-  },
-  {
-    "words":"verantwortung gezogen",
-    "numbers":2
-  },
-  {
-    "words":"ist unglaublich",
-    "numbers":2
-  },
-  {
-    "words":"leyen",
-    "numbers":2
-  },
-  {
-    "words":"darf kein",
-    "numbers":2
-  },
-  {
-    "words":"endlich auf",
-    "numbers":2
-  },
-  {
-    "words":"stoppen",
-    "numbers":2
-  },
-  {
-    "words":"großartiger",
-    "numbers":2
-  },
-  {
-    "words":"hoffnungsträger",
-    "numbers":2
-  },
-  {
-    "words":"kein kanzler",
-    "numbers":2
-  },
-  {
-    "words":"schaden",
-    "numbers":2
-  },
-  {
-    "words":"nächsten",
-    "numbers":2
-  },
-  {
-    "words":"klasse",
-    "numbers":2
-  },
-  {
-    "words":"merz als",
-    "numbers":2
-  },
-  {
-    "words":"steht",
-    "numbers":2
-  },
-  {
-    "words":"grünen und",
-    "numbers":2
-  },
-  {
-    "words":"der spd",
-    "numbers":2
-  },
-  {
-    "words":"grünen",
-    "numbers":2
-  },
-  {
-    "words":"nicht mein",
-    "numbers":2
-  },
-  {
-    "words":"mein kanzler",
-    "numbers":2
-  },
-  {
-    "words":"mein",
-    "numbers":2
-  },
-  {
-    "words":"dass endlich",
-    "numbers":2
-  },
-  {
-    "words":"rüstungsverträge",
-    "numbers":2
-  },
-  {
-    "words":"richtigen dinge",
-    "numbers":2
-  },
-  {
-    "words":"klarem",
-    "numbers":2
-  },
-  {
-    "words":"für diese",
-    "numbers":2
-  },
-  {
-    "words":"meine hochachtung",
-    "numbers":2
-  },
-  {
-    "words":"für eine",
-    "numbers":2
-  },
-  {
-    "words":"eine politik",
-    "numbers":2
-  },
-  {
-    "words":"stopp",
-    "numbers":2
-  },
-  {
-    "words":"jemanden",
-    "numbers":2
-  },
-  {
-    "words":"schämen",
-    "numbers":2
-  },
-  {
-    "words":"klimafreundlichkeit",
-    "numbers":2
-  },
-  {
-    "words":"freundschaft",
-    "numbers":2
-  },
-  {
-    "words":"nichts mehr",
-    "numbers":2
-  },
-  {
-    "words":"sie gibt",
-    "numbers":2
-  },
-  {
-    "words":"kein krieg",
-    "numbers":2
-  },
-  {
-    "words":"dieser",
-    "numbers":2
-  },
-  {
-    "words":"merz nicht",
-    "numbers":2
-  },
-  {
-    "words":"aussage",
-    "numbers":2
-  },
-  {
-    "words":"fehlbesetzung",
-    "numbers":2
-  },
-  {
-    "words":"wenige",
-    "numbers":2
-  },
-  {
-    "words":"verzweiflung",
-    "numbers":2
-  },
-  {
-    "words":"mit russland",
-    "numbers":2
-  },
-  {
-    "words":"untergehen",
-    "numbers":2
-  },
-  {
-    "words":"doppelmoral",
-    "numbers":2
-  },
-  {
-    "words":"bei klarem",
-    "numbers":2
-  },
-  {
-    "words":"klarem verstand",
-    "numbers":2
-  },
-  {
-    "words":"bleiben sie",
-    "numbers":2
-  },
-  {
-    "words":"gedacht",
-    "numbers":2
-  },
-  {
-    "words":"unfähigen",
-    "numbers":2
-  },
-  {
-    "words":"türkischer",
-    "numbers":2
-  },
-  {
-    "words":"der ukraine",
-    "numbers":2
-  },
-  {
-    "words":"menschenverachtend",
-    "numbers":2
-  },
-  {
-    "words":"wagenknecht das",
-    "numbers":2
-  },
-  {
-    "words":"herrn scholz",
-    "numbers":2
-  },
-  {
-    "words":"brandt",
-    "numbers":2
-  },
-  {
-    "words":"habe auch",
-    "numbers":2
-  },
-  {
-    "words":"herr scholz",
-    "numbers":2
-  },
-  {
-    "words":"krieg und",
-    "numbers":2
-  },
-  {
-    "words":"bald",
-    "numbers":2
-  },
-  {
-    "words":"die",
-    "numbers":2
-  },
-  {
-    "words":"deutschland hat",
-    "numbers":2
-  },
-  {
-    "words":"sondern",
-    "numbers":2
-  },
-  {
-    "words":"diskussion",
-    "numbers":2
-  },
-  {
-    "words":"öffentlich",
-    "numbers":2
-  },
-  {
-    "words":"rechtliche",
-    "numbers":2
-  },
-  {
-    "words":"george orwell",
+    "words":"analyse",
     "numbers":2
   },
   {
@@ -1876,355 +1496,123 @@
     "numbers":2
   },
   {
-    "words":"orwell",
+    "words":"söhne",
     "numbers":2
   },
   {
-    "words":"propaganda",
+    "words":"journalismus",
     "numbers":2
   },
   {
-    "words":"keine kriege",
+    "words":"reaktionen",
     "numbers":2
   },
   {
-    "words":"müssten",
+    "words":"plakaten",
     "numbers":2
   },
   {
-    "words":"andersdenkenden",
+    "words":"eigentlich",
     "numbers":2
   },
   {
-    "words":"kriegstreiberei",
+    "words":"gesunder",
     "numbers":2
   },
   {
-    "words":"ihr",
+    "words":"palmer",
     "numbers":2
   },
   {
-    "words":"viel",
+    "words":"beugehaftforderung",
     "numbers":2
   },
   {
-    "words":"migrationsgeschichte",
+    "words":"für ungeimpfte",
     "numbers":2
   },
   {
-    "words":"ich finde",
+    "words":"ungeimpfte",
     "numbers":2
   },
   {
-    "words":"finde",
+    "words":"beugehaft",
     "numbers":2
   },
   {
-    "words":"julian",
+    "words":"mitgemacht",
     "numbers":2
   },
   {
-    "words":"silvesterfeuerwerk",
+    "words":"unverschämtheit",
     "numbers":2
   },
   {
-    "words":"sagen",
+    "words":"medienfreiheit",
     "numbers":2
   },
   {
-    "words":"ausländer",
+    "words":"taurus",
     "numbers":2
   },
   {
-    "words":"diplomatisch",
+    "words":"persönlichkeiten",
     "numbers":2
   },
   {
-    "words":"egal",
+    "words":"fakten",
     "numbers":2
   },
   {
-    "words":"privatvermögen",
+    "words":"forderungen",
     "numbers":2
   },
   {
-    "words":"vermissen",
+    "words":"jugoslavien",
     "numbers":2
   },
   {
-    "words":"politische",
+    "words":"linken",
     "numbers":2
   },
   {
-    "words":"lügen",
+    "words":"merkwürdiger",
     "numbers":2
   },
   {
-    "words":"kann",
+    "words":"merkwürdig",
     "numbers":2
   },
   {
-    "words":"übertreffen",
+    "words":"umfassende",
     "numbers":2
   },
   {
-    "words":"hallervorden sie",
+    "words":"zusammenfassung",
     "numbers":2
   },
   {
-    "words":"mandat",
+    "words":"hervorragende",
     "numbers":2
   },
   {
-    "words":"laut",
+    "words":"wagenknecht das",
     "numbers":2
   },
   {
-    "words":"weg",
+    "words":"für diese",
     "numbers":2
   },
   {
-    "words":"der wahl",
-    "numbers":2
-  },
-  {
-    "words":"arrogant",
-    "numbers":2
-  },
-  {
-    "words":"unverschaemt",
-    "numbers":2
-  },
-  {
-    "words":"positionen",
-    "numbers":2
-  },
-  {
-    "words":"fernsehen",
-    "numbers":2
-  },
-  {
-    "words":"authentisch",
-    "numbers":2
-  },
-  {
-    "words":"sympathisch",
-    "numbers":2
-  },
-  {
-    "words":"donanyi",
-    "numbers":2
-  },
-  {
-    "words":"friedenstüchtig",
-    "numbers":2
-  },
-  {
-    "words":"hahne",
-    "numbers":2
-  },
-  {
-    "words":"herzlichen dank",
-    "numbers":2
-  },
-  {
-    "words":"friedensverhandlungen",
-    "numbers":2
-  },
-  {
-    "words":"volle unterstützung",
-    "numbers":2
-  },
-  {
-    "words":"interesse",
-    "numbers":2
-  },
-  {
-    "words":"unterstützung",
-    "numbers":2
-  },
-  {
-    "words":"schon",
-    "numbers":2
-  },
-  {
-    "words":"der krieg",
-    "numbers":2
-  },
-  {
-    "words":"dass sahra",
-    "numbers":2
-  },
-  {
-    "words":"zusammen",
-    "numbers":2
-  },
-  {
-    "words":"verhandlungen",
-    "numbers":2
-  },
-  {
-    "words":"einzige",
-    "numbers":2
-  },
-  {
-    "words":"bundestagspräsidentin",
-    "numbers":2
-  },
-  {
-    "words":"grundschulklasse",
-    "numbers":2
-  },
-  {
-    "words":"fr wagenknecht",
-    "numbers":2
-  },
-  {
-    "words":"wagenknecht ihre",
-    "numbers":2
-  },
-  {
-    "words":"kundgebungen",
-    "numbers":2
-  },
-  {
-    "words":"und authentisch",
-    "numbers":2
-  },
-  {
-    "words":"überheblichkeit",
-    "numbers":2
-  },
-  {
-    "words":"wahr",
-    "numbers":2
-  },
-  {
-    "words":"aufklärung",
-    "numbers":2
-  },
-  {
-    "words":"sie weiterhin",
-    "numbers":2
-  },
-  {
-    "words":"dazwischenquatschen",
-    "numbers":2
-  },
-  {
-    "words":"unprofessionell",
-    "numbers":2
-  },
-  {
-    "words":"ohne frieden",
-    "numbers":2
-  },
-  {
-    "words":"fehlkalkulation",
-    "numbers":2
-  },
-  {
-    "words":"jedes wort",
-    "numbers":2
-  },
-  {
-    "words":"ist wahr",
-    "numbers":2
-  },
-  {
-    "words":"miteinander",
-    "numbers":2
-  },
-  {
-    "words":"kommunikationskultur",
-    "numbers":2
-  },
-  {
-    "words":"politikerinnen",
-    "numbers":2
-  },
-  {
-    "words":"sie recht",
-    "numbers":2
-  },
-  {
-    "words":"kanzlerin",
-    "numbers":2
-  },
-  {
-    "words":"meinen",
-    "numbers":2
-  },
-  {
-    "words":"größten",
-    "numbers":2
-  },
-  {
-    "words":"gehabt",
-    "numbers":2
-  },
-  {
-    "words":"bitte nicht",
-    "numbers":2
-  },
-  {
-    "words":"kleinkriegen",
-    "numbers":2
-  },
-  {
-    "words":"westlichen",
-    "numbers":2
-  },
-  {
-    "words":"menschenrechten",
-    "numbers":2
-  },
-  {
-    "words":"hat sie",
-    "numbers":2
-  },
-  {
-    "words":"wie",
-    "numbers":2
-  },
-  {
-    "words":"gästen",
-    "numbers":2
-  },
-  {
-    "words":"geht nicht",
-    "numbers":2
-  },
-  {
-    "words":"klaus",
-    "numbers":2
-  },
-  {
-    "words":"eine echte",
-    "numbers":2
-  },
-  {
-    "words":"echte",
-    "numbers":2
-  },
-  {
-    "words":"ganze",
-    "numbers":2
-  },
-  {
-    "words":"beleidigung",
-    "numbers":2
-  },
-  {
-    "words":"fehlen",
-    "numbers":2
-  },
-  {
-    "words":"und baerbock",
+    "words":"menschenverachtend",
     "numbers":2
   },
   {
     "words":"weiter machen",
+    "numbers":2
+  },
+  {
+    "words":"gedacht",
     "numbers":2
   },
   {
@@ -2236,7 +1624,15 @@
     "numbers":2
   },
   {
+    "words":"bleiben sie",
+    "numbers":2
+  },
+  {
     "words":"bereicherung",
+    "numbers":2
+  },
+  {
+    "words":"rüstungsverträge",
     "numbers":2
   },
   {
@@ -2249,6 +1645,10 @@
   },
   {
     "words":"ausreden",
+    "numbers":2
+  },
+  {
+    "words":"dass endlich",
     "numbers":2
   },
   {
@@ -2284,11 +1684,51 @@
     "numbers":2
   },
   {
-    "words":"beitrittsgespräche",
+    "words":"geht nicht",
     "numbers":2
   },
   {
-    "words":"ohne",
+    "words":"unfähigen",
+    "numbers":2
+  },
+  {
+    "words":"türkischer",
+    "numbers":2
+  },
+  {
+    "words":"mein kanzler",
+    "numbers":2
+  },
+  {
+    "words":"migrationsgeschichte",
+    "numbers":2
+  },
+  {
+    "words":"kriege",
+    "numbers":2
+  },
+  {
+    "words":"volksvertreter",
+    "numbers":2
+  },
+  {
+    "words":"hohen",
+    "numbers":2
+  },
+  {
+    "words":"dazwischenschreien",
+    "numbers":2
+  },
+  {
+    "words":"und frieden",
+    "numbers":2
+  },
+  {
+    "words":"ohne waffen",
+    "numbers":2
+  },
+  {
+    "words":"schaffen ohne",
     "numbers":2
   },
   {
@@ -2296,7 +1736,451 @@
     "numbers":2
   },
   {
-    "words":"gewissenlos",
+    "words":"ohne",
+    "numbers":2
+  },
+  {
+    "words":"beitrittsgespräche",
+    "numbers":2
+  },
+  {
+    "words":"eine echte",
+    "numbers":2
+  },
+  {
+    "words":"echte",
+    "numbers":2
+  },
+  {
+    "words":"ganze",
+    "numbers":2
+  },
+  {
+    "words":"beleidigung",
+    "numbers":2
+  },
+  {
+    "words":"julian",
+    "numbers":2
+  },
+  {
+    "words":"fehlen",
+    "numbers":2
+  },
+  {
+    "words":"finde",
+    "numbers":2
+  },
+  {
+    "words":"und baerbock",
+    "numbers":2
+  },
+  {
+    "words":"ich finde",
+    "numbers":2
+  },
+  {
+    "words":"mein",
+    "numbers":2
+  },
+  {
+    "words":"nicht mein",
+    "numbers":2
+  },
+  {
+    "words":"alle tassen",
+    "numbers":2
+  },
+  {
+    "words":"hoffnungsträger",
+    "numbers":2
+  },
+  {
+    "words":"dieser",
+    "numbers":2
+  },
+  {
+    "words":"merz nicht",
+    "numbers":2
+  },
+  {
+    "words":"aussage",
+    "numbers":2
+  },
+  {
+    "words":"stoppen",
+    "numbers":2
+  },
+  {
+    "words":"fehlbesetzung",
+    "numbers":2
+  },
+  {
+    "words":"wenige",
+    "numbers":2
+  },
+  {
+    "words":"endlich auf",
+    "numbers":2
+  },
+  {
+    "words":"darf kein",
+    "numbers":2
+  },
+  {
+    "words":"verzweiflung",
+    "numbers":2
+  },
+  {
+    "words":"mit russland",
+    "numbers":2
+  },
+  {
+    "words":"leyen",
+    "numbers":2
+  },
+  {
+    "words":"ist unglaublich",
+    "numbers":2
+  },
+  {
+    "words":"richtigen dinge",
+    "numbers":2
+  },
+  {
+    "words":"untergehen",
+    "numbers":2
+  },
+  {
+    "words":"doppelmoral",
+    "numbers":2
+  },
+  {
+    "words":"bei klarem",
+    "numbers":2
+  },
+  {
+    "words":"klarem verstand",
+    "numbers":2
+  },
+  {
+    "words":"meine hochachtung",
+    "numbers":2
+  },
+  {
+    "words":"klarem",
+    "numbers":2
+  },
+  {
+    "words":"großartiger",
+    "numbers":2
+  },
+  {
+    "words":"kein krieg",
+    "numbers":2
+  },
+  {
+    "words":"positionen",
+    "numbers":2
+  },
+  {
+    "words":"kein kanzler",
+    "numbers":2
+  },
+  {
+    "words":"unverschaemt",
+    "numbers":2
+  },
+  {
+    "words":"arrogant",
+    "numbers":2
+  },
+  {
+    "words":"für eine",
+    "numbers":2
+  },
+  {
+    "words":"eine politik",
+    "numbers":2
+  },
+  {
+    "words":"stopp",
+    "numbers":2
+  },
+  {
+    "words":"jemanden",
+    "numbers":2
+  },
+  {
+    "words":"grünen",
+    "numbers":2
+  },
+  {
+    "words":"schämen",
+    "numbers":2
+  },
+  {
+    "words":"der spd",
+    "numbers":2
+  },
+  {
+    "words":"klimafreundlichkeit",
+    "numbers":2
+  },
+  {
+    "words":"grünen und",
+    "numbers":2
+  },
+  {
+    "words":"steht",
+    "numbers":2
+  },
+  {
+    "words":"merz als",
+    "numbers":2
+  },
+  {
+    "words":"freundschaft",
+    "numbers":2
+  },
+  {
+    "words":"klasse",
+    "numbers":2
+  },
+  {
+    "words":"nichts mehr",
+    "numbers":2
+  },
+  {
+    "words":"sie gibt",
+    "numbers":2
+  },
+  {
+    "words":"nächsten",
+    "numbers":2
+  },
+  {
+    "words":"schaden",
+    "numbers":2
+  },
+  {
+    "words":"wagenecht",
+    "numbers":2
+  },
+  {
+    "words":"verstand",
+    "numbers":2
+  },
+  {
+    "words":"der ukraine",
+    "numbers":2
+  },
+  {
+    "words":"laut",
+    "numbers":2
+  },
+  {
+    "words":"kommunikationskultur",
+    "numbers":2
+  },
+  {
+    "words":"aufklärung",
+    "numbers":2
+  },
+  {
+    "words":"politikerinnen",
+    "numbers":2
+  },
+  {
+    "words":"kanzlerin",
+    "numbers":2
+  },
+  {
+    "words":"mandat",
+    "numbers":2
+  },
+  {
+    "words":"meinen",
+    "numbers":2
+  },
+  {
+    "words":"größten",
+    "numbers":2
+  },
+  {
+    "words":"gehabt",
+    "numbers":2
+  },
+  {
+    "words":"hallervorden sie",
+    "numbers":2
+  },
+  {
+    "words":"bitte nicht",
+    "numbers":2
+  },
+  {
+    "words":"kleinkriegen",
+    "numbers":2
+  },
+  {
+    "words":"westlichen",
+    "numbers":2
+  },
+  {
+    "words":"menschenrechten",
+    "numbers":2
+  },
+  {
+    "words":"hat sie",
+    "numbers":2
+  },
+  {
+    "words":"sie recht",
+    "numbers":2
+  },
+  {
+    "words":"übertreffen",
+    "numbers":2
+  },
+  {
+    "words":"wahr",
+    "numbers":2
+  },
+  {
+    "words":"überheblichkeit",
+    "numbers":2
+  },
+  {
+    "words":"und authentisch",
+    "numbers":2
+  },
+  {
+    "words":"miteinander",
+    "numbers":2
+  },
+  {
+    "words":"ist wahr",
+    "numbers":2
+  },
+  {
+    "words":"sympathisch",
+    "numbers":2
+  },
+  {
+    "words":"jedes wort",
+    "numbers":2
+  },
+  {
+    "words":"andersdenkenden",
+    "numbers":2
+  },
+  {
+    "words":"absolut richtig",
+    "numbers":2
+  },
+  {
+    "words":"fremdschähmen",
+    "numbers":2
+  },
+  {
+    "words":"und seine",
+    "numbers":2
+  },
+  {
+    "words":"soll",
+    "numbers":2
+  },
+  {
+    "words":"wagenknecht bringt",
+    "numbers":2
+  },
+  {
+    "words":"unsere politiker",
+    "numbers":2
+  },
+  {
+    "words":"das volk",
+    "numbers":2
+  },
+  {
+    "words":"kriegstreiberei",
+    "numbers":2
+  },
+  {
+    "words":"gefallen",
+    "numbers":2
+  },
+  {
+    "words":"sie weiterhin",
+    "numbers":2
+  },
+  {
+    "words":"ihr",
+    "numbers":2
+  },
+  {
+    "words":"vermissen",
+    "numbers":2
+  },
+  {
+    "words":"dazwischenquatschen",
+    "numbers":2
+  },
+  {
+    "words":"unprofessionell",
+    "numbers":2
+  },
+  {
+    "words":"ohne frieden",
+    "numbers":2
+  },
+  {
+    "words":"der wahl",
+    "numbers":2
+  },
+  {
+    "words":"fehlkalkulation",
+    "numbers":2
+  },
+  {
+    "words":"weg",
+    "numbers":2
+  },
+  {
+    "words":"authentisch",
+    "numbers":2
+  },
+  {
+    "words":"donanyi",
+    "numbers":2
+  },
+  {
+    "words":"seiner",
+    "numbers":2
+  },
+  {
+    "words":"kundgebungen",
+    "numbers":2
+  },
+  {
+    "words":"wie",
+    "numbers":2
+  },
+  {
+    "words":"diplomatisch",
+    "numbers":2
+  },
+  {
+    "words":"fernsehen",
+    "numbers":2
+  },
+  {
+    "words":"gästen",
+    "numbers":2
+  },
+  {
+    "words":"klaus",
     "numbers":2
   },
   {
@@ -2320,6 +2204,10 @@
     "numbers":2
   },
   {
+    "words":"ausländer",
+    "numbers":2
+  },
+  {
     "words":"exzellente",
     "numbers":2
   },
@@ -2336,47 +2224,111 @@
     "numbers":2
   },
   {
+    "words":"sagen",
+    "numbers":2
+  },
+  {
+    "words":"gewissenlos",
+    "numbers":2
+  },
+  {
     "words":"sehr wichtig",
     "numbers":2
   },
   {
-    "words":"kriege",
+    "words":"silvesterfeuerwerk",
     "numbers":2
   },
   {
-    "words":"seiner",
+    "words":"egal",
     "numbers":2
   },
   {
-    "words":"verstand",
+    "words":"wagenknecht ihre",
     "numbers":2
   },
   {
-    "words":"alle tassen",
+    "words":"friedenstüchtig",
     "numbers":2
   },
   {
-    "words":"wagenecht",
+    "words":"fr wagenknecht",
     "numbers":2
   },
   {
-    "words":"volksvertreter",
+    "words":"hahne",
     "numbers":2
   },
   {
-    "words":"hohen",
+    "words":"herzlichen dank",
     "numbers":2
   },
   {
-    "words":"dazwischenschreien",
+    "words":"kann",
     "numbers":2
   },
   {
-    "words":"und frieden",
+    "words":"friedensverhandlungen",
     "numbers":2
   },
   {
-    "words":"ohne waffen",
+    "words":"volle unterstützung",
+    "numbers":2
+  },
+  {
+    "words":"interesse",
+    "numbers":2
+  },
+  {
+    "words":"unterstützung",
+    "numbers":2
+  },
+  {
+    "words":"schon",
+    "numbers":2
+  },
+  {
+    "words":"lügen",
+    "numbers":2
+  },
+  {
+    "words":"der krieg",
+    "numbers":2
+  },
+  {
+    "words":"dass sahra",
+    "numbers":2
+  },
+  {
+    "words":"politische",
+    "numbers":2
+  },
+  {
+    "words":"privatvermögen",
+    "numbers":2
+  },
+  {
+    "words":"zusammen",
+    "numbers":2
+  },
+  {
+    "words":"viel",
+    "numbers":2
+  },
+  {
+    "words":"verhandlungen",
+    "numbers":2
+  },
+  {
+    "words":"einzige",
+    "numbers":2
+  },
+  {
+    "words":"bundestagspräsidentin",
+    "numbers":2
+  },
+  {
+    "words":"grundschulklasse",
     "numbers":2
   },
   {
