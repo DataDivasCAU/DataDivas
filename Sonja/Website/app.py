@@ -83,6 +83,12 @@ def get_election():
 def get_answer_seven():
     answer_seven_path = Path(BASE) / "data" / "tradewife" / "answer_seven.json"
     return jsonify(load_json(str(answer_seven_path)))
+
+@app.route("/hype_sentiment.json")
+def get_hype_sentiment():
+    hype_sentiment_path = Path(BASE) / "data" / "hypeSentiment" / "sentiment.json"
+    return jsonify(load_json(str(hype_sentiment_path)))
+
 @app.route("/load_yt_current_data_of_parties")
 def channel_stats_all():
     results = []
