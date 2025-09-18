@@ -1,15 +1,175 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dynamische Tabelle + Pie + Scatter</title>
   <script src="https://cdn.tailwindcss.com" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* Custom checkbox styling */
+    .custom-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      position: relative;
+      background-color: white;
+    }
+
+    .custom-checkbox:checked {
+      background-color: #4f46e5;
+      border-color: #4f46e5;
+    }
+
+    .custom-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* Dropdown styling */
+    .party-dropdown-button {
+      transition: all 0.2s;
+    }
+
+    .party-dropdown-button:hover {
+      background-color: #f3f4f6;
+    }
+
+    .party-dropdown-content {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border-radius: 0.375rem;
+      max-height: 300px;
+    }
+
+    .party-checkbox-container:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* Dark mode styles */
+    html.dark body {
+      background-image: linear-gradient(to bottom right, #1e293b, #0f172a);
+      color: #e2e8f0;
+    }
+
+    html.dark .bg-white {
+      background-color: #1e293b;
+      color: #e2e8f0;
+    }
+
+    html.dark .text-gray-800 {
+      color: #e2e8f0;
+    }
+
+    html.dark .text-gray-700 {
+      color: #cbd5e1;
+    }
+
+    html.dark .text-gray-600, 
+    html.dark .text-gray-500 {
+      color: #94a3b8;
+    }
+
+    html.dark .text-indigo-800 {
+      color: #a5b4fc;
+    }
+
+    html.dark .bg-indigo-100 {
+      background-color: #312e81;
+      color: #e0e7ff;
+    }
+
+    html.dark .text-indigo-600 {
+      color: #818cf8;
+    }
+
+    html.dark .bg-gray-200,
+    html.dark .bg-gray-100,
+    html.dark .bg-gray-50 {
+      background-color: #334155;
+    }
+
+    html.dark .bg-gray-200:hover,
+    html.dark .bg-gray-100:hover {
+      background-color: #475569;
+    }
+
+    html.dark .border-gray-200,
+    html.dark .border-gray-100 {
+      border-color: #334155;
+    }
+
+    html.dark .shadow-md {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    html.dark .custom-checkbox {
+      background-color: #334155;
+      border-color: #475569;
+    }
+
+    html.dark .party-dropdown-button:hover,
+    html.dark .party-checkbox-container:hover {
+      background-color: #475569;
+    }
+
+    html.dark select,
+    html.dark input,
+    html.dark button.border {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      border-color: #475569;
+    }
+
+    /* Dark mode toggle button */
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    html.dark .dark-mode-toggle {
+      background-color: #6366f1;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 p-6">
-  <div class="max-w-6xl mx-auto">
-    <header class="flex items-end justify-between mb-6 gap-4">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center justify-between p-6">
+  <!-- Dark Mode Toggle Button -->
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="w-full max-w-6xl">
+    <div class="flex items-end justify-between mb-6 gap-4">
       <div class="min-w-0">
         <h1 class="text-2xl font-bold">Posts per Party</h1>
         <div id="subtitle" class="text-sm text-gray-500 mt-1">Ansicht: 2025</div>
@@ -25,13 +185,34 @@
           <option value="both">Beide Wahlen</option>
         </select>
 
+        <label for="partyDropdown" class="font-medium">Parteien:</label>
+        <div class="relative inline-block">
+          <button id="partyDropdown" type="button" class="border rounded p-2 bg-white flex items-center justify-between min-w-[150px] party-dropdown-button">
+            <span>Keine Partei</span>
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="partyDropdownContent" class="absolute z-10 hidden bg-white border mt-1 party-dropdown-content max-h-60 overflow-y-auto min-w-[200px]">
+            <div class="p-2 border-b">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" id="selectAllParties" class="mr-2 custom-checkbox">
+                <span>Alle auswählen</span>
+              </label>
+            </div>
+            <div id="partyCheckboxes" class="p-2">
+              <!-- Will be populated dynamically -->
+            </div>
+          </div>
+        </div>
+
         <a id="btnExport"
-           href="/export-excel"
+           href="/export-pdf"
            class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
-          Export als Excel
+          Export als PDF
         </a>
       </div>
-    </header>
+    </div>
 
     <!-- Tabelle -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
@@ -46,10 +227,22 @@
 
     <!-- Charts -->
     <section class="grid gap-8 lg:grid-cols-2">
-      <!-- Pie nur bei Single-Ansicht -->
+      <!-- Posts Pie Chart -->
       <div class="max-w-xl">
         <div id="chartTitle" class="mb-2 font-semibold">Posts 2025 (Pie)</div>
         <canvas id="pieChart"></canvas>
+      </div>
+
+      <!-- Election Pie Chart -->
+      <div class="max-w-xl">
+        <div id="electionChartTitle" class="mb-2 font-semibold">Wahlergebnisse 2025 (Pie)</div>
+        <canvas id="electionPieChart"></canvas>
+      </div>
+
+      <!-- Combined Chart -->
+      <div class="max-w-xl">
+        <div id="combinedChartTitle" class="mb-2 font-semibold">Posts und Wahlergebnisse 2025</div>
+        <canvas id="combinedChart"></canvas>
       </div>
 
       <!-- Scatter nur bei "both" -->
@@ -61,19 +254,67 @@
       </div>
     </section>
 
+    <!-- Individual Party Charts -->
+    <section id="partyChartsSection" class="mt-8">
+      <h2 class="text-xl font-bold mb-4">Einzelne Parteien</h2>
+      <div id="partyCharts" class="grid gap-8 lg:grid-cols-2">
+        <!-- Will be populated dynamically -->
+      </div>
+    </section>
+
     <!-- Karten-Buttons -->
     <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-      <a href="/data.json"
-         class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-        <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Daten (JSON)</h2>
-        <p class="text-gray-600">Rohdaten zu Posts pro Partei als JSON.</p>
-      </a>
+      <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
+        <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Daten (Posts)</h2>
+        <p class="text-gray-600">Rohdaten zu Posts pro Partei.</p>
+        <div class="flex mt-4 space-x-3">
+          <button onclick="viewJsonData('/data.json')" class="px-3 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Anzeigen
+          </button>
+          <div class="relative">
+            <button onclick="toggleDownloadOptions('data')" class="px-3 py-2 rounded bg-green-100 hover:bg-green-200 text-green-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Download
+            </button>
+            <div id="data-download-options" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+              <a href="/data.json" download class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">JSON herunterladen</a>
+              <button onclick="downloadCSV('/data.json', 'posts-data')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CSV herunterladen</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <a href="/election.json"
-         class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
+      <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
         <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Wahldaten</h2>
-        <p class="text-gray-600">Wahlergebnisse der Parteien in JSON-Form.</p>
-      </a>
+        <p class="text-gray-600">Wahlergebnisse der Parteien.</p>
+        <div class="flex mt-4 space-x-3">
+          <button onclick="viewJsonData('/election.json')" class="px-3 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Anzeigen
+          </button>
+          <div class="relative">
+            <button onclick="toggleDownloadOptions('election')" class="px-3 py-2 rounded bg-green-100 hover:bg-green-200 text-green-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Download
+            </button>
+            <div id="election-download-options" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+              <a href="/election.json" download class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">JSON herunterladen</a>
+              <button onclick="downloadCSV('/election.json', 'election-data')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CSV herunterladen</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <a href="/load_yt_current_data_of_parties"
          class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
@@ -81,9 +322,190 @@
         <p class="text-gray-600">Lade aktuelle YouTube-Statistiken der Parteien.</p>
       </a>
     </section>
+
+    <!-- JSON Viewer Modal -->
+    <div id="jsonViewerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
+        <div class="flex justify-between items-center border-b p-4">
+          <h3 class="text-xl font-semibold" id="jsonViewerTitle">JSON Daten</h3>
+          <button onclick="closeJsonViewer()" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="overflow-auto p-4 flex-grow">
+          <pre id="jsonViewerContent" class="text-sm bg-gray-50 p-4 rounded"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script defer>
+    // Keyboard shortcut for PDF export (Strg+P)
+    document.addEventListener('keydown', function(event) {
+      // Check if Ctrl+P is pressed (keyCode 80 is 'p')
+      if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault(); // Prevent default browser print dialog
+        window.location.href = '/export-pdf'; // Redirect to PDF export
+      }
+    });
+
+    // JSON Viewer functions
+    function viewJsonData(url) {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          // Set the title based on the URL
+          const title = url.includes('data.json') ? 'Posts pro Partei Daten' : 'Wahlergebnisse Daten';
+          document.getElementById('jsonViewerTitle').textContent = title;
+
+          // Format JSON with 2 spaces indentation and display it
+          document.getElementById('jsonViewerContent').textContent = JSON.stringify(data, null, 2);
+
+          // Show the modal
+          document.getElementById('jsonViewerModal').classList.remove('hidden');
+        })
+        .catch(error => {
+          console.error('Error fetching JSON data:', error);
+          alert('Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+        });
+    }
+
+    function closeJsonViewer() {
+      document.getElementById('jsonViewerModal').classList.add('hidden');
+    }
+
+    // Close modal when clicking outside the content
+    document.getElementById('jsonViewerModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeJsonViewer();
+      }
+    });
+
+    // Download options toggle
+    function toggleDownloadOptions(type) {
+      const optionsId = `${type}-download-options`;
+      const options = document.getElementById(optionsId);
+
+      // Close all other dropdowns first
+      document.querySelectorAll('[id$="-download-options"]').forEach(el => {
+        if (el.id !== optionsId) {
+          el.classList.add('hidden');
+        }
+      });
+
+      // Toggle this dropdown
+      options.classList.toggle('hidden');
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('button[onclick^="toggleDownloadOptions"]')) {
+        document.querySelectorAll('[id$="-download-options"]').forEach(el => {
+          el.classList.add('hidden');
+        });
+      }
+    });
+
+    // Convert JSON to CSV and download
+    function downloadCSV(url, filename) {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          let csv = '';
+
+          // Handle different data structures
+          if (url.includes('data.json')) {
+            // For posts data
+            // Get the relevant keys (electionPosts2021, electionPosts2025, diffPosts2025)
+            const dataKeys = Object.keys(data).filter(key => key.includes('Posts'));
+            const yearKeys = dataKeys.filter(key => key.includes('election')); // Only electionPosts keys
+            const parties = new Set();
+
+            // Collect all party names
+            yearKeys.forEach(key => {
+              Object.keys(data[key]).forEach(party => parties.add(party));
+            });
+
+            // Create CSV header row
+            csv += 'Party,' + yearKeys.map(key => key.replace('electionPosts', 'Posts ')) + ',Diff\n';
+
+            // Create rows for each party
+            Array.from(parties).forEach(party => {
+              let row = party;
+              yearKeys.forEach(key => {
+                row += ',' + (data[key][party] !== undefined ? data[key][party] : '');
+              });
+
+              // Add diff column
+              row += ',' + (data['diffPosts2025'] && data['diffPosts2025'][party] !== undefined ? data['diffPosts2025'][party] : '');
+
+              csv += row + '\n';
+            });
+          } else if (url.includes('election.json')) {
+            // For election data
+            // Handle nested structure with arrays
+            const years = Object.keys(data).filter(key => key !== 'diffElection');
+            const parties = new Set();
+
+            // Collect all party names
+            years.forEach(year => {
+              if (Array.isArray(data[year]) && data[year].length > 0) {
+                Object.keys(data[year][0]).forEach(party => parties.add(party));
+              }
+            });
+
+            // Add diff parties too
+            if (data.diffElection) {
+              Object.keys(data.diffElection).forEach(party => parties.add(party));
+            }
+
+            // Create CSV header row
+            csv += 'Party,' + years.map(y => y.replace('election', 'Election ')) + ',Diff\n';
+
+            // Create rows for each party
+            Array.from(parties).forEach(party => {
+              let row = party;
+              years.forEach(year => {
+                if (Array.isArray(data[year]) && data[year].length > 0) {
+                  row += ',' + (data[year][0][party] !== undefined ? data[year][0][party] : '');
+                } else {
+                  row += ',';
+                }
+              });
+
+              // Add diff column
+              row += ',' + (data.diffElection && data.diffElection[party] !== undefined ? data.diffElection[party] : '');
+
+              csv += row + '\n';
+            });
+          }
+
+          // Create download link
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          const url = URL.createObjectURL(blob);
+
+          link.setAttribute('href', url);
+          link.setAttribute('download', filename + '.csv');
+          link.style.visibility = 'hidden';
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          // Hide dropdown after download
+          document.querySelectorAll('[id$="-download-options"]').forEach(el => {
+            el.classList.add('hidden');
+          });
+        })
+        .catch(error => {
+          console.error('Error converting to CSV:', error);
+          alert('Fehler beim Konvertieren der Daten. Bitte versuchen Sie es später erneut.');
+        });
+    }
+
     let dataStore = {
       posts2025: [],
       posts2021: [],
@@ -93,7 +515,9 @@
     };
 
     let currentPeriod = "first";
-    let pieChart, scatterChart;
+    let pieChart, electionPieChart, combinedChart, scatterChart;
+    let partyCharts = new Map(); // Store individual party charts
+    let selectedParties = []; // Store selected parties
     let sortState = { key: null, dir: 1 };
 
     // === Parteifarben ===
@@ -154,6 +578,9 @@
         dataStore.posts2025 = mergeElection(rows2025, dataStore.election2025);
         dataStore.posts2021 = mergeElection(rows2021, dataStore.election2021);
 
+        // Populate party dropdown
+        populatePartyDropdown();
+
         refresh();
       })
       .catch(err => console.error("Ladefehler:", err));
@@ -196,7 +623,11 @@
       const tfoot = document.getElementById("tableFoot");
       tbody.innerHTML = ""; tfoot.innerHTML = "";
 
-      let data = rows.slice();
+      // Filter rows based on selected parties
+      let data = selectedParties.length > 0
+        ? rows.filter(r => selectedParties.includes(r.party))
+        : rows.slice();
+
       if (sortState.key) {
         data.sort((a, b) => {
           const va = a[sortState.key], vb = b[sortState.key];
@@ -236,7 +667,14 @@
       const e25 = dataStore.election2025 || new Map();
       const e21 = dataStore.election2021 || new Map();
       const dE  = dataStore.diffElection || new Map();
-      const parties = [...new Set([...p25.keys(), ...p21.keys(), ...e25.keys(), ...e21.keys(), ...dE.keys()])];
+
+      // Get all unique parties from all datasets
+      let parties = [...new Set([...p25.keys(), ...p21.keys(), ...e25.keys(), ...e21.keys(), ...dE.keys()])];
+
+      // Filter parties based on selection
+      if (selectedParties.length > 0) {
+        parties = parties.filter(party => selectedParties.includes(party));
+      }
 
       renderHeader([
         { key: "party",          label: "Partei" },
@@ -327,8 +765,15 @@
       if (pieChart) pieChart.destroy();
       if (!rows || rows.length === 0) return;
 
-      const labels = rows.map(r => r.party);
-      const values = rows.map(r => r.posts);
+      // Filter rows based on selected parties
+      const filteredRows = selectedParties.length > 0 
+        ? rows.filter(r => selectedParties.includes(r.party))
+        : rows;
+
+      if (filteredRows.length === 0) return;
+
+      const labels = filteredRows.map(r => r.party);
+      const values = filteredRows.map(r => r.posts);
       const total = values.reduce((a, b) => a + b, 0);
       const backgroundColor = labels.map(getPartyColor);
 
@@ -351,7 +796,338 @@
         }
       });
 
-      document.getElementById("chartTitle").textContent = `Posts ${year} (Pie)`;
+      document.getElementById("chartTitle").textContent = `1. Diagramm: Nur Posts (${year})`;
+    }
+
+    function renderElectionPie(year) {
+      const ctx = document.getElementById("electionPieChart").getContext("2d");
+      if (electionPieChart) electionPieChart.destroy();
+
+      const electionMap = year === 2025 ? dataStore.election2025 : dataStore.election2021;
+      if (!electionMap || electionMap.size === 0) return;
+
+      // Filter parties based on selection
+      const filteredParties = selectedParties.length > 0
+        ? [...electionMap.keys()].filter(party => selectedParties.includes(party))
+        : [...electionMap.keys()];
+
+      if (filteredParties.length === 0) return;
+
+      const labels = filteredParties;
+      const values = filteredParties.map(party => electionMap.get(party));
+      const backgroundColor = labels.map(getPartyColor);
+
+      electionPieChart = new Chart(ctx, {
+        type: "pie",
+        data: { labels, datasets: [{ data: values, backgroundColor }] },
+        options: {
+          plugins: {
+            legend: { position: "right" },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw;
+                  return `${context.label}: ${fmtPct(value)}`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      document.getElementById("electionChartTitle").textContent = `2. Diagramm: Nur Wahlergebnisse (${year})`;
+    }
+
+    function renderCombinedChart(year) {
+      const ctx = document.getElementById("combinedChart").getContext("2d");
+      if (combinedChart) combinedChart.destroy();
+
+      const rows = year === 2025 ? dataStore.posts2025 : dataStore.posts2021;
+      const electionMap = year === 2025 ? dataStore.election2025 : dataStore.election2021;
+
+      if (!rows || rows.length === 0 || !electionMap || electionMap.size === 0) return;
+
+      // Get parties that exist in both datasets
+      let parties = rows.filter(r => electionMap.has(r.party)).map(r => r.party);
+
+      // Filter parties based on selection
+      if (selectedParties.length > 0) {
+        parties = parties.filter(party => selectedParties.includes(party));
+      }
+
+      // Skip if no matching parties
+      if (parties.length === 0) return;
+
+      const labels = parties;
+      const postValues = parties.map(p => {
+        const row = rows.find(r => r.party === p);
+        return row ? row.posts : 0;
+      });
+
+      const electionValues = parties.map(p => electionMap.get(p) || 0);
+      const backgroundColor = labels.map(getPartyColor);
+
+      // Scale the values to make them comparable in the chart
+      const maxPosts = Math.max(...postValues);
+      const scaledPosts = postValues.map(v => (v / maxPosts) * 100);
+
+      combinedChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Posts (skaliert)",
+              data: scaledPosts,
+              backgroundColor: backgroundColor.map(c => c + "80"), // Add transparency
+              borderColor: backgroundColor,
+              borderWidth: 1
+            },
+            {
+              label: "Wahlergebnisse (%)",
+              data: electionValues,
+              backgroundColor: backgroundColor,
+              borderColor: backgroundColor.map(c => c + "80"),
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Prozent (%)'
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const datasetLabel = context.dataset.label;
+                  const value = context.raw;
+                  if (datasetLabel.includes("Posts")) {
+                    const originalValue = postValues[context.dataIndex];
+                    return `Posts: ${originalValue} (${value.toFixed(1)}% skaliert)`;
+                  } else {
+                    return `Wahlergebnis: ${fmtPct(value)}`;
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      document.getElementById("combinedChartTitle").textContent = `3. Diagramm: Posts und Wahlergebnisse zusammen (${year})`;
+    }
+
+    function populatePartyDropdown() {
+      const partyCheckboxes = document.getElementById("partyCheckboxes");
+      const dropdownButton = document.getElementById("partyDropdown");
+      const dropdownContent = document.getElementById("partyDropdownContent");
+      const selectAllCheckbox = document.getElementById("selectAllParties");
+
+      partyCheckboxes.innerHTML = "";
+
+      // Get all unique parties from both years
+      const parties = new Set();
+      dataStore.posts2025.forEach(r => parties.add(r.party));
+      dataStore.posts2021.forEach(r => parties.add(r.party));
+
+      // Sort parties alphabetically
+      const sortedParties = [...parties].sort();
+
+      // Initialize selectedParties with no parties
+      selectedParties = [];
+
+      // Hide party charts section initially
+      document.getElementById("partyChartsSection").classList.add("hidden");
+
+      // Add checkboxes for each party
+      sortedParties.forEach(party => {
+        const checkboxContainer = document.createElement("div");
+        checkboxContainer.className = "py-1 px-2 rounded party-checkbox-container";
+
+        const label = document.createElement("label");
+        label.className = "flex items-center cursor-pointer w-full";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = party;
+        checkbox.checked = false; // Default: none selected
+        checkbox.className = "mr-2 party-checkbox custom-checkbox";
+
+        const span = document.createElement("span");
+        span.textContent = party;
+
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        checkboxContainer.appendChild(label);
+        partyCheckboxes.appendChild(checkboxContainer);
+
+        // Add event listener to each checkbox
+        checkbox.addEventListener("change", () => {
+          updateSelectedParties();
+          updateDropdownButtonText();
+        });
+      });
+
+      // Toggle dropdown when button is clicked
+      dropdownButton.addEventListener("click", () => {
+        dropdownContent.classList.toggle("hidden");
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!dropdownButton.contains(e.target) && !dropdownContent.contains(e.target)) {
+          dropdownContent.classList.add("hidden");
+        }
+      });
+
+      // Select All checkbox functionality
+      selectAllCheckbox.addEventListener("change", () => {
+        const isChecked = selectAllCheckbox.checked;
+        document.querySelectorAll(".party-checkbox").forEach(checkbox => {
+          checkbox.checked = isChecked;
+        });
+        updateSelectedParties();
+        updateDropdownButtonText();
+      });
+
+      // Function to update selectedParties array based on checked checkboxes
+      function updateSelectedParties() {
+        selectedParties = [];
+        document.querySelectorAll(".party-checkbox:checked").forEach(checkbox => {
+          selectedParties.push(checkbox.value);
+        });
+
+        // Update "Select All" checkbox state
+        const allCheckboxes = document.querySelectorAll(".party-checkbox");
+        const checkedCheckboxes = document.querySelectorAll(".party-checkbox:checked");
+        selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
+
+        // Update all charts and tables
+        refresh();
+      }
+
+      // Function to update dropdown button text
+      function updateDropdownButtonText() {
+        const allCheckboxes = document.querySelectorAll(".party-checkbox");
+        const checkedCheckboxes = document.querySelectorAll(".party-checkbox:checked");
+
+        if (checkedCheckboxes.length === 0) {
+          dropdownButton.querySelector("span").textContent = "Keine Partei";
+        } else if (checkedCheckboxes.length === allCheckboxes.length) {
+          dropdownButton.querySelector("span").textContent = "Alle Parteien";
+        } else if (checkedCheckboxes.length === 1) {
+          dropdownButton.querySelector("span").textContent = checkedCheckboxes[0].value;
+        } else {
+          dropdownButton.querySelector("span").textContent = `${checkedCheckboxes.length} Parteien`;
+        }
+      }
+    }
+
+    function renderPartyCharts() {
+      const container = document.getElementById("partyCharts");
+      container.innerHTML = "";
+
+      // Clear existing charts
+      partyCharts.forEach(chart => chart.destroy());
+      partyCharts.clear();
+
+      // If no parties selected, hide the section
+      if (selectedParties.length === 0) {
+        document.getElementById("partyChartsSection").classList.add("hidden");
+        return;
+      }
+
+      document.getElementById("partyChartsSection").classList.remove("hidden");
+
+      // Create a chart for each selected party
+      selectedParties.forEach(party => {
+        // Create container for this party's chart
+        const chartContainer = document.createElement("div");
+        chartContainer.className = "bg-white p-4 rounded-lg shadow";
+
+        const chartTitle = document.createElement("h3");
+        chartTitle.className = "text-lg font-semibold mb-2";
+        chartTitle.textContent = party;
+
+        const canvas = document.createElement("canvas");
+        canvas.id = `chart-${party.replace(/\s+/g, '-')}`;
+
+        chartContainer.appendChild(chartTitle);
+        chartContainer.appendChild(canvas);
+        container.appendChild(chartContainer);
+
+        // Render chart for this party
+        renderPartyChart(party, canvas.id);
+      });
+    }
+
+    function renderPartyChart(party, canvasId) {
+      const ctx = document.getElementById(canvasId).getContext("2d");
+
+      // Get data for this party
+      const data2025 = dataStore.posts2025.find(r => r.party === party);
+      const data2021 = dataStore.posts2021.find(r => r.party === party);
+      const election2025 = dataStore.election2025.get(party) || 0;
+      const election2021 = dataStore.election2021.get(party) || 0;
+
+      const posts2025 = data2025 ? data2025.posts : 0;
+      const posts2021 = data2021 ? data2021.posts : 0;
+
+      const partyColor = getPartyColor(party);
+
+      const chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Posts 2021", "Posts 2025", "Wahl 2021 (%)", "Wahl 2025 (%)"],
+          datasets: [{
+            data: [posts2021, posts2025, election2021, election2025],
+            backgroundColor: [
+              partyColor + "80", // Posts 2021 with transparency
+              partyColor,        // Posts 2025
+              partyColor + "80", // Election 2021 with transparency
+              partyColor         // Election 2025
+            ],
+            borderColor: partyColor,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw;
+                  const label = context.label;
+                  if (label.includes("Wahl")) {
+                    return `${label}: ${fmtPct(value)}`;
+                  } else {
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      partyCharts.set(party, chart);
     }
 
     function renderScatter(rowsBoth) {
@@ -359,8 +1135,13 @@
       const titleEl = document.getElementById("scatterTitle");
       if (scatterChart) scatterChart.destroy();
 
+      // Filter rows based on selected parties
+      const filteredRows = selectedParties.length > 0
+        ? rowsBoth.filter(r => selectedParties.includes(r.party))
+        : rowsBoth;
+
       // Punkte bauen
-      const points = rowsBoth.map(r => ({
+      const points = filteredRows.map(r => ({
         x: r.diffPosts,
         y: r.diffElection,
         r: 5,
@@ -409,16 +1190,174 @@
           scales: {
             x: {
               title: { display: true, text: "Diff Posts (2025–2021)" },
-              min: xmin, max: xmax, grid: { color: "#e5e7eb" },
+              min: xmin, max: xmax, 
+              grid: { 
+                lineWidth: (context) => context.tick.value === 0 ? 2 : 1,
+                color: (context) => context.tick.value === 0 ? '#666' : '#e5e7eb'
+              },
+              border: {
+                display: true,
+                width: 2,
+                color: '#666'
+              },
               ticks: { precision: 0 }
             },
             y: {
               title: { display: true, text: "Diff Election (pp)" },
-              min: ymin, max: ymax, grid: { color: "#e5e7eb" }
+              min: ymin, max: ymax, 
+              grid: { 
+                lineWidth: (context) => context.tick.value === 0 ? 2 : 1,
+                color: (context) => context.tick.value === 0 ? '#666' : '#e5e7eb'
+              },
+              border: {
+                display: true,
+                width: 2,
+                color: '#666'
+              }
             }
           }
         }
       });
+    }
+
+    function renderPostsChartBoth() {
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      if (pieChart) pieChart.destroy();
+
+      const p25 = new Map((dataStore.posts2025 || []).map(r => [r.party, r.posts]));
+      const p21 = new Map((dataStore.posts2021 || []).map(r => [r.party, r.posts]));
+
+      // Get all parties that have posts in either year
+      let parties = [...new Set([...p25.keys(), ...p21.keys()])];
+
+      // Filter parties based on selection
+      if (selectedParties.length > 0) {
+        parties = parties.filter(party => selectedParties.includes(party));
+      }
+
+      if (parties.length === 0) return;
+
+      const labels = parties;
+      const values2025 = parties.map(p => p25.get(p) || 0);
+      const values2021 = parties.map(p => p21.get(p) || 0);
+      const backgroundColor = labels.map(getPartyColor);
+
+      pieChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Posts 2025",
+              data: values2025,
+              backgroundColor: backgroundColor,
+              borderColor: backgroundColor.map(c => c + "80"),
+              borderWidth: 1
+            },
+            {
+              label: "Posts 2021",
+              data: values2021,
+              backgroundColor: backgroundColor.map(c => c + "80"),
+              borderColor: backgroundColor,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "top" },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  return `${context.dataset.label}: ${context.raw}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Anzahl Posts'
+              }
+            }
+          }
+        }
+      });
+
+      document.getElementById("chartTitle").textContent = "1. Diagramm: Nur Posts";
+    }
+
+    function renderElectionChartBoth() {
+      const ctx = document.getElementById("electionPieChart").getContext("2d");
+      if (electionPieChart) electionPieChart.destroy();
+
+      const e25 = dataStore.election2025 || new Map();
+      const e21 = dataStore.election2021 || new Map();
+
+      // Get all parties that have election results in either year
+      let parties = [...new Set([...e25.keys(), ...e21.keys()])];
+
+      // Filter parties based on selection
+      if (selectedParties.length > 0) {
+        parties = parties.filter(party => selectedParties.includes(party));
+      }
+
+      if (parties.length === 0) return;
+
+      const labels = parties;
+      const values2025 = parties.map(p => e25.get(p) || 0);
+      const values2021 = parties.map(p => e21.get(p) || 0);
+      const backgroundColor = labels.map(getPartyColor);
+
+      electionPieChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Wahlergebnisse 2025 (%)",
+              data: values2025,
+              backgroundColor: backgroundColor,
+              borderColor: backgroundColor.map(c => c + "80"),
+              borderWidth: 1
+            },
+            {
+              label: "Wahlergebnisse 2021 (%)",
+              data: values2021,
+              backgroundColor: backgroundColor.map(c => c + "80"),
+              borderColor: backgroundColor,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "top" },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  return `${context.dataset.label}: ${fmtPct(context.raw)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Prozent (%)'
+              }
+            }
+          }
+        }
+      });
+
+      document.getElementById("electionChartTitle").textContent = "2. Diagramm: Nur Wahlergebnisse";
     }
 
     function refresh() {
@@ -428,9 +1367,17 @@
       if (currentPeriod === "both") {
         subtitle.textContent = "Ansicht: 2025 vs. 2021";
         renderTableBoth();
-        // Pie ausblenden
-        if (pieChart) { pieChart.destroy(); pieChart = null; }
-        document.getElementById("chartTitle").textContent = "—";
+
+        // Hide combined chart
+        if (combinedChart) { combinedChart.destroy(); combinedChart = null; }
+        document.getElementById("combinedChartTitle").textContent = "—";
+
+        // Render posts and election charts for both years
+        renderPostsChartBoth();
+        renderElectionChartBoth();
+
+        // Party charts for both years
+        renderPartyCharts();
         return;
       }
 
@@ -438,21 +1385,77 @@
       if (scatterChart) { scatterChart.destroy(); scatterChart = null; }
       scatterTitle.classList.add("hidden");
 
-      if (currentPeriod === "first") {
-        subtitle.textContent = "Ansicht: 2025";
-        renderTableSingle(dataStore.posts2025, 2025);
-        renderPie(dataStore.posts2025, 2025);
-      } else {
-        subtitle.textContent = "Ansicht: 2021";
-        renderTableSingle(dataStore.posts2021, 2021);
-        renderPie(dataStore.posts2021, 2021);
-      }
+      const year = currentPeriod === "first" ? 2025 : 2021;
+      const rows = currentPeriod === "first" ? dataStore.posts2025 : dataStore.posts2021;
+
+      subtitle.textContent = `Ansicht: ${year}`;
+      renderTableSingle(rows, year);
+      renderPie(rows, year);
+      renderElectionPie(year);
+      renderCombinedChart(year);
+      renderPartyCharts();
     }
 
     document.getElementById("dataset").addEventListener("change", (e) => {
       const v = e.target.value;
       currentPeriod = (v === "both") ? "both" : (v === "second" ? "second" : "first");
       refresh();
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="mt-16 w-full max-w-5xl mx-auto">
+    <div class="border-t border-gray-200 pt-8 pb-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <h3 class="text-lg font-semibold text-indigo-800">DataDivas</h3>
+          <p class="text-gray-600">Datenanalyse zum Einfluss sozialer Medien auf die Politik</p>
+        </div>
+        <div class="flex space-x-4">
+          <a href="/impressum" class="text-indigo-600 hover:text-indigo-800 transition">Impressum</a>
+          <a href="/datenschutz" class="text-indigo-600 hover:text-indigo-800 transition">Datenschutz</a>
+          <a href="/kontakt" class="text-indigo-600 hover:text-indigo-800 transition">Kontakt</a>
+        </div>
+      </div>
+      <div class="mt-6 text-center text-gray-500 text-sm">
+        © 2023 DataDivas. Alle Rechte vorbehalten.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Dark Mode JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const htmlElement = document.documentElement;
+      const moonIcon = '<i class="fas fa-moon"></i>';
+      const sunIcon = '<i class="fas fa-sun"></i>';
+
+      // Check for saved theme preference or use system preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      // Apply the saved theme or system preference
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        htmlElement.classList.add('dark');
+        darkModeToggle.innerHTML = sunIcon;
+      } else {
+        htmlElement.classList.remove('dark');
+        darkModeToggle.innerHTML = moonIcon;
+      }
+
+      // Toggle dark mode on button click
+      darkModeToggle.addEventListener('click', function() {
+        if (htmlElement.classList.contains('dark')) {
+          htmlElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          darkModeToggle.innerHTML = moonIcon;
+        } else {
+          htmlElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          darkModeToggle.innerHTML = sunIcon;
+        }
+      });
     });
   </script>
 </body>

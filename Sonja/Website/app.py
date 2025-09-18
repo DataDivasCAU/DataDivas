@@ -5,15 +5,16 @@ from io import BytesIO
 import json  
 from party import Party, fetch_channel_statistics
 
-# ⬅️ externe Export-Funktion (Datei liegt neben app.py)
+# ⬅️ externe Export-Funktionen (Dateien liegen neben app.py)
 from templates.election_export_xlsx import build_workbook
+from templates.election_export_pdf import build_pdf
 
 app = Flask(__name__)
 
 # Pfade stabil relativ zur app.py
 BASE = Path(__file__).resolve().parent
-DATA_PATH     = "data/PostPerParty/data.json"
-ELECTION_PATH = "data/PostPerParty/election.json"
+DATA_PATH     = "data/postPerParty/data.json"
+ELECTION_PATH = "data/postPerParty/election.json"
 
 def load_json(path: str):
     """Hilfsfunktion: JSON-Datei laden und als Python-Dict zurückgeben."""
@@ -62,6 +63,14 @@ def tradwife():
 def impressum():
     return render_template("impressum.html")
 
+@app.route("/datenschutz")
+def datenschutz():
+    return render_template("datenschutz.html")
+
+@app.route("/kontakt")
+def kontakt():
+    return render_template("kontakt.html")
+
 @app.route("/data.json")
 def get_data():
     return jsonify(load_json(DATA_PATH))
@@ -69,6 +78,11 @@ def get_data():
 @app.route("/election.json")
 def get_election():
     return jsonify(load_json(ELECTION_PATH))
+
+@app.route("/answer_seven.json")
+def get_answer_seven():
+    answer_seven_path = Path(BASE) / "data" / "tradewife" / "answer_seven.json"
+    return jsonify(load_json(str(answer_seven_path)))
 @app.route("/load_yt_current_data_of_parties")
 def channel_stats_all():
     results = []
@@ -82,7 +96,7 @@ def channel_stats_all():
                 "error": str(e)
             })
     return jsonify(results)
-    
+
 
 @app.route("/export-excel")
 def export_excel():
@@ -99,6 +113,22 @@ def export_excel():
         )
     except Exception as e:
         abort(500, description=f"Export-Fehler: {type(e).__name__}: {e}")
+
+@app.route("/export-pdf")
+def export_pdf():
+    try:
+        posts_data    = load_json(DATA_PATH)      # <- dict
+        election_data = load_json(ELECTION_PATH)  # <- dict
+        pdf_io: BytesIO = build_pdf(posts_data, election_data)
+        pdf_io.seek(0)
+        return send_file(
+            pdf_io,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name="posts-per-party_all.pdf",
+        )
+    except Exception as e:
+        abort(500, description=f"PDF-Export-Fehler: {type(e).__name__}: {e}")
 
 # ----------------- ERROR HANDLER -----------------
 
