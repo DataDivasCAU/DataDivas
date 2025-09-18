@@ -5,15 +5,19 @@ from io import BytesIO
 import json  
 from party import Party, fetch_channel_statistics
 
-# ⬅️ externe Export-Funktion (Datei liegt neben app.py)
+# ⬅️ externe Export-Funktionen (Dateien liegen neben app.py)
 from templates.election_export_xlsx import build_workbook
+from templates.election_export_pdf import build_pdf
 
 app = Flask(__name__)
 
 # Pfade stabil relativ zur app.py
 BASE = Path(__file__).resolve().parent
-DATA_PATH     = "data/PostPerParty/data.json"
-ELECTION_PATH = "data/PostPerParty/election.json"
+DATA_PATH       = "data/postPerParty/data.json"
+ELECTION_PATH   = "data/postPerParty/election.json"
+DATA_CSV_PATH   = BASE / "data" / "postPerParty" / "data.csv"
+ELECTION_CSV_PATH = BASE / "data" / "postPerParty" / "election.csv"
+FRIDAYS_JSON_PATH = BASE / "data" / "fridaysForFuture" / "fridaysForFuture.json"
 
 def load_json(path: str):
     """Hilfsfunktion: JSON-Datei laden und als Python-Dict zurückgeben."""
@@ -34,6 +38,11 @@ def index():
 def post_per_party():
     return render_template("post-per-party.html")
 
+@app.route("/post-per-party/stats")
+def post_per_party_stats():
+    # Renders a page that shows current party channel stats with table and chart
+    return render_template("stats.html")
+
 @app.route("/antivax-yt")
 def antivax():
     return render_template("antivax.html")
@@ -45,6 +54,10 @@ def afd():
 @app.route("/fridaysForFuture")
 def fridaysForFuture():
     return render_template("fridaysForFuture.html")
+
+@app.route("/fridaysForFuture.json")
+def fridaysForFuture_json():
+    return jsonify(load_json(str(FRIDAYS_JSON_PATH)))
 
 @app.route("/meToo")
 def meToo():
@@ -62,6 +75,14 @@ def tradwife():
 def impressum():
     return render_template("impressum.html")
 
+@app.route("/datenschutz")
+def datenschutz():
+    return render_template("datenschutz.html")
+
+@app.route("/kontakt")
+def kontakt():
+    return render_template("kontakt.html")
+
 @app.route("/data.json")
 def get_data():
     return jsonify(load_json(DATA_PATH))
@@ -69,8 +90,61 @@ def get_data():
 @app.route("/election.json")
 def get_election():
     return jsonify(load_json(ELECTION_PATH))
+
+@app.route("/answer_seven.json")
+def get_answer_seven():
+    answer_seven_path = Path(BASE) / "data" / "tradewife" / "answer_seven.json"
+    return jsonify(load_json(str(answer_seven_path)))
+
+@app.route("/hype_sentiment.json")
+def get_hype_sentiment():
+    hype_sentiment_path = Path(BASE) / "data" / "hypeSentiment" / "sentiment.json"
+    return jsonify(load_json(str(hype_sentiment_path)))
+
+@app.route("/meToo_timeseries.json")
+def get_meToo_timeseries():
+    meToo_series_path = Path(BASE) / "data" / "meToo" / "meToo.json"
+    return jsonify(load_json(str(meToo_series_path)))
+
+@app.route("/meToo_sentiment.json")
+def get_meToo_sentiment():
+    meToo_sentiment_path = Path(BASE) / "data" / "meToo" / "sentiment.json"
+    return jsonify(load_json(str(meToo_sentiment_path)))
+
 @app.route("/load_yt_current_data_of_parties")
 def channel_stats_all():
+    from datetime import datetime
+    # Fetch current stats for all parties; add timestamp; persist to stats.json
+    results = []
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    for party in Party:
+        try:
+            stats = fetch_channel_statistics(party)
+            # Ensure structure and add timestamp
+            stats["timestamp"] = timestamp
+            results.append(stats)
+        except Exception as e:
+            # If quota or any error: return an error status but still include timestamp
+            results.append({
+                "party": party.value,
+                "error": "konnte nicht geladen werden",
+                "details": str(e),
+                "timestamp": timestamp
+            })
+    # Persist latest request as JSON under data/postPerParty/stats.json
+    try:
+        stats_path = BASE / "data" / "postPerParty" / "stats.json"
+        stats_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(stats_path, "w", encoding="utf-8") as f:
+            json.dump(results, f, ensure_ascii=False, indent=2)
+    except Exception:
+        # Do not fail API if saving to disk fails
+        pass
+    return jsonify(results)
+
+@app.route("/export-current-stats.json")
+def export_current_stats_json():
+    """Erzeugt die aktuellen YouTube-Statistiken aller Parteien und gibt sie als JSON-Download zurück."""
     results = []
     for party in Party:
         try:
@@ -81,8 +155,11 @@ def channel_stats_all():
                 "party": party.value,
                 "error": str(e)
             })
-    return jsonify(results)
-    
+    # send_file is nicer for filenames, but jsonify is fine; set headers for download behavior
+    resp = jsonify(results)
+    resp.headers["Content-Disposition"] = "attachment; filename=current_party_stats.json"
+    return resp
+
 
 @app.route("/export-excel")
 def export_excel():
@@ -99,6 +176,51 @@ def export_excel():
         )
     except Exception as e:
         abort(500, description=f"Export-Fehler: {type(e).__name__}: {e}")
+
+@app.route("/export-pdf")
+def export_pdf():
+    try:
+        posts_data    = load_json(DATA_PATH)      # <- dict
+        election_data = load_json(ELECTION_PATH)  # <- dict
+        pdf_io: BytesIO = build_pdf(posts_data, election_data)
+        pdf_io.seek(0)
+        return send_file(
+            pdf_io,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name="posts-per-party_all.pdf",
+        )
+    except Exception as e:
+        abort(500, description=f"PDF-Export-Fehler: {type(e).__name__}: {e}")
+
+# -------- CSV DOWNLOADS (verwenden lokale CSV-Dateien) --------
+@app.route("/download/posts-csv")
+def download_posts_csv():
+    try:
+        return send_file(
+            DATA_CSV_PATH,
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="posts-per-party_data.csv",
+        )
+    except FileNotFoundError:
+        abort(404, description=f"CSV nicht gefunden: {DATA_CSV_PATH}")
+    except Exception as e:
+        abort(500, description=f"CSV-Download-Fehler (Posts): {type(e).__name__}: {e}")
+
+@app.route("/download/election-csv")
+def download_election_csv():
+    try:
+        return send_file(
+            ELECTION_CSV_PATH,
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="posts-per-party_election.csv",
+        )
+    except FileNotFoundError:
+        abort(404, description=f"CSV nicht gefunden: {ELECTION_CSV_PATH}")
+    except Exception as e:
+        abort(500, description=f"CSV-Download-Fehler (Election): {type(e).__name__}: {e}")
 
 # ----------------- ERROR HANDLER -----------------
 

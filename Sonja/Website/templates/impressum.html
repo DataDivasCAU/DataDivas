@@ -1,23 +1,32 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" class="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Impressum</title>
   <meta name="description" content="Impressum und Quellenangaben" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-800">
+  <!-- Dark Mode Toggle Button -->
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
+
   <header class="border-b bg-white/70 backdrop-blur">
-    <div class="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
-      <h1 class="text-xl sm:text-2xl font-bold">Impressum</h1>
-      <a href="/" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold shadow hover:bg-indigo-700 transition">
-        ⬅︎ Zur Startseite
-      </a>
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl sm:text-2xl font-semibold">Impressum</h1>
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="/" class="hover:underline">Start</a>
+        <a href="/tradwife" class="hover:underline">Tradwife</a>
+        <a href="/impressum" class="hover:underline">Impressum</a>
+      </nav>
     </div>
   </header>
 
-  <main class="mx-auto max-w-5xl px-4 py-8 space-y-8">
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
     <!-- Verantwortlich -->
      <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Verantwortlich nach § 5 TMG</h2>
@@ -96,16 +105,47 @@
     <!-- Letzte Aktualisierung -->
     <section class="rounded-2xl bg-white shadow p-6">
       <h2 class="text-lg font-bold text-indigo-700 mb-3">Stand</h2>
-      <p>Letzte Aktualisierung: <span class="font-mono">16.09.2025</span></p>
+      <p>Letzte Aktualisierung: <span class="font-mono">18.09.2025</span></p>
     </section>
   </main>
 
-  <footer class="mt-8 py-8 text-center text-sm text-gray-500">
-    © <span id="y"></span> Beispielprojekt — Alle Rechte vorbehalten.
-  </footer>
+  {% set footer_max_w = 'max-w-6xl' %}
+  {% include 'partials/footer.html' %}
 
+  <!-- Dark Mode JavaScript -->
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.addEventListener('DOMContentLoaded', function() {
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const htmlElement = document.documentElement;
+      const moonIcon = '<i class="fas fa-moon"></i>';
+      const sunIcon = '<i class="fas fa-sun"></i>';
+
+      // Check for saved theme preference or use system preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      // Apply the saved theme or system preference
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        htmlElement.classList.add('dark');
+        darkModeToggle.innerHTML = sunIcon;
+      } else {
+        htmlElement.classList.remove('dark');
+        darkModeToggle.innerHTML = moonIcon;
+      }
+
+      // Toggle dark mode on button click
+      darkModeToggle.addEventListener('click', function() {
+        if (htmlElement.classList.contains('dark')) {
+          htmlElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          darkModeToggle.innerHTML = moonIcon;
+        } else {
+          htmlElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          darkModeToggle.innerHTML = sunIcon;
+        }
+      });
+    });
   </script>
 </body>
 </html>

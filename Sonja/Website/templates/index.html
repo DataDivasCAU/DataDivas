@@ -1,74 +1,194 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" class="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Startseite</title>
+  <title>Der Einfluss von Social Media auf die Politik</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-between p-6">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center justify-between p-6">
+  <!-- Dark Mode Toggle Button -->
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
 
-  <!-- Grid mit Buttons -->
+  <!-- Header Section -->
+  <header class="w-full max-w-5xl mb-10 text-center">
+    <h1 class="text-4xl font-bold text-indigo-800 mb-4">Der Einfluss von Social Media auf die Politik</h1>
+    <p class="text-xl text-gray-700 max-w-3xl mx-auto">
+      Wie beeinflussen soziale Medien den politischen Diskurs in Deutschland? Unsere Datenanalyse untersucht verschiedene politische Bewegungen und deren Präsenz in sozialen Netzwerken.
+    </p>
+    <div class="flex justify-center space-x-4 mt-6">
+      <span class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full flex items-center">
+        <i class="fas fa-chart-line mr-2"></i> Datenvisualisierung
+      </span>
+      <span class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full flex items-center">
+        <i class="fas fa-hashtag mr-2"></i> Social Media Trends
+      </span>
+      <span class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full flex items-center">
+        <i class="fas fa-vote-yea mr-2"></i> Politische Analyse
+      </span>
+    </div>
+  </header>
+
+  <!-- Themen Überschrift -->
+  <h2 class="w-full max-w-5xl text-2xl font-bold text-indigo-800 mb-6 text-center">Politische Bewegungen in Sozialen Medien</h2>
+
+  <!-- Grid mit Karten -->
   <div class="max-w-5xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    
+
     <!-- Karte 1 -->
     <a href="/antivax-yt"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">antivax</h2>
-      <p class="text-gray-600">Visualisierung der Anzahl an Posts pro Partei.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-red-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-red-100 p-3 rounded-full mr-3">
+          <i class="fas fa-virus text-red-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Anti-Impfbewegung</h2>
+      </div>
+      <p class="text-gray-600">Analyse der Anti-Impf-Rhetorik in sozialen Medien und deren Einfluss auf den politischen Diskurs.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 2 -->
     <a href="/afd"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2"> ❌AfD</h2>
-      <p class="text-gray-600">Rohdaten zu Posts pro Partei als JSON.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-blue-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-blue-100 p-3 rounded-full mr-3">
+          <i class="fas fa-landmark text-blue-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">AfD</h2>
+      </div>
+      <p class="text-gray-600">Untersuchung der Social-Media-Strategie der AfD und deren Wirkung auf die Wählerschaft.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 3 -->
     <a href="/fridaysForFuture"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">🌱 Fridays for Future</h2>
-      <p class="text-gray-600">Wahlergebnisse der Parteien in JSON-Form.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-green-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-green-100 p-3 rounded-full mr-3">
+          <i class="fas fa-leaf text-green-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Fridays for Future</h2>
+      </div>
+      <p class="text-gray-600">Wie die Klimabewegung soziale Medien nutzt, um politischen Wandel zu bewirken.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 4 -->
     <a href="/meToo"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">👊 #MeToo</h2>
-      <p class="text-gray-600">Lade aktuelle YouTube-Statistiken der Parteien.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-purple-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-purple-100 p-3 rounded-full mr-3">
+          <i class="fas fa-fist-raised text-purple-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">#MeToo</h2>
+      </div>
+      <p class="text-gray-600">Der Einfluss der #MeToo-Bewegung auf politische Entscheidungen und gesellschaftlichen Wandel.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 5 -->
     <a href="/wagenknecht"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">👩‍🦰 Wagenknecht</h2>
-      <p class="text-gray-600">Exportiere die Ergebnisse als Excel-Datei.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-yellow-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-yellow-100 p-3 rounded-full mr-3">
+          <i class="fas fa-user-tie text-yellow-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Wagenknecht</h2>
+      </div>
+      <p class="text-gray-600">Analyse der Social-Media-Präsenz von Sahra Wagenknecht und deren politischer Wirkung.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 6 -->
      <a href="/post-per-party"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">📊 Posts per Party</h2>
-      <p class="text-gray-600">Visualisierung der Anzahl an Posts pro Partei.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-indigo-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-indigo-100 p-3 rounded-full mr-3">
+          <i class="fas fa-chart-bar text-indigo-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Posts pro Partei</h2>
+      </div>
+      <p class="text-gray-600">Vergleichende Analyse der Social-Media-Aktivität verschiedener politischer Parteien.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
     <!-- Karte 7 -->
     <a href="/tradwife"
-       class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
-      <h2 class="text-xl font-bold text-indigo-700 mb-2">✉️ Kontakt</h2>
-      <p class="text-gray-600">Fragen oder Feedback? Kontaktiere uns.</p>
+       class="block rounded-2xl bg-white shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-6 border-t-4 border-pink-500">
+      <div class="flex items-center mb-3">
+        <div class="bg-pink-100 p-3 rounded-full mr-3">
+          <i class="fas fa-home text-pink-600 text-xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Tradwife-Bewegung</h2>
+      </div>
+      <p class="text-gray-600">Untersuchung des Tradwife-Phänomens in sozialen Medien und dessen politische Implikationen.</p>
+      <div class="mt-4 text-indigo-600 font-medium flex items-center">
+        <span>Mehr erfahren</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </div>
     </a>
 
   </div>
 
-  <!-- Impressum-Button unten -->
-  <footer class="mt-10">
-    <a href="/impressum"
-       class="inline-block rounded-lg bg-gray-700 text-white px-6 py-3 shadow hover:bg-gray-800 transition">
-      Impressum
-    </a>
-  </footer>
+  {% include 'partials/footer.html' %}
 
+  <!-- Dark Mode JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const htmlElement = document.documentElement;
+      const moonIcon = '<i class="fas fa-moon"></i>';
+      const sunIcon = '<i class="fas fa-sun"></i>';
+
+      // Check for saved theme preference or use system preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      // Apply the saved theme or system preference
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        htmlElement.classList.add('dark');
+        darkModeToggle.innerHTML = sunIcon;
+      } else {
+        htmlElement.classList.remove('dark');
+        darkModeToggle.innerHTML = moonIcon;
+      }
+
+      // Toggle dark mode on button click
+      darkModeToggle.addEventListener('click', function() {
+        if (htmlElement.classList.contains('dark')) {
+          htmlElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          darkModeToggle.innerHTML = moonIcon;
+        } else {
+          htmlElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          darkModeToggle.innerHTML = sunIcon;
+        }
+      });
+    });
+  </script>
 </body>
 </html>

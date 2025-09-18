@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de" class="light">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>#MeToo Trend & Sentiment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark Mode Toggle Button -->
+<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+</button>
+<div class="max-w-6xl mx-auto pt-6">
+    <header class="flex flex-col items-center mb-6 gap-4 text-center">
+        <div class="min-w-0">
+            <h1 class="text-2xl font-bold">#MeToo Trend & Sentiment</h1>
+            <div id="subtitle" class="text-sm text-gray-500 mt-1">Analyse der #MeToo-Bewegung: Wikipedia-Aufrufe und
+                Stimmungsphasen
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap justify-center w-full">
+            <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
+
+            <div class="flex items-center gap-3 grow w-full md:w-auto">
+                <span class="font-medium">Zeitraum:</span>
+                <div id="date-range-slider" class="w-64 md:w-96"></div>
+                <div class="text-sm text-gray-600">
+                    <span id="range-start" class="font-medium"></span>
+                    <span class="mx-1">bis</span>
+                    <span id="range-end" class="font-medium"></span>
+                </div>
+                <label for="year-select" class="ml-2 text-sm text-gray-600">Jahr:</label>
+                <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
+                    <option value="">Alle Jahre</option>
+                </select>
+                <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Zurücksetzen</button>
+            </div>
+        </div>
+    </header>
+</div>
+<main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+    <section class="space-y-3">
+        <div class="flex items-end justify-between flex-wrap gap-2">
+            <div>
+                <h2 class="text-lg font-semibold">Zeitverlauf der Wikipedia-Aufrufe</h2>
+                <p class="text-sm text-gray-600">Quelle: Daten aus Sonja/Website/data/meToo/meToo.json</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+            <canvas id="viewsChart" height="120"></canvas>
+        </div>
+    </section>
+
+    <section class="space-y-3">
+        <div>
+            <h2 class="text-lg font-semibold">Stimmungsanalyse über Hype-Phasen</h2>
+            <p class="text-sm text-gray-600">Quelle: Daten aus Sonja/Website/data/meToo/sentiment.json</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl shadow p-4">
+                <h3 class="font-medium mb-2">Gesamtverteilung</h3>
+                <canvas id="sentimentPie"></canvas>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-4">
+                <h3 class="font-medium mb-2">Verteilung pro Phase</h3>
+                <canvas id="sentimentStacked"></canvas>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% set footer_max_w = 'max-w-6xl' %}
+{% include 'partials/footer.html' %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Dark mode init (respect saved pref and system)
+        const root = document.documentElement; // <html>
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('theme');
+
+        function applyTheme(theme) {
+            if (theme === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
+            // Update Chart.js default color for axes/labels
+            const isDark = root.classList.contains('dark');
+            const color = isDark ? '#e2e8f0' : '#0f172a';
+            Chart.defaults.color = color;
+            // Update existing charts if any
+            window.__charts?.forEach(ch => ch.update());
+        }
+
+        applyTheme(savedTheme ? savedTheme : (prefersDark.matches ? 'dark' : 'light'));
+        prefersDark.addEventListener?.('change', e => {
+            if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light');
+        });
+        const toggleBtn = document.getElementById('darkModeToggle');
+        toggleBtn.addEventListener('click', () => {
+            const isDark = root.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            applyTheme(isDark ? 'dark' : 'light');
+        });
+
+        window.__charts = [];
+
+        // Helper: fetch JSON with error handling
+        async function getJSON(url) {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+            return res.json();
+        }
+
+        // 1) Time series for views
+        try {
+            const series = await getJSON('/meToo_timeseries.json');
+            const labels = series.map(d => d.timestamp);
+            const values = series.map(d => d.views);
+
+            const ctx1 = document.getElementById('viewsChart').getContext('2d');
+            const line = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Aufrufe',
+                        data: values,
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79,70,229,0.12)',
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.15,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: true},
+                        tooltip: {mode: 'index', intersect: false}
+                    },
+                    scales: {
+                        x: {ticks: {autoSkip: true, maxTicksLimit: 10}},
+                        y: {beginAtZero: true}
+                    }
+                }
+            });
+            window.__charts.push(line);
+
+            // Date range slider (drag to select timeframe)
+            const slider = document.getElementById('date-range-slider');
+            const lblStart = document.getElementById('range-start');
+            const lblEnd = document.getElementById('range-end');
+            const resetBtn = document.getElementById('reset-filters');
+
+            // Parse DD.MM.YYYY into Date
+            const parseDDMMYYYY = (s) => {
+                const [dd, mm, yyyy] = s.split('.');
+                return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+            };
+            const dates = labels.map(parseDDMMYYYY);
+            const minIndex = 0;
+            const maxIndex = dates.length - 1;
+
+            function fmt(d) {
+                const pad = (n) => String(n).padStart(2, '0');
+                return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+            }
+
+            if (slider && window.noUiSlider) {
+                noUiSlider.create(slider, {
+                    start: [minIndex, maxIndex],
+                    connect: true,
+                    step: 1,
+                    range: { min: minIndex, max: maxIndex }
+                });
+
+                // Populate year dropdown and wire it to the slider
+                const yearSelect = document.getElementById('year-select');
+                const yearRanges = {};
+                dates.forEach((d, i) => {
+                    const y = d.getFullYear();
+                    if (!(y in yearRanges)) {
+                        yearRanges[y] = [i, i];
+                    } else {
+                        yearRanges[y][1] = i;
+                    }
+                });
+                if (yearSelect) {
+                    // Ensure options exist (keeps 'Alle Jahre' default)
+                    // Remove any year options in case of re-init
+                    [...yearSelect.querySelectorAll('option')]
+                        .filter(o => o.value !== '')
+                        .forEach(o => o.remove());
+                    Object.keys(yearRanges).forEach(y => {
+                        const opt = document.createElement('option');
+                        opt.value = String(y);
+                        opt.textContent = String(y);
+                        yearSelect.appendChild(opt);
+                    });
+
+                    yearSelect.addEventListener('change', () => {
+                        const val = yearSelect.value;
+                        if (!val) {
+                            slider.noUiSlider.set([minIndex, maxIndex]);
+                            applyRange(minIndex, maxIndex);
+                        } else {
+                            const [a, b] = yearRanges[val];
+                            slider.noUiSlider.set([a, b]);
+                            applyRange(a, b);
+                        }
+                    });
+                }
+
+                function applyRange(iStart, iEnd) {
+                    const s = Math.max(minIndex, Math.min(maxIndex, Math.round(iStart)));
+                    const e = Math.max(minIndex, Math.min(maxIndex, Math.round(iEnd)));
+                    const a = Math.min(s, e);
+                    const b = Math.max(s, e);
+
+                    lblStart.textContent = fmt(dates[a]);
+                    lblEnd.textContent = fmt(dates[b]);
+
+                    // Update chart with sliced data
+                    const newLabels = labels.slice(a, b + 1);
+                    const newValues = values.slice(a, b + 1);
+
+                    // Reset to defaults
+                    line.data.datasets[0].pointRadius = 0;
+                    line.options.scales.x.ticks.autoSkip = true;
+                    line.options.scales.x.ticks.maxTicksLimit = 10;
+
+                    line.data.labels = newLabels;
+                    line.data.datasets[0].data = newValues;
+                    line.update();
+                }
+
+                slider.noUiSlider.on('update', (valuesArr) => {
+                    // Only update labels on move
+                    const iStart = Number(valuesArr[0]);
+                    const iEnd = Number(valuesArr[1]);
+                    const s = Math.round(iStart);
+                    const e = Math.round(iEnd);
+                    lblStart.textContent = fmt(dates[Math.min(s, e)]);
+                    lblEnd.textContent = fmt(dates[Math.max(s, e)]);
+                });
+
+                slider.noUiSlider.on('change', (valuesArr) => {
+                    const iStart = Number(valuesArr[0]);
+                    const iEnd = Number(valuesArr[1]);
+                    applyRange(iStart, iEnd);
+                });
+
+                // Initial apply full range
+                applyRange(minIndex, maxIndex);
+
+                // Reset button returns to full range
+                resetBtn?.addEventListener('click', () => {
+                    slider.noUiSlider.set([minIndex, maxIndex]);
+                    applyRange(minIndex, maxIndex);
+                    if (typeof yearSelect !== 'undefined' && yearSelect) {
+                        yearSelect.value = '';
+                    }
+                });
+            }
+        } catch (e) {
+            console.error('Fehler beim Laden der Zeitreihe', e);
+        }
+
+        // 2) Sentiment
+        try {
+            const s = await getJSON('/meToo_sentiment.json');
+            const phases = Object.keys(s);
+            const categories = ['positive', 'neutral', 'negative'];
+
+            // Aggregate totals
+            const totals = categories.map(cat => phases.reduce((acc, ph) => acc + (s[ph][cat] || 0), 0));
+
+            // Pie chart
+            const ctxPie = document.getElementById('sentimentPie').getContext('2d');
+            const pie = new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ['Positiv', 'Neutral', 'Negativ'],
+                    datasets: [{
+                        data: totals,
+                        backgroundColor: ['#10b981', '#94a3b8', '#ef4444']
+                    }]
+                },
+                options: {plugins: {legend: {position: 'bottom'}}}
+            });
+            window.__charts.push(pie);
+
+            // Stacked bar per phase
+            const ctxStack = document.getElementById('sentimentStacked').getContext('2d');
+            const bar = new Chart(ctxStack, {
+                type: 'bar',
+                data: {
+                    labels: phases.map(p => p.replace('sentiment', '').replace(/([A-Z])/g, ' $1').trim()),
+                    datasets: [
+                        {label: 'Positiv', backgroundColor: '#10b981', data: phases.map(p => s[p].positive)},
+                        {label: 'Neutral', backgroundColor: '#94a3b8', data: phases.map(p => s[p].neutral)},
+                        {label: 'Negativ', backgroundColor: '#ef4444', data: phases.map(p => s[p].negative)}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {legend: {position: 'bottom'}},
+                    scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true}}
+                }
+            });
+            window.__charts.push(bar);
+        } catch (e) {
+            console.error('Fehler beim Laden des Sentiments', e);
+        }
+    });
+</script>
+</body>
+</html>
