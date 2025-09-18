@@ -5,4 +5,4 @@
 cd "$(dirname "$0")/Sonja/Website" || exit 1
 
 # start docker environment
-docker compose up --build
+docker compose up

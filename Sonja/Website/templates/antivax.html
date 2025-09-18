@@ -1,122 +1,268 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="light">
 <head>
-    <meta charset="UTF-8">
-    <title>TOP 15 keywords in comments</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            background-color: white;
-            color: black;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #chartContainer {
-            width: 90%;
-            max-width: 1000px;
-            margin: 40px auto;
-        }
-        select {
-            padding: 8px 12px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Anti‑Impf‑Bewegung (Antivax) – Keywords und Entwicklung</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
-    <h2>Top Keywords by year and combined</h2>
-    <label for="yearSelect">Select year:</label>
-    <select id="yearSelect">
-        <option value="all" selected>all years</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-    </select>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+  <!-- Dark Mode Toggle Button -->
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
 
-    <div id="chartContainer">
-        <canvas id="keywordsChart"></canvas>
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-900">Anti‑Impf‑Bewegung (Antivax)</h1>
+      <p class="mt-3 max-w-3xl mx-auto text-gray-700">Diese Seite bietet einen Einblick in die Online‑Diskussion rund um die Anti‑Impf‑Bewegung. Auf Basis von YouTube‑Kommentaren werden die häufigsten Schlagwörter nach Jahren sowie die Entwicklung ausgewählter Begriffe über die Zeit visualisiert. Die Auswertung ist deskriptiv und wertet die Inhalte nicht inhaltlich.</p>
+    </header>
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Top Keywords nach Jahr und kombiniert</h2>
+    <div class="flex items-center justify-center gap-3 mb-4">
+      <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
+      <label for="yearSelect" class="text-gray-700">Jahr wählen:</label>
+      <select id="yearSelect" class="px-3 py-2 rounded bg-white shadow border border-gray-200"></select>
+    </div>
+    <div id="chartContainer" class="bg-white rounded-2xl shadow p-4">
+      <canvas id="keywordsChart" height="140"></canvas>
     </div>
 
-    <script>
-        const rawData = {
-            "2020": [["die", 27],["vaccine", 25],["pray", 12],["children", 11],["child", 11],["doctors", 10],["baby", 10],["parents", 9],["good", 9],["cant", 9],["video", 9],["lord", 9],["know", 8],["vaccines", 8],["way", 7]],
-            "2021": [["vaccine", 112],["covid", 82],["right", 67],["know", 62],["good", 54],["love", 53],["need", 51],["hes", 50],["freedom", 50],["want", 49],["cant", 47],["vaccinated", 46],["anti", 46],["medical", 45],["shes", 40]],
-            "2022": [["anti", 46],["covid", 38],["vaccine", 38],["freedom", 36],["mandates", 35],["good", 33],["right", 30],["mandate", 30],["government", 29],["country", 29],["vaccinated", 28],["love", 28],["world", 27],["way", 25],["want", 25]],
-            "2023": [["vaccine", 29],["rfk", 28],["sir", 27],["vaccines", 21],["hes", 20],["hai", 19],["day", 17],["dose", 17],["jr", 15],["de", 15],["covid", 13],["good", 12],["debate", 11],["vaccinated", 11],["vote", 11]],
-            "2024": [["sir", 17],["vaccine", 13],["hai", 9],["rfk", 8],["right", 7],["kya", 7],["ne", 6],["kids", 5],["covid", 5],["bill", 5],["shoulder", 5],["pe", 5],["dose", 5],["tha", 5],["cant", 4]],
-            "2025": [["vaccines", 50],["rfk", 49],["vaccine", 30],["thank", 29],["vaccinated", 28],["covid", 28],["know", 26],["want", 23],["jr", 22],["doctor", 21],["dr", 21],["hes", 21],["bernie", 21],["health", 21],["good", 20]]
+    <h2 class="text-2xl font-bold text-indigo-800 mt-10 mb-4 text-center">Entwicklung ausgewählter Wörter über die Zeit</h2>
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-4">
+      <!-- Multi-select dropdown -->
+      <div class="relative" id="wordMultiSelect">
+        <button type="button" id="wordSelectToggle" class="px-3 py-2 rounded bg-white shadow border border-gray-200 flex items-center gap-2">
+          <span id="wordSelectLabel">Wörter wählen</span>
+          <i class="fas fa-chevron-down text-gray-500"></i>
+        </button>
+        <div id="wordOptions" class="absolute mt-2 w-64 max-h-60 overflow-auto bg-white rounded-xl shadow-lg border border-gray-200 p-2 hidden z-20">
+          <!-- options injected dynamically -->
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="clearSelection" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Auswahl löschen</button>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-4">
+      <canvas id="timeSeriesChart" height="160"></canvas>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const htmlElement = document.documentElement;
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const moonIcon = '<i class="fas fa-moon"></i>';
+      const sunIcon = '<i class="fas fa-sun"></i>';
+
+      // Apply saved theme or system preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        htmlElement.classList.add('dark');
+        darkModeToggle.innerHTML = sunIcon;
+      } else {
+        htmlElement.classList.remove('dark');
+        darkModeToggle.innerHTML = moonIcon;
+      }
+
+      // Data
+      const rawData = {
+        "2020": [["die",27],["vaccine",25],["pray",12],["children",11],["child",11],["doctors",10],["baby",10],["parents",9],["good",9],["cant",9],["video",9],["lord",9],["know",8],["vaccines",8],["way",7]],
+        "2021": [["vaccine",112],["covid",82],["right",67],["know",62],["good",54],["love",53],["need",51],["hes",50],["freedom",50],["want",49],["cant",47],["vaccinated",46],["anti",46],["medical",45],["shes",40]],
+        "2022": [["anti",46],["covid",38],["vaccine",38],["freedom",36],["mandates",35],["good",33],["right",30],["mandate",30],["government",29],["country",29],["vaccinated",28],["love",28],["world",27],["way",25],["want",25]],
+        "2023": [["vaccine",29],["rfk",28],["sir",27],["vaccines",21],["hes",20],["hai",19],["day",17],["dose",17],["jr",15],["de",15],["covid",13],["good",12],["debate",11],["vaccinated",11],["vote",11]],
+        "2024": [["sir",17],["vaccine",13],["hai",9],["rfk",8],["right",7],["kya",7],["ne",6],["kids",5],["covid",5],["bill",5],["shoulder",5],["pe",5],["dose",5],["tha",5],["cant",4]],
+        "2025": [["vaccines",50],["rfk",49],["vaccine",30],["thank",29],["vaccinated",28],["covid",28],["know",26],["want",23],["jr",22],["doctor",21],["dr",21],["hes",21],["bernie",21],["health",21],["good",20]]
+      };
+
+      const yearSelect = document.getElementById('yearSelect');
+      // Populate selector
+      const years = ['all', ...Object.keys(rawData)];
+      years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = (y === 'all') ? 'Alle Jahre' : y;
+        yearSelect.appendChild(opt);
+      });
+      yearSelect.value = 'all';
+
+      const ctx = document.getElementById('keywordsChart').getContext('2d');
+      let chart;
+
+      function getColors() {
+        const isDark = htmlElement.classList.contains('dark');
+        return {
+          axis: isDark ? '#e2e8f0' : '#0f172a',
+          grid: isDark ? '#475569' : '#e5e7eb',
+          bar: '#10b981',
+          lines: [
+            '#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#06b6d4','#f97316','#84cc16','#f43f5e','#10b981'
+          ],
+          bg: isDark ? '#1f2937' : '#ffffff'
         };
+      }
 
-        const ctx = document.getElementById('keywordsChart').getContext('2d');
-        let chart;
-
-        function renderChart(year) {
-            let labels = [];
-            let data = [];
-
-            if (year === "all") {
-                const combined = {};
-                for (const yr in rawData) {
-                    rawData[yr].forEach(([keyword, count]) => {
-                        combined[keyword] = (combined[keyword] || 0) + count;
-                    });
-                }
-
-                const sorted = Object.entries(combined).sort((a, b) => b[1] - a[1]).slice(0, 40);
-                labels = sorted.map(([k]) => k);
-                data = sorted.map(([_, v]) => v);
-            } else {
-                const yearData = rawData[year];
-                labels = yearData.map(item => item[0]);
-                data = yearData.map(item => item[1]);
-            }
-
-            if (chart) {
-                chart.destroy();
-            }
-
-            chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `Keyword frequency – ${year === "all" ? "Alle Jahre" : year}`,
-                        data: data,
-                        backgroundColor: 'green',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            ticks: { color: 'black' },
-                            grid: { color: '#ccc' }
-                        },
-                        y: {
-                            ticks: { color: 'black' },
-                            grid: { color: '#ccc' }
-                        }
-                    }
-                }
+      function renderChart(year) {
+        const colors = getColors();
+        let labels = [];
+        let data = [];
+        if (year === 'all') {
+          const combined = {};
+          for (const yr in rawData) {
+            rawData[yr].forEach(([keyword, count]) => {
+              combined[keyword] = (combined[keyword] || 0) + count;
             });
+          }
+          const sorted = Object.entries(combined).sort((a,b) => b[1]-a[1]).slice(0,40);
+          labels = sorted.map(([k]) => k);
+          data = sorted.map(([_,v]) => v);
+        } else {
+          const yearData = rawData[year];
+          labels = yearData.map(item => item[0]);
+          data = yearData.map(item => item[1]);
         }
-
-        // Initial rendering
-        const yearSelect = document.getElementById('yearSelect');
-        renderChart(yearSelect.value);
-
-        // Event listener
-        yearSelect.addEventListener('change', () => {
-            renderChart(yearSelect.value);
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+          type: 'bar',
+          data: { labels, datasets: [{ label: `Keyword frequency – ${year === 'all' ? 'Alle Jahre' : year}`, data, backgroundColor: colors.bar, borderWidth: 1 }] },
+          options: {
+            indexAxis: 'y', responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { beginAtZero: true, ticks: { color: colors.axis }, grid: { color: colors.grid } },
+              y: { ticks: { color: colors.axis }, grid: { color: colors.grid } }
+            }
+          }
         });
-    </script>
+      }
+
+      // Initial render
+      renderChart(yearSelect.value);
+
+      yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
+
+      // ==== Time series for selected words ====
+      const wordSelectToggle = document.getElementById('wordSelectToggle');
+      const wordOptions = document.getElementById('wordOptions');
+      const wordSelectLabel = document.getElementById('wordSelectLabel');
+      const clearSelectionBtn = document.getElementById('clearSelection');
+      const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
+      let timeChart;
+
+      // Build years sorted
+      const yearLabels = Object.keys(rawData).sort((a,b)=>a.localeCompare(b));
+
+      // Build combined keywords and default selection
+      const combinedCounts = {};
+      for (const y in rawData) {
+        rawData[y].forEach(([k,c]) => combinedCounts[k] = (combinedCounts[k]||0) + c);
+      }
+      const allKeywords = Object.keys(combinedCounts).sort((a,b)=> combinedCounts[b]-combinedCounts[a]);
+      let selected = allKeywords.slice(0,3); // default top 3
+
+      function updateSelectLabel() {
+        if (selected.length === 0) {
+          wordSelectLabel.textContent = 'Wörter wählen';
+        } else if (selected.length <= 3) {
+          wordSelectLabel.textContent = selected.join(', ');
+        } else {
+          wordSelectLabel.textContent = selected.slice(0,3).join(', ') + ` +${selected.length-3}`;
+        }
+      }
+
+      function populateOptions() {
+        wordOptions.innerHTML = '';
+        allKeywords.forEach((kw, idx) => {
+          const id = `kw_${idx}`;
+          const wrap = document.createElement('label');
+          wrap.className = 'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-100 cursor-pointer';
+          wrap.innerHTML = `<input type="checkbox" class="kwCheck" data-kw="${kw}" ${selected.includes(kw)?'checked':''}/> <span>${kw} <span class=\"text-gray-500\">(${combinedCounts[kw]})</span></span>`;
+          wordOptions.appendChild(wrap);
+        });
+      }
+
+      function getDatasetFor(kw, color){
+        const data = yearLabels.map(y => {
+          const entry = rawData[y].find(([k])=>k===kw);
+          return entry ? entry[1] : 0;
+        });
+        return {
+          label: kw,
+          data,
+          borderColor: color,
+          backgroundColor: color,
+          tension: 0.3,
+          fill: false
+        };
+      }
+
+      function renderTimeSeries(){
+        const colors = getColors();
+        const datasets = selected.map((kw, i)=> getDatasetFor(kw, colors.lines[i % colors.lines.length]));
+        if (timeChart) timeChart.destroy();
+        timeChart = new Chart(ctxTime, {
+          type: 'line',
+          data: { labels: yearLabels, datasets },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: true, labels: { color: colors.axis } } },
+            scales: {
+              x: { ticks: { color: colors.axis }, grid: { color: colors.grid } },
+              y: { beginAtZero: true, ticks: { color: colors.axis }, grid: { color: colors.grid } }
+            }
+          }
+        });
+      }
+
+      // Initialize dropdown
+      updateSelectLabel();
+      populateOptions();
+      renderTimeSeries();
+
+      // Dropdown toggle and outside click
+      wordSelectToggle.addEventListener('click', ()=>{
+        wordOptions.classList.toggle('hidden');
+      });
+      document.addEventListener('click', (e)=>{
+        if (!document.getElementById('wordMultiSelect').contains(e.target)) {
+          wordOptions.classList.add('hidden');
+        }
+      });
+
+      clearSelectionBtn.addEventListener('click', ()=>{
+        selected = [];
+        populateOptions();
+        updateSelectLabel();
+        renderTimeSeries();
+      });
+
+      // Instant update when a checkbox is toggled
+      wordOptions.addEventListener('change', (e)=>{
+        if (e.target && e.target.classList.contains('kwCheck')) {
+          const checks = wordOptions.querySelectorAll('.kwCheck');
+          selected = Array.from(checks).filter(c=>c.checked).map(c=>c.dataset.kw);
+          updateSelectLabel();
+          renderTimeSeries();
+        }
+      });
+
+      // Toggle dark mode
+      darkModeToggle.addEventListener('click', function() {
+        if (htmlElement.classList.contains('dark')) {
+          htmlElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          darkModeToggle.innerHTML = moonIcon;
+        } else {
+          htmlElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          darkModeToggle.innerHTML = sunIcon;
+        }
+        renderChart(yearSelect.value);
+        renderTimeSeries();
+      });
+    });
+  </script>
 </body>
 </html>

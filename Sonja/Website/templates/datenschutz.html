@@ -7,73 +7,9 @@
   <meta name="description" content="Datenschutzerklärung" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    /* Dark mode styles */
-    html.dark body {
-      background-image: linear-gradient(to bottom right, #1e293b, #0f172a);
-      color: #e2e8f0;
-    }
-
-    html.dark .bg-white, 
-    html.dark .bg-white\/70 {
-      background-color: #1e293b;
-      color: #e2e8f0;
-    }
-
-    html.dark .text-gray-800 {
-      color: #e2e8f0;
-    }
-
-    html.dark .text-gray-600,
-    html.dark .text-gray-500 {
-      color: #94a3b8;
-    }
-
-    html.dark .text-indigo-800,
-    html.dark .text-indigo-700,
-    html.dark .text-indigo-600 {
-      color: #a5b4fc;
-    }
-
-    html.dark .border-gray-200,
-    html.dark .border-b {
-      border-color: #334155;
-    }
-
-    html.dark .shadow {
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Dark mode toggle button */
-    .dark-mode-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      background-color: #4f46e5;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .dark-mode-toggle:hover {
-      transform: scale(1.1);
-    }
-
-    html.dark .dark-mode-toggle {
-      background-color: #6366f1;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-800">
   <!-- Dark Mode Toggle Button -->
   <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
     <i class="fas fa-moon"></i>
@@ -153,28 +89,7 @@
     </section>
   </main>
 
-  <footer class="mt-16 w-full max-w-5xl mx-auto">
-    <div class="border-t border-gray-200 pt-8 pb-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <h3 class="text-lg font-semibold text-indigo-800">DataDivas</h3>
-          <p class="text-gray-600">Datenanalyse zum Einfluss sozialer Medien auf die Politik</p>
-        </div>
-        <div class="flex space-x-4">
-          <a href="/impressum" class="text-indigo-600 hover:text-indigo-800 transition">Impressum</a>
-          <a href="/datenschutz" class="text-indigo-600 hover:text-indigo-800 transition">Datenschutz</a>
-          <a href="/kontakt" class="text-indigo-600 hover:text-indigo-800 transition">Kontakt</a>
-        </div>
-      </div>
-      <div class="mt-6 text-center text-gray-500 text-sm">
-        © <span id="y"></span> DataDivas. Alle Rechte vorbehalten.
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  {% include 'partials/footer.html' %}
 
   <!-- Dark Mode JavaScript -->
   <script>
