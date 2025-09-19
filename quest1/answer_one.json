@@ -28,6 +28,38 @@
       {
         "words": "pray",
         "numbers": 2
+      },
+      {
+        "words": "infant",
+        "numbers": 1
+      },
+      {
+        "words": "dr",
+        "numbers": 1
+      },
+      {
+        "words": "emmanuel",
+        "numbers": 1
+      },
+      {
+        "words": "actor",
+        "numbers": 1
+      },
+      {
+        "words": "investigation",
+        "numbers": 1
+      },
+      {
+        "words": "killer",
+        "numbers": 1
+      },
+      {
+        "words": "stupidity",
+        "numbers": 1
+      },
+      {
+        "words": "liable",
+        "numbers": 1
       }
     ]
   },
@@ -50,11 +82,11 @@
         "numbers": 17
       },
       {
-        "words": "pandemic",
+        "words": "vaccination",
         "numbers": 14
       },
       {
-        "words": "vaccination",
+        "words": "pandemic",
         "numbers": 14
       },
       {
@@ -62,11 +94,11 @@
         "numbers": 14
       },
       {
-        "words": "protesters",
+        "words": "protesting",
         "numbers": 10
       },
       {
-        "words": "protesting",
+        "words": "protesters",
         "numbers": 10
       },
       {
@@ -90,7 +122,7 @@
         "numbers": 6
       },
       {
-        "words": "sympathy",
+        "words": "freedom",
         "numbers": 5
       }
     ]
@@ -114,11 +146,11 @@
         "numbers": 9
       },
       {
-        "words": "vaccines",
+        "words": "mandate",
         "numbers": 8
       },
       {
-        "words": "mandate",
+        "words": "vaccines",
         "numbers": 8
       },
       {
@@ -130,7 +162,7 @@
         "numbers": 6
       },
       {
-        "words": "vaxxers",
+        "words": "protesting",
         "numbers": 5
       },
       {
@@ -138,15 +170,11 @@
         "numbers": 5
       },
       {
-        "words": "protesting",
+        "words": "vaxxers",
         "numbers": 5
       },
       {
-        "words": "freedom",
-        "numbers": 4
-      },
-      {
-        "words": "vaxx",
+        "words": "vaccination",
         "numbers": 4
       },
       {
@@ -154,7 +182,11 @@
         "numbers": 4
       },
       {
-        "words": "vaccination",
+        "words": "vaxx",
+        "numbers": 4
+      },
+      {
+        "words": "freedom",
         "numbers": 4
       }
     ]
@@ -170,15 +202,15 @@
         "numbers": 6
       },
       {
+        "words": "vaccinated",
+        "numbers": 5
+      },
+      {
         "words": "covid",
         "numbers": 5
       },
       {
         "words": "rfk",
-        "numbers": 5
-      },
-      {
-        "words": "vaccinated",
         "numbers": 5
       },
       {
@@ -190,23 +222,7 @@
         "numbers": 3
       },
       {
-        "words": "vaccination",
-        "numbers": 2
-      },
-      {
-        "words": "health",
-        "numbers": 2
-      },
-      {
         "words": "debate",
-        "numbers": 2
-      },
-      {
-        "words": "vaccinate",
-        "numbers": 2
-      },
-      {
-        "words": "pandemic",
         "numbers": 2
       },
       {
@@ -218,7 +234,23 @@
         "numbers": 2
       },
       {
-        "words": "jr",
+        "words": "democrat",
+        "numbers": 2
+      },
+      {
+        "words": "vax",
+        "numbers": 2
+      },
+      {
+        "words": "pharma",
+        "numbers": 2
+      },
+      {
+        "words": "sympathy",
+        "numbers": 2
+      },
+      {
+        "words": "president",
         "numbers": 2
       }
     ]
@@ -234,16 +266,56 @@
         "numbers": 2
       },
       {
-        "words": "injection",
+        "words": "msnbc",
         "numbers": 2
       },
       {
-        "words": "msnbc",
+        "words": "injection",
         "numbers": 2
       },
       {
         "words": "pandemic",
         "numbers": 2
+      },
+      {
+        "words": "president",
+        "numbers": 1
+      },
+      {
+        "words": "maga",
+        "numbers": 1
+      },
+      {
+        "words": "republican",
+        "numbers": 1
+      },
+      {
+        "words": "autistic",
+        "numbers": 1
+      },
+      {
+        "words": "autistim",
+        "numbers": 1
+      },
+      {
+        "words": "maher",
+        "numbers": 1
+      },
+      {
+        "words": "vaccination",
+        "numbers": 1
+      },
+      {
+        "words": "mcfarlane",
+        "numbers": 1
+      },
+      {
+        "words": "autism",
+        "numbers": 1
+      },
+      {
+        "words": "political",
+        "numbers": 1
       }
     ]
   },
@@ -274,11 +346,11 @@
         "numbers": 7
       },
       {
-        "words": "vaccinations",
+        "words": "kennedy",
         "numbers": 6
       },
       {
-        "words": "kennedy",
+        "words": "vaccinations",
         "numbers": 6
       },
       {
@@ -286,15 +358,7 @@
         "numbers": 6
       },
       {
-        "words": "senator",
-        "numbers": 5
-      },
-      {
         "words": "vaccination",
-        "numbers": 5
-      },
-      {
-        "words": "doctor",
         "numbers": 5
       },
       {
@@ -302,11 +366,19 @@
         "numbers": 5
       },
       {
+        "words": "doctor",
+        "numbers": 5
+      },
+      {
+        "words": "senator",
+        "numbers": 5
+      },
+      {
         "words": "health",
         "numbers": 4
       },
       {
-        "words": "immunity",
+        "words": "bhai",
         "numbers": 4
       }
     ]
