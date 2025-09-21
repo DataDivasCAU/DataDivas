@@ -299,30 +299,30 @@
           }
         });
 
-        // Add average data points for 2024 and 2025 to allData
+        // Add sum data points for 2024 and 2025 to allData
         if (year2024Data.periods > 0) {
           allData.push({
             period: "2024",
-            prettyPeriod: "2024 (Average)",
-            videos: Math.round(year2024Data.videos / year2024Data.periods),
-            views: Math.round(year2024Data.views / year2024Data.periods),
-            likes: Math.round(year2024Data.likes / year2024Data.periods),
-            viewsPerVideo: Math.round((year2024Data.views / year2024Data.periods) / (year2024Data.videos / year2024Data.periods)),
-            likesPerVideo: Math.round((year2024Data.likes / year2024Data.periods) / (year2024Data.videos / year2024Data.periods)),
-            likesPerView: (((year2024Data.likes / year2024Data.periods) / (year2024Data.views / year2024Data.periods)) * 100).toFixed(2)
+            prettyPeriod: "2024 (Total)",
+            videos: Math.round(year2024Data.videos),
+            views: Math.round(year2024Data.views),
+            likes: Math.round(year2024Data.likes),
+            viewsPerVideo: Math.round((year2024Data.views) / (year2024Data.videos)),
+            likesPerVideo: Math.round((year2024Data.likes) / (year2024Data.videos)),
+            likesPerView: (((year2024Data.likes) / (year2024Data.views)) * 100).toFixed(2)
           });
         }
 
         if (year2025Data.periods > 0) {
           allData.push({
             period: "2025",
-            prettyPeriod: "2025 (Average)",
-            videos: Math.round(year2025Data.videos / year2025Data.periods),
-            views: Math.round(year2025Data.views / year2025Data.periods),
-            likes: Math.round(year2025Data.likes / year2025Data.periods),
-            viewsPerVideo: Math.round((year2025Data.views / year2025Data.periods) / (year2025Data.videos / year2025Data.periods)),
-            likesPerVideo: Math.round((year2025Data.likes / year2025Data.periods) / (year2025Data.videos / year2025Data.periods)),
-            likesPerView: (((year2025Data.likes / year2025Data.periods) / (year2025Data.views / year2025Data.periods)) * 100).toFixed(2)
+            prettyPeriod: "2025 (Total)",
+            videos: Math.round(year2025Data.videos),
+            views: Math.round(year2025Data.views),
+            likes: Math.round(year2025Data.likes),
+            viewsPerVideo: Math.round((year2025Data.views) / (year2025Data.videos)),
+            likesPerVideo: Math.round((year2025Data.likes) / (year2025Data.videos)),
+            likesPerView: (((year2025Data.likes) / (year2025Data.views)) * 100).toFixed(2)
           });
         }
 
