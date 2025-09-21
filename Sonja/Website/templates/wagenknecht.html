@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahra Wagenknecht – Kommentare Analyse</title>
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <!-- WordCloud library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
+  <style>
+    .dark .card { background-color: #111827; }
+    .dark .text-muted { color: #9CA3AF; }
+    .dark-mode-toggle {
+      position: fixed; right: 16px; top: 16px; z-index: 1000;
+      background: #e5e7eb; color: #111827; border-radius: 9999px; padding: 10px 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .dark .dark-mode-toggle { background: #111827; color: #e5e7eb; }
+    /* Constrain chart height to prevent infinite growth */
+    .chart-container { position: relative; height: 35vh; min-height: 300px; max-height: 600px; width: 100%; padding: 0 0 8px; }
+    .chart-container canvas { display: block; width: 100% !important; height: 100% !important; }
+    /* Large combined wordcloud (analog zu FFF) */
+    #wordcloud { position: relative; overflow: hidden; margin: 0 auto; width: min(100%, 900px); }
+    #wordcloud canvas { width: 100% !important; height: 100% !important; display: block; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="max-w-6xl mx-auto">
+    <header class="flex flex-col items-center mb-6 gap-2 text-center">
+      <h1 class="text-2xl font-bold">Sahra Wagenknecht – Kommentare Analyse</h1>
+      <div class="text-sm text-gray-500" id="subtitle">Häufigste Wörter in YouTube‑Kommentaren – Vorher/Nachher</div>
+      <div class="flex items-center gap-3 flex-wrap justify-center mt-2">
+        <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
+      </div>
+    </header>
+
+    <!-- Kombinierte Wordcloud (analog zu FridaysForFuture) -->
+    <section class="card shadow rounded-2xl bg-white p-4 mb-6">
+      <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
+      <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">Kombiniert aus Vorher/Nachher‑Kommentaren zu Sahra Wagenknecht.</p>
+      <div id="wordcloud" style="height: 820px;"></div>
+    </section>
+
+
+    <!-- Bar Charts -->
+    <section class="grid gap-6 lg:grid-cols-2 mt-6">
+      <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
+        <div class="mb-2 font-semibold">Top Wörter – Vorher</div>
+        <div class="chart-container">
+          <canvas id="chartBefore"></canvas>
+        </div>
+      </div>
+      <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
+        <div class="mb-2 font-semibold">Top Wörter – Nachher</div>
+        <div class="chart-container">
+          <canvas id="chartAfter"></canvas>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Combined Bar Chart with Words on X-Axis -->
+    <section class="mt-8">
+      <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
+        <div class="mb-2 font-semibold">Vergleich nach Wörtern (X‑Achse: Wörter)</div>
+        <div class="chart-container">
+          <canvas id="wordAxisCompare"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="overflow-x-auto shadow rounded-2xl mt-8 bg-white">
+      <table class="min-w-full border-collapse" id="compareTable">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-3">Rang</th>
+            <th class="p-3">Wort (Vorher)</th>
+            <th class="p-3">Anzahl (Vorher)</th>
+            <th class="p-3">Wort (Nachher)</th>
+            <th class="p-3">Anzahl (Nachher)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    // --- Dark mode ---
+    (function initTheme() {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+      document.documentElement.classList.toggle("light", savedTheme !== "dark");
+      const btn = document.getElementById("darkModeToggle");
+      const moon = '<i class="fas fa-moon"></i>';
+      const sun = '<i class="fas fa-sun"></i>';
+      btn.innerHTML = savedTheme === "dark" ? sun : moon;
+      btn.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.toggle("dark");
+        document.documentElement.classList.toggle("light", !isDark);
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        btn.innerHTML = isDark ? sun : moon;
+        // Re-render combined wordcloud to adapt background/colors
+        if (typeof safeRenderCombined === 'function') {
+          setTimeout(()=> safeRenderCombined(), 50);
+        }
+      });
+    })();
+
+    window.addEventListener('load', function() {
+    // Utility to get top N terms
+    function topN(data, n = 20) {
+      // data is array of {words, numbers}
+      const sorted = [...data].sort((a,b) => b.numbers - a.numbers);
+      return sorted.slice(0, n);
+    }
+    function getBg(){ return document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff'; }
+    function pickWordColor(){
+      const isDark = document.documentElement.classList.contains('dark');
+      const lightPalette = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#17becf','#bcbd22','#ff6384','#36a2eb','#4bc0c0','#f59e0b','#ef4444','#10b981','#8b5cf6'];
+      const darkPalette = ['#93c5fd','#34d399','#fbbf24','#f87171','#a78bfa','#22d3ee','#a3e635','#fb923c','#fb7185','#2dd4bf','#fde68a','#60a5fa'];
+      const pal = isDark ? darkPalette : lightPalette;
+      return pal[Math.floor(Math.random()*pal.length)];
+    }
+
+    // Load both datasets
+    Promise.all([
+      fetch('/wagenknecht_words_a.json').then(r => r.json()),
+      fetch('/wagenknecht_words_b.json').then(r => r.json())
+    ]).then(([beforeData, afterData]) => {
+      const topBefore = topN(beforeData, 20);
+      const topAfter  = topN(afterData, 20);
+
+      // Prepare data
+      const labelsBefore = topBefore.map(d => d.words);
+      const valuesBefore = topBefore.map(d => d.numbers);
+      const labelsAfter  = topAfter.map(d => d.words);
+      const valuesAfter  = topAfter.map(d => d.numbers);
+
+
+      // Build combined list for the big wordcloud (sum A+B by word)
+      const combinedMap = new Map();
+      [...beforeData, ...afterData].forEach(d => {
+        const w = String(d.words || '').toLowerCase();
+        const n = Number(d.numbers) || 0;
+        if (!w) return;
+        combinedMap.set(w, (combinedMap.get(w) || 0) + n);
+      });
+      const combinedList = Array.from(combinedMap.entries())
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0, 200);
+
+
+      const wcCombinedEl = document.getElementById('wordcloud');
+
+      // Render combined big wordcloud analogous to FFF
+      function renderCombined(){
+        if (!wcCombinedEl) return;
+        wcCombinedEl.innerHTML = '';
+        WordCloud(wcCombinedEl, {
+          list: combinedList,
+          gridSize: 10,
+          weightFactor: (count) => 6 + Math.sqrt(count) * 12,
+          color: pickWordColor,
+          backgroundColor: getBg(),
+          rotateRatio: 0,
+          shape: 'circle',
+          ellipticity: 0.9
+        });
+      }
+      function safeRenderCombined(attempt = 0){
+        const ready = wcCombinedEl && wcCombinedEl.clientWidth > 50 && wcCombinedEl.clientHeight > 50;
+        if (!ready && attempt < 20){
+          return setTimeout(()=> safeRenderCombined(attempt+1), 120);
+        }
+        renderCombined();
+      }
+      safeRenderCombined();
+
+
+      // Render bar charts
+      const ctxB = document.getElementById('chartBefore').getContext('2d');
+      const ctxA = document.getElementById('chartAfter').getContext('2d');
+
+      const commonOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } }, y: { beginAtZero: true } }
+      };
+
+      new Chart(ctxB, {
+        type: 'bar',
+        data: {
+          labels: labelsBefore,
+          datasets: [{ label: 'Häufigkeit', data: valuesBefore, backgroundColor: '#60A5FA' }]
+        },
+        options: commonOpts
+      });
+
+      new Chart(ctxA, {
+        type: 'bar',
+        data: {
+          labels: labelsAfter,
+          datasets: [{ label: 'Häufigkeit', data: valuesAfter, backgroundColor: '#34D399' }]
+        },
+        options: commonOpts
+      });
+
+
+      // Combined bar chart with words on X-axis
+      const wordSet = new Map();
+      topBefore.forEach(d => wordSet.set(d.words, (wordSet.get(d.words)||0) + d.numbers));
+      topAfter.forEach(d => wordSet.set(d.words, (wordSet.get(d.words)||0) + d.numbers));
+      // Sort words by combined frequency desc and take top N (e.g., 20)
+      const combinedWords = Array.from(wordSet.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 20).map(([w])=>w);
+      const beforeByWord = combinedWords.map(w => (beforeData.find(d=>d.words===w)?.numbers) || 0);
+      const afterByWord  = combinedWords.map(w => (afterData.find(d=>d.words===w)?.numbers) || 0);
+      const ctxWordAxis = document.getElementById('wordAxisCompare').getContext('2d');
+      new Chart(ctxWordAxis, {
+        type: 'bar',
+        data: {
+          labels: combinedWords,
+          datasets: [
+            { label: 'Vorher', data: beforeByWord, backgroundColor: 'rgba(59,130,246,0.7)' },
+            { label: 'Nachher', data: afterByWord,  backgroundColor: 'rgba(16,185,129,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true } },
+          scales: {
+            x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 }, title: { display: true, text: 'Wörter' } },
+            y: { beginAtZero: true, title: { display: true, text: 'Häufigkeit' } }
+          }
+        }
+      });
+
+      // Render comparison table
+      const tbody = document.querySelector('#compareTable tbody');
+      const maxRows = Math.max(topBefore.length, topAfter.length);
+      for (let i = 0; i < maxRows; i++) {
+        const b = topBefore[i];
+        const a = topAfter[i];
+        const tr = document.createElement('tr');
+        tr.className = i % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+        tr.innerHTML = `
+          <td class="p-3">${i+1}</td>
+          <td class="p-3">${b ? b.words : ''}</td>
+          <td class="p-3">${b ? b.numbers : ''}</td>
+          <td class="p-3">${a ? a.words : ''}</td>
+          <td class="p-3">${a ? a.numbers : ''}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      // Re-render combined wordcloud on resize (debounced)
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => { safeRenderCombined(); }, 200);
+      });
+    }).catch(err => {
+      console.error('Fehler beim Laden der Wagenknecht-Daten:', err);
+    });
+    });
+  </script>
+</body>
+</html>

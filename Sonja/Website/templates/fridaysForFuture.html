@@ -18,7 +18,7 @@
     #wordcloud canvas { width: 100% !important; height: 100% !important; display: block; }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 p-6">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 p-6 text-gray-900">
 <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
     <i class="fas fa-moon"></i>
 </button>
@@ -27,7 +27,7 @@
     <header class="flex flex-col items-center mb-6 gap-4 text-center">
       <div class="min-w-0">
         <h1 class="text-2xl font-bold">Fridays For Future – YouTube Analyse</h1>
-        <div class="text-sm text-gray-500 mt-1">Datenbasis: fridaysForFuture.json</div>
+        <div class="text-sm text-gray-900 dark:text-gray-200 mt-1">Datenbasis: fridaysForFuture.json</div>
       </div>
       <div class="flex items-center gap-3 flex-wrap justify-center">
         <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
@@ -41,6 +41,17 @@
       </div>
     </header>
 
+    <!-- Context dialog: inserted per issue description -->
+    <section class="chart-box mb-8" id="fff-dialog">
+      <h2 class="text-xl font-bold mb-3">Fridays for Future – Kontext</h2>
+      <div class="prose max-w-none text-sm leading-relaxed">
+        <h3 class="font-semibold mb-1">What is Fridays for Future?</h3>
+        <p>Fridays for Future is a global political movement focused on climate-related issues. Also known as the School Strike for Climate, it began with school students skipping Friday classes to participate in demonstrations. The goal is to make political leaders take stronger action in fighting climate change as well as accelerating the transition to renewable energy.</p>
+        <h3 class="font-semibold mt-4 mb-1">What data did we gather?</h3>
+        <p>We collected the statistics of 100 German-language videos related to Fridays for Future, along with the 10 most relevant comments for each video. This includes the title, upload-time, descriptions, like- and view-count.</p>
+      </div>
+    </section>
+
     <section class="chart-box mb-8">
       <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos nach Views</h2>
       <canvas id="barTopViews" height="120"></canvas>
@@ -53,17 +64,20 @@
       </div>
       <div class="chart-box">
         <h2 class="text-lg font-semibold mb-2 text-center">Uploads über die Zeit</h2>
+        <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">This graph shows the amount of videos uploaded in 2019 and 2020 and marks German protest days, which explain many spikes.</p>
         <canvas id="lineUploadsOverTime" height="140"></canvas>
       </div>
     </section>
 
     <section class="chart-box mb-8">
       <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
+      <p class="text-sm dark:text-gray-200 text-center max-w-3xl mx-auto mb-2">We generated a WordCloud using keybert based on keywords extracted from the video titles, descriptions and comments.</p>
       <div id="wordcloud" style="height: 820px;"></div>
     </section>
 
     <section class="chart-box mb-8">
       <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords je Zeitraum</h2>
+      <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">We tracked how often these keywords appeared in the 15 most-viewed videos during three periods: 01.01.2019–01.06.2019, 01.07.2019–01.12.2019, and 01.01.2020–01.12.2020.</p>
       <div id="heatmap" class="overflow-x-auto">
         <table id="heatmapTable" class="min-w-full table"></table>
       </div>
@@ -99,7 +113,13 @@
       if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
         htmlEl.classList.add('dark');
         darkModeToggle.innerHTML = sunIcon;
+        // Ensure only light text in dark mode
+        document.body.classList.remove('text-gray-900');
         document.body.classList.add('bg-gray-900','text-gray-100');
+      } else {
+        // Ensure only dark text in light mode
+        document.body.classList.add('text-gray-900');
+        document.body.classList.remove('text-gray-100','bg-gray-900');
       }
       darkModeToggle.addEventListener('click', () => {
         const isDark = htmlEl.classList.toggle('dark');
@@ -108,6 +128,7 @@
         // Toggle body styles
         document.body.classList.toggle('bg-gray-900', isDark);
         document.body.classList.toggle('text-gray-100', isDark);
+        document.body.classList.toggle('text-gray-900', !isDark);
         // Re-render visuals to adapt colors
         const n = Number(topNEl.value);
         renderAll(n);
