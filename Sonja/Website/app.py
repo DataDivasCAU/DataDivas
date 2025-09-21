@@ -49,6 +49,12 @@ def post_per_party_stats():
 def antivax():
     return render_template("antivax.html")
 
+# Antivax data endpoint (like tradwife pattern): serves the antivax answer_one.json
+@app.route("/answer_one.json")
+def antivax_answer_one():
+    path = Path(BASE) / "data" / "antivax" / "answer_one.json"
+    return jsonify(load_json(str(path)))
+
 @app.route("/afd")
 def afd():
     return render_template("afd.html")

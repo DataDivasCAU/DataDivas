@@ -67,26 +67,48 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
-        // Data
-        const rawData = {
-            "2020": [["die", 27], ["vaccine", 25], ["pray", 12], ["children", 11], ["child", 11], ["doctors", 10], ["baby", 10], ["parents", 9], ["good", 9], ["cant", 9], ["video", 9], ["lord", 9], ["know", 8], ["vaccines", 8], ["way", 7]],
-            "2021": [["vaccine", 112], ["covid", 82], ["right", 67], ["know", 62], ["good", 54], ["love", 53], ["need", 51], ["hes", 50], ["freedom", 50], ["want", 49], ["cant", 47], ["vaccinated", 46], ["anti", 46], ["medical", 45], ["shes", 40]],
-            "2022": [["anti", 46], ["covid", 38], ["vaccine", 38], ["freedom", 36], ["mandates", 35], ["good", 33], ["right", 30], ["mandate", 30], ["government", 29], ["country", 29], ["vaccinated", 28], ["love", 28], ["world", 27], ["way", 25], ["want", 25]],
-            "2023": [["vaccine", 29], ["rfk", 28], ["sir", 27], ["vaccines", 21], ["hes", 20], ["hai", 19], ["day", 17], ["dose", 17], ["jr", 15], ["de", 15], ["covid", 13], ["good", 12], ["debate", 11], ["vaccinated", 11], ["vote", 11]],
-            "2024": [["sir", 17], ["vaccine", 13], ["hai", 9], ["rfk", 8], ["right", 7], ["kya", 7], ["ne", 6], ["kids", 5], ["covid", 5], ["bill", 5], ["shoulder", 5], ["pe", 5], ["dose", 5], ["tha", 5], ["cant", 4]],
-            "2025": [["vaccines", 50], ["rfk", 49], ["vaccine", 30], ["thank", 29], ["vaccinated", 28], ["covid", 28], ["know", 26], ["want", 23], ["jr", 22], ["doctor", 21], ["dr", 21], ["hes", 21], ["bernie", 21], ["health", 21], ["good", 20]]
-        };
-
+        // Data: load from JSON file and transform to internal structure {year: [[word,count], ...]}
         const yearSelect = document.getElementById('yearSelect');
-        // Populate selector
-        const years = ['all', ...Object.keys(rawData)];
-        years.forEach(y => {
-            const opt = document.createElement('option');
-            opt.value = y;
-            opt.textContent = (y === 'all') ? 'Alle Jahre' : y;
-            yearSelect.appendChild(opt);
-        });
-        yearSelect.value = 'all';
+        let rawData = null; // will be { year: [[word,count], ...] }
+
+        async function loadData() {
+            try {
+                const res = await fetch('/answer_one.json');
+                const json = await res.json();
+                // Transform: incoming format {year: { keywords: [ {words, numbers}, ... ] }}
+                const transformed = {};
+                Object.keys(json).forEach(year => {
+                    const kwArr = (json[year] && Array.isArray(json[year].keywords)) ? json[year].keywords : (json[year] && json[year].keywords ? Object.values(json[year].keywords) : []);
+                    // Map to [word, count]
+                    const arr = kwArr
+                        .filter(x => x && (x.words !== undefined || x.word !== undefined) && (x.numbers !== undefined || x.count !== undefined))
+                        .map(x => [String(x.words ?? x.word), Number(x.numbers ?? x.count) || 0]);
+                    // sort desc by count for stability
+                    arr.sort((a, b) => b[1] - a[1]);
+                    transformed[year] = arr;
+                });
+                rawData = transformed;
+
+                // Populate selector
+                const years = ['all', ...Object.keys(rawData).sort((a,b)=>a.localeCompare(b))];
+                years.forEach(y => {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.textContent = (y === 'all') ? 'Alle Jahre' : y;
+                    yearSelect.appendChild(opt);
+                });
+                yearSelect.value = 'all';
+
+                // proceed with rendering and controls init
+                afterDataLoaded();
+            } catch (e) {
+                console.error('Failed to load antivax data', e);
+                const container = document.getElementById('chartContainer');
+                if (container) {
+                    container.innerHTML = '<div class="text-red-600">Fehler beim Laden der Daten.</div>';
+                }
+            }
+        }
 
         const ctx = document.getElementById('keywordsChart').getContext('2d');
         let chart;
@@ -146,10 +168,7 @@
             });
         }
 
-        // Initial render
-        renderChart(yearSelect.value);
-
-        yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
+        // defer initial render until data is loaded
 
         // ==== Time series for selected words ====
         const wordSelectToggle = document.getElementById('wordSelectToggle');
@@ -159,16 +178,13 @@
         const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
         let timeChart;
 
-        // Build years sorted
-        const yearLabels = Object.keys(rawData).sort((a, b) => a.localeCompare(b));
+        // Build years sorted (initialized after data load)
+        let yearLabels = [];
 
-        // Build combined keywords and default selection
-        const combinedCounts = {};
-        for (const y in rawData) {
-            rawData[y].forEach(([k, c]) => combinedCounts[k] = (combinedCounts[k] || 0) + c);
-        }
-        const allKeywords = Object.keys(combinedCounts).sort((a, b) => combinedCounts[b] - combinedCounts[a]);
-        let selected = allKeywords.slice(0, 3); // default top 3
+        // Build combined keywords and default selection (initialized after data load)
+        let combinedCounts = {};
+        let allKeywords = [];
+        let selected = []; // default will be set after data load
 
         function updateSelectLabel() {
             if (selected.length === 0) {
@@ -224,10 +240,28 @@
             });
         }
 
-        // Initialize dropdown
-        updateSelectLabel();
-        populateOptions();
-        renderTimeSeries();
+        // Initialize after data load
+        function afterDataLoaded() {
+            // Build years sorted from loaded rawData
+            yearLabels = Object.keys(rawData).sort((a, b) => a.localeCompare(b));
+
+            // Build combined counts
+            combinedCounts = {};
+            for (const y in rawData) {
+                rawData[y].forEach(([k, c]) => combinedCounts[k] = (combinedCounts[k] || 0) + c);
+            }
+            allKeywords = Object.keys(combinedCounts).sort((a, b) => combinedCounts[b] - combinedCounts[a]);
+            selected = allKeywords.slice(0, 3);
+
+            // Initial renders
+            renderChart('all');
+            updateSelectLabel();
+            populateOptions();
+            renderTimeSeries();
+
+            // Hook year selector now that data exists
+            yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
+        }
 
         // Dropdown toggle and outside click
         wordSelectToggle.addEventListener('click', () => {
@@ -267,9 +301,15 @@
                 localStorage.setItem('theme', 'dark');
                 darkModeToggle.innerHTML = sunIcon;
             }
-            renderChart(yearSelect.value);
-            renderTimeSeries();
+            // Re-render if data is available
+            if (rawData) {
+                renderChart(yearSelect.value || 'all');
+                renderTimeSeries();
+            }
         });
+
+        // Start loading data
+        loadData();
     });
 </script>
 {% include 'partials/footer.html' %}

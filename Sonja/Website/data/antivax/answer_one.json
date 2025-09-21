@@ -1,0 +1,386 @@
+{
+  "2020": {
+    "keywords": [
+      {
+        "words": "vaccine",
+        "numbers": 11
+      },
+      {
+        "words": "covid",
+        "numbers": 4
+      },
+      {
+        "words": "pandemic",
+        "numbers": 3
+      },
+      {
+        "words": "vaccines",
+        "numbers": 3
+      },
+      {
+        "words": "vaccination",
+        "numbers": 3
+      },
+      {
+        "words": "concerns",
+        "numbers": 2
+      },
+      {
+        "words": "pray",
+        "numbers": 2
+      },
+      {
+        "words": "infant",
+        "numbers": 1
+      },
+      {
+        "words": "dr",
+        "numbers": 1
+      },
+      {
+        "words": "emmanuel",
+        "numbers": 1
+      },
+      {
+        "words": "actor",
+        "numbers": 1
+      },
+      {
+        "words": "investigation",
+        "numbers": 1
+      },
+      {
+        "words": "killer",
+        "numbers": 1
+      },
+      {
+        "words": "stupidity",
+        "numbers": 1
+      },
+      {
+        "words": "liable",
+        "numbers": 1
+      }
+    ]
+  },
+  "2021": {
+    "keywords": [
+      {
+        "words": "vaccine",
+        "numbers": 53
+      },
+      {
+        "words": "covid",
+        "numbers": 35
+      },
+      {
+        "words": "vaccinated",
+        "numbers": 24
+      },
+      {
+        "words": "vaccines",
+        "numbers": 17
+      },
+      {
+        "words": "vaccination",
+        "numbers": 14
+      },
+      {
+        "words": "pandemic",
+        "numbers": 14
+      },
+      {
+        "words": "protest",
+        "numbers": 14
+      },
+      {
+        "words": "protesting",
+        "numbers": 10
+      },
+      {
+        "words": "protesters",
+        "numbers": 10
+      },
+      {
+        "words": "vax",
+        "numbers": 9
+      },
+      {
+        "words": "funny",
+        "numbers": 8
+      },
+      {
+        "words": "vaxxers",
+        "numbers": 7
+      },
+      {
+        "words": "ignorance",
+        "numbers": 7
+      },
+      {
+        "words": "unvaccinated",
+        "numbers": 6
+      },
+      {
+        "words": "freedom",
+        "numbers": 5
+      }
+    ]
+  },
+  "2022": {
+    "keywords": [
+      {
+        "words": "vaccine",
+        "numbers": 22
+      },
+      {
+        "words": "vaccinated",
+        "numbers": 15
+      },
+      {
+        "words": "covid",
+        "numbers": 9
+      },
+      {
+        "words": "protest",
+        "numbers": 9
+      },
+      {
+        "words": "mandate",
+        "numbers": 8
+      },
+      {
+        "words": "vaccines",
+        "numbers": 8
+      },
+      {
+        "words": "protesters",
+        "numbers": 7
+      },
+      {
+        "words": "protests",
+        "numbers": 6
+      },
+      {
+        "words": "protesting",
+        "numbers": 5
+      },
+      {
+        "words": "canadians",
+        "numbers": 5
+      },
+      {
+        "words": "vaxxers",
+        "numbers": 5
+      },
+      {
+        "words": "vaccination",
+        "numbers": 4
+      },
+      {
+        "words": "truckers",
+        "numbers": 4
+      },
+      {
+        "words": "vaxx",
+        "numbers": 4
+      },
+      {
+        "words": "freedom",
+        "numbers": 4
+      }
+    ]
+  },
+  "2023": {
+    "keywords": [
+      {
+        "words": "vaccine",
+        "numbers": 12
+      },
+      {
+        "words": "vaccines",
+        "numbers": 6
+      },
+      {
+        "words": "vaccinated",
+        "numbers": 5
+      },
+      {
+        "words": "covid",
+        "numbers": 5
+      },
+      {
+        "words": "rfk",
+        "numbers": 5
+      },
+      {
+        "words": "injection",
+        "numbers": 3
+      },
+      {
+        "words": "hai",
+        "numbers": 3
+      },
+      {
+        "words": "debate",
+        "numbers": 2
+      },
+      {
+        "words": "vaccinations",
+        "numbers": 2
+      },
+      {
+        "words": "jab",
+        "numbers": 2
+      },
+      {
+        "words": "democrat",
+        "numbers": 2
+      },
+      {
+        "words": "vax",
+        "numbers": 2
+      },
+      {
+        "words": "pharma",
+        "numbers": 2
+      },
+      {
+        "words": "sympathy",
+        "numbers": 2
+      },
+      {
+        "words": "president",
+        "numbers": 2
+      }
+    ]
+  },
+  "2024": {
+    "keywords": [
+      {
+        "words": "vaccine",
+        "numbers": 4
+      },
+      {
+        "words": "hai",
+        "numbers": 2
+      },
+      {
+        "words": "msnbc",
+        "numbers": 2
+      },
+      {
+        "words": "injection",
+        "numbers": 2
+      },
+      {
+        "words": "pandemic",
+        "numbers": 2
+      },
+      {
+        "words": "president",
+        "numbers": 1
+      },
+      {
+        "words": "maga",
+        "numbers": 1
+      },
+      {
+        "words": "republican",
+        "numbers": 1
+      },
+      {
+        "words": "autistic",
+        "numbers": 1
+      },
+      {
+        "words": "autistim",
+        "numbers": 1
+      },
+      {
+        "words": "maher",
+        "numbers": 1
+      },
+      {
+        "words": "vaccination",
+        "numbers": 1
+      },
+      {
+        "words": "mcfarlane",
+        "numbers": 1
+      },
+      {
+        "words": "autism",
+        "numbers": 1
+      },
+      {
+        "words": "political",
+        "numbers": 1
+      }
+    ]
+  },
+  "2025": {
+    "keywords": [
+      {
+        "words": "vaccines",
+        "numbers": 19
+      },
+      {
+        "words": "vaccine",
+        "numbers": 16
+      },
+      {
+        "words": "vaccinated",
+        "numbers": 13
+      },
+      {
+        "words": "covid",
+        "numbers": 9
+      },
+      {
+        "words": "rfk",
+        "numbers": 8
+      },
+      {
+        "words": "trump",
+        "numbers": 7
+      },
+      {
+        "words": "kennedy",
+        "numbers": 6
+      },
+      {
+        "words": "vaccinations",
+        "numbers": 6
+      },
+      {
+        "words": "polio",
+        "numbers": 6
+      },
+      {
+        "words": "vaccination",
+        "numbers": 5
+      },
+      {
+        "words": "bernie",
+        "numbers": 5
+      },
+      {
+        "words": "doctor",
+        "numbers": 5
+      },
+      {
+        "words": "senator",
+        "numbers": 5
+      },
+      {
+        "words": "health",
+        "numbers": 4
+      },
+      {
+        "words": "bhai",
+        "numbers": 4
+      }
+    ]
+  }
+}
