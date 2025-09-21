@@ -76,14 +76,44 @@
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const savedTheme = localStorage.getItem('theme');
 
+        function getColors() {
+            const isDark = root.classList.contains('dark');
+            return {
+                axis: isDark ? '#e2e8f0' : '#0f172a',
+                grid: isDark ? '#475569' : '#e5e7eb',
+                legend: isDark ? '#e2e8f0' : '#0f172a'
+            };
+        }
+
+        function applyChartColors(chart) {
+            const c = getColors();
+            // default text color
+            Chart.defaults.color = c.axis;
+            // legend labels
+            if (chart.options?.plugins?.legend?.labels) {
+                chart.options.plugins.legend.labels.color = c.legend;
+            } else if (chart.options?.plugins?.legend) {
+                chart.options.plugins.legend.labels = { color: c.legend };
+            }
+            // tooltips use default; fine
+            // scales
+            if (chart.options?.scales) {
+                Object.values(chart.options.scales).forEach(scale => {
+                    if (!scale.ticks) scale.ticks = {};
+                    if (!scale.grid) scale.grid = {};
+                    scale.ticks.color = c.axis;
+                    scale.grid.color = c.grid;
+                });
+            }
+        }
+
         function applyTheme(theme) {
             if (theme === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
             // Update Chart.js default color for axes/labels
-            const isDark = root.classList.contains('dark');
-            const color = isDark ? '#e2e8f0' : '#0f172a';
-            Chart.defaults.color = color;
+            const colors = getColors();
+            Chart.defaults.color = colors.axis;
             // Update existing charts if any
-            window.__charts?.forEach(ch => ch.update());
+            window.__charts?.forEach(ch => { applyChartColors(ch); ch.update(); });
         }
 
         applyTheme(savedTheme ? savedTheme : (prefersDark.matches ? 'dark' : 'light'));
@@ -139,6 +169,7 @@
                     }
                 }
             });
+            applyChartColors(line);
             window.__charts.push(line);
 
             // Date range slider (drag to select timeframe)
@@ -283,6 +314,7 @@
                 },
                 options: {plugins: {legend: {position: 'bottom'}}}
             });
+            applyChartColors(pie);
             window.__charts.push(pie);
 
             // Stacked bar per phase
@@ -303,6 +335,7 @@
                     scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true}}
                 }
             });
+            applyChartColors(bar);
             window.__charts.push(bar);
         } catch (e) {
             console.error('Fehler beim Laden des Sentiments', e);
