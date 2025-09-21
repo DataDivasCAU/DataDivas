@@ -319,20 +319,55 @@
 
             // Stacked bar per phase
             const ctxStack = document.getElementById('sentimentStacked').getContext('2d');
+            // Convert absolute counts to percentages per phase
+            const phaseLabels = phases.map(p => p.replace('sentiment', '').replace(/([A-Z])/g, ' $1').trim());
+            const totalsPerPhase = phases.map(p => {
+                const pos = Number(s[p].positive || 0);
+                const neu = Number(s[p].neutral || 0);
+                const neg = Number(s[p].negative || 0);
+                const t = pos + neu + neg;
+                return t > 0 ? t : 0;
+            });
+            const toPct = (val, total) => total ? +(val / total * 100).toFixed(2) : 0;
+            const dataPos = phases.map((p, i) => toPct(Number(s[p].positive || 0), totalsPerPhase[i]));
+            const dataNeu = phases.map((p, i) => toPct(Number(s[p].neutral || 0), totalsPerPhase[i]));
+            const dataNeg = phases.map((p, i) => toPct(Number(s[p].negative || 0), totalsPerPhase[i]));
+
             const bar = new Chart(ctxStack, {
                 type: 'bar',
                 data: {
-                    labels: phases.map(p => p.replace('sentiment', '').replace(/([A-Z])/g, ' $1').trim()),
+                    labels: phaseLabels,
                     datasets: [
-                        {label: 'Positiv', backgroundColor: '#10b981', data: phases.map(p => s[p].positive)},
-                        {label: 'Neutral', backgroundColor: '#94a3b8', data: phases.map(p => s[p].neutral)},
-                        {label: 'Negativ', backgroundColor: '#ef4444', data: phases.map(p => s[p].negative)}
+                        {label: 'Positiv', backgroundColor: '#10b981', data: dataPos},
+                        {label: 'Neutral', backgroundColor: '#94a3b8', data: dataNeu},
+                        {label: 'Negativ', backgroundColor: '#ef4444', data: dataNeg}
                     ]
                 },
                 options: {
                     responsive: true,
-                    plugins: {legend: {position: 'bottom'}},
-                    scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true}}
+                    plugins: {
+                        legend: {position: 'bottom'},
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const label = ctx.dataset.label || '';
+                                    const v = typeof ctx.raw === 'number' ? ctx.raw : Number(ctx.raw);
+                                    return `${label}: ${v}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {stacked: true},
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: (value) => `${value}%`
+                            }
+                        }
+                    }
                 }
             });
             applyChartColors(bar);

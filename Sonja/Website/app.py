@@ -10,6 +10,8 @@ from templates.election_export_xlsx import build_workbook
 from templates.election_export_pdf import build_pdf
 
 app = Flask(__name__)
+# Preserve insertion order of keys in JSON responses (disable Flask default sorting)
+app.json.sort_keys = False
 
 # Pfade stabil relativ zur app.py
 BASE = Path(__file__).resolve().parent
