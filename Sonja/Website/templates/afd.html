@@ -213,11 +213,17 @@
         data: {
           labels,
           datasets: [
-            { label: 'Videos (rel.)', data: videos, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', tension: 0.2, fill: true },
-            { label: 'Wikipedia (rel.)', data: wiki, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.2)', tension: 0.2, fill: true }
+            { label: 'Videos (rel.)', data: videos, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', tension: 0.2, fill: true, yAxisID: 'y1' },
+            { label: 'Wikipedia (rel.)', data: wiki, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.2)', tension: 0.2, fill: true, yAxisID: 'y' }
           ]
         },
-        options: { scales: { x: { ticks: { color: getAxis() } }, y: { ticks: { color: getAxis() }, grid: { color: getGrid() } } } }
+        options: {
+          scales: {
+            x: { ticks: { color: getAxis() }, grid: { color: getGrid() } },
+            y: { type: 'linear', position: 'left', ticks: { color: getAxis() }, grid: { color: getGrid() } },
+            y1: { type: 'linear', position: 'right', ticks: { color: getAxis() }, grid: { drawOnChartArea: false } }
+          }
+        }
       });
     }
 
