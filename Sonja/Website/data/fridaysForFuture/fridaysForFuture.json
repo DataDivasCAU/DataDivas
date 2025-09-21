@@ -2112,116 +2112,134 @@
     "KeywordCounts": {
       "keyword_counts_combined": [
         {
-          "": "eu",
-          "Jan2019 - May2019": 1,
-          "July2019 - Dec2019": 2,
-          "Jan2020 - Dec2020": 3
-        },
-        {
-          "": "fightfor1point5",
-          "Jan2019 - May2019": 0,
-          "July2019 - Dec2019": 0,
-          "Jan2020 - Dec2020": 2
-        },
-        {
-          "": "klima",
-          "Jan2019 - May2019": 2,
-          "July2019 - Dec2019": 2,
-          "Jan2020 - Dec2020": 2
-        },
-        {
-          "": "greta",
-          "Jan2019 - May2019": 3,
-          "July2019 - Dec2019": 3,
-          "Jan2020 - Dec2020": 3
-        },
-        {
-          "": "welt",
-          "Jan2019 - May2019": 1,
-          "July2019 - Dec2019": 1,
-          "Jan2020 - Dec2020": 0
-        },
-        {
-          "": "demo",
-          "Jan2019 - May2019": 3,
-          "July2019 - Dec2019": 0,
-          "Jan2020 - Dec2020": 0
-        },
-        {
-          "": "protest",
-          "Jan2019 - May2019": 1,
-          "July2019 - Dec2019": 2,
-          "Jan2020 - Dec2020": 0
-        },
-        {
           "": "future",
-          "Jan2019 - May2019": 10,
-          "July2019 - Dec2019": 9,
-          "Jan2020 - Dec2020": 6
+          "Jan2019 - May2019": 15,
+          "June2019 - Dec2019": 14,
+          "Jan2020 - Dec2020": 10
         },
         {
-          "": "proteste",
-          "Jan2019 - May2019": 1,
-          "July2019 - Dec2019": 2,
-          "Jan2020 - Dec2020": 0
-        },
-        {
-          "": "friday",
-          "Jan2019 - May2019": 10,
-          "July2019 - Dec2019": 10,
-          "Jan2020 - Dec2020": 6
-        },
-        {
-          "": "thunberg",
-          "Jan2019 - May2019": 3,
-          "July2019 - Dec2019": 2,
-          "Jan2020 - Dec2020": 3
-        },
-        {
-          "": "schüler",
+          "": "politik",
           "Jan2019 - May2019": 2,
-          "July2019 - Dec2019": 0,
+          "June2019 - Dec2019": 1,
           "Jan2020 - Dec2020": 0
         },
         {
           "": "interview",
           "Jan2019 - May2019": 0,
-          "July2019 - Dec2019": 1,
+          "June2019 - Dec2019": 1,
+          "Jan2020 - Dec2020": 2
+        },
+        {
+          "": "klima",
+          "Jan2019 - May2019": 4,
+          "June2019 - Dec2019": 4,
+          "Jan2020 - Dec2020": 3
+        },
+        {
+          "": "rechtsanwalt",
+          "Jan2019 - May2019": 2,
+          "June2019 - Dec2019": 0,
+          "Jan2020 - Dec2020": 1
+        },
+        {
+          "": "welt",
+          "Jan2019 - May2019": 2,
+          "June2019 - Dec2019": 1,
+          "Jan2020 - Dec2020": 0
+        },
+        {
+          "": "protest",
+          "Jan2019 - May2019": 3,
+          "June2019 - Dec2019": 4,
+          "Jan2020 - Dec2020": 0
+        },
+        {
+          "": "demo",
+          "Jan2019 - May2019": 4,
+          "June2019 - Dec2019": 1,
+          "Jan2020 - Dec2020": 0
+        },
+        {
+          "": "eu",
+          "Jan2019 - May2019": 2,
+          "June2019 - Dec2019": 3,
+          "Jan2020 - Dec2020": 3
+        },
+        {
+          "": "schüler",
+          "Jan2019 - May2019": 3,
+          "June2019 - Dec2019": 0,
+          "Jan2020 - Dec2020": 0
+        },
+        {
+          "": "friday",
+          "Jan2019 - May2019": 15,
+          "June2019 - Dec2019": 15,
+          "Jan2020 - Dec2020": 10
+        },
+        {
+          "": "thunberg",
+          "Jan2019 - May2019": 3,
+          "June2019 - Dec2019": 4,
+          "Jan2020 - Dec2020": 3
+        },
+        {
+          "": "greta",
+          "Jan2019 - May2019": 3,
+          "June2019 - Dec2019": 5,
+          "Jan2020 - Dec2020": 3
+        },
+        {
+          "": "streik",
+          "Jan2019 - May2019": 3,
+          "June2019 - Dec2019": 0,
           "Jan2020 - Dec2020": 1
         }
       ],
       "keyword_counts_Jan2019": [
         {
-          "": "friday",
-          "count": 10
-        },
-        {
-          "": "protest",
-          "count": 1
+          "": "future",
+          "count": 15
         },
         {
           "": "proteste",
           "count": 1
         },
         {
-          "": "future",
-          "count": 10
+          "": "ländern",
+          "count": 1
+        },
+        {
+          "": "friday",
+          "count": 15
+        },
+        {
+          "": "protest",
+          "count": 2
         },
         {
           "": "streiken",
           "count": 1
         },
         {
-          "": "schwänzen",
-          "count": 1
+          "": "schüler",
+          "count": 3
         },
         {
-          "": "schüler",
+          "": "streik",
+          "count": 3
+        },
+        {
+          "": "schwänzen",
+          "count": 2
+        },
+        {
+          "": "rechtsanwalt",
           "count": 2
         },
         {
           "": "demo",
-          "count": 3
+          "count": 4
         },
         {
           "": "klimastreik",
@@ -2229,27 +2247,27 @@
         },
         {
           "": "klima",
-          "count": 2
-        },
-        {
-          "": "greta",
-          "count": 3
+          "count": 4
         },
         {
           "": "thunberg",
           "count": 3
         },
         {
-          "": "eu",
-          "count": 1
+          "": "greta",
+          "count": 3
         },
         {
           "": "aktivisten",
-          "count": 1
+          "count": 2
+        },
+        {
+          "": "eu",
+          "count": 2
         },
         {
           "": "welt",
-          "count": 1
+          "count": 2
         },
         {
           "": "bewegung",
@@ -2258,15 +2276,55 @@
         {
           "": "wien",
           "count": 1
+        },
+        {
+          "": "klimaaktivisten",
+          "count": 1
+        },
+        {
+          "": "politik",
+          "count": 2
+        },
+        {
+          "": "politikern",
+          "count": 1
+        },
+        {
+          "": "politiker",
+          "count": 1
+        },
+        {
+          "": "schule",
+          "count": 1
+        },
+        {
+          "": "forderungen",
+          "count": 1
+        },
+        {
+          "": "demos",
+          "count": 1
+        },
+        {
+          "": "klimaschutz",
+          "count": 1
         }
       ],
       "keyword_counts_Jan2020": [
+        {
+          "": "interview",
+          "count": 2
+        },
         {
           "": "eu",
           "count": 3
         },
         {
-          "": "interview",
+          "": "neubauer",
+          "count": 2
+        },
+        {
+          "": "climate",
           "count": 1
         },
         {
@@ -2278,20 +2336,24 @@
           "count": 3
         },
         {
-          "": "climate",
-          "count": 1
-        },
-        {
           "": "friday",
-          "count": 6
+          "count": 10
         },
         {
           "": "future",
-          "count": 6
+          "count": 10
         },
         {
           "": "klima",
-          "count": 2
+          "count": 3
+        },
+        {
+          "": "rechtsanwalt",
+          "count": 1
+        },
+        {
+          "": "hop",
+          "count": 1
         },
         {
           "": "fightfor1point5",
@@ -2308,436 +2370,748 @@
         {
           "": "zeiten",
           "count": 1
-        }
-      ],
-      "keyword_counts_July2019": [
-        {
-          "": "friday",
-          "count": 10
         },
         {
-          "": "future",
-          "count": 9
-        },
-        {
-          "": "eu",
-          "count": 2
-        },
-        {
-          "": "interview",
+          "": "fridaysforfuture",
           "count": 1
         },
         {
-          "": "greta",
-          "count": 3
-        },
-        {
-          "": "klima",
-          "count": 2
-        },
-        {
-          "": "thunberg",
-          "count": 2
-        },
-        {
-          "": "protest",
-          "count": 2
-        },
-        {
-          "": "aachen",
+          "": "verdi",
           "count": 1
         },
         {
-          "": "proteste",
-          "count": 2
+          "": "streik",
+          "count": 1
+        },
+        {
+          "": "livestream",
+          "count": 1
+        },
+        {
+          "": "live",
+          "count": 1
         },
         {
           "": "zukunft",
           "count": 1
-        },
-        {
-          "": "klimaproteste",
-          "count": 1
-        },
-        {
-          "": "welt",
-          "count": 1
         }
       ],
+      "keyword_counts_July2019": [
+            {
+              "": "friday",
+              "count": 15
+            },
+            {
+              "": "future",
+              "count": 14
+            },
+            {
+              "": "eu",
+              "count": 3
+            },
+            {
+              "": "interview",
+              "count": 1
+            },
+            {
+              "": "hubraum",
+              "count": 1
+            },
+            {
+              "": "greta",
+              "count": 5
+            },
+            {
+              "": "thunberg",
+              "count": 4
+            },
+            {
+              "": "klima",
+              "count": 4
+            },
+            {
+              "": "aachen",
+              "count": 1
+            },
+            {
+              "": "proteste",
+              "count": 2
+            },
+            {
+              "": "protest",
+              "count": 2
+            },
+            {
+              "": "zukunft",
+              "count": 1
+            },
+            {
+              "": "sommerkongress",
+              "count": 1
+            },
+            {
+              "": "weltweite",
+              "count": 1
+            },
+            {
+              "": "klimaproteste",
+              "count": 1
+            },
+            {
+              "": "welt",
+              "count": 1
+            },
+            {
+              "": "demo",
+              "count": 1
+            },
+            {
+              "": "politik",
+              "count": 1
+            },
+            {
+              "": "junge",
+              "count": 1
+            },
+            {
+              "": "klimaschützer",
+              "count": 1
+            }
+          ],
       "keywords": [
-        {
-          "words": "future",
-          "numbers": 129
-        },
-        {
-          "words": "klima",
-          "numbers": 29
-        },
-        {
-          "words": "demo",
-          "numbers": 29
-        },
-        {
-          "words": "greta",
-          "numbers": 27
-        },
-        {
-          "words": "klimaschutz",
-          "numbers": 22
-        },
-        {
-          "words": "thunberg",
-          "numbers": 21
-        },
-        {
-          "words": "friday",
-          "numbers": 18
-        },
-        {
-          "words": "schule",
-          "numbers": 17
-        },
-        {
-          "words": "klimastreik",
-          "numbers": 17
-        },
-        {
-          "words": "danke",
-          "numbers": 16
-        },
-        {
-          "words": 2019,
-          "numbers": 15
-        },
-        {
-          "words": "einfach",
-          "numbers": 15
-        },
-        {
-          "words": "schüler",
-          "numbers": 15
-        },
-        {
-          "words": "zukunft",
-          "numbers": 14
-        },
-        {
-          "words": "co2",
-          "numbers": 14
-        },
-        {
-          "words": "forderungen",
-          "numbers": 13
-        },
-        {
-          "words": "demonstrieren",
-          "numbers": 12
-        },
-        {
-          "words": "fridaysforfuture",
-          "numbers": 12
-        },
-        {
-          "words": "berlin",
-          "numbers": 12
-        },
-        {
-          "words": "interview",
-          "numbers": 10
-        },
-        {
-          "words": "rede",
-          "numbers": 10
-        },
-        {
-          "words": "menschen",
-          "numbers": 10
-        },
-        {
-          "words": "jugend",
-          "numbers": 9
-        },
-        {
-          "words": "streiken",
-          "numbers": 9
-        },
-        {
-          "words": "politik",
-          "numbers": 9
-        },
-        {
-          "words": "hamburg",
-          "numbers": 8
-        },
-        {
-          "words": "fff",
-          "numbers": 8
-        },
-        {
-          "words": "mainz",
-          "numbers": 8
-        },
-        {
-          "words": "leute",
-          "numbers": 8
-        },
-        {
-          "words": "lächerlich",
-          "numbers": 7
-        },
-        {
-          "words": "aachen",
-          "numbers": 7
-        },
-        {
-          "words": "unterstützen",
-          "numbers": 7
-        },
-        {
-          "words": "stuttgart",
-          "numbers": 7
-        },
-        {
-          "words": 2020,
-          "numbers": 7
-        },
-        {
-          "words": "beitrag",
-          "numbers": 7
-        },
-        {
-          "words": "ferien",
-          "numbers": 6
-        },
-        {
-          "words": "climate",
-          "numbers": 6
-        },
-        {
-          "words": "protest",
-          "numbers": 6
-        },
-        {
-          "words": "bewegung",
-          "numbers": 6
-        },
-        {
-          "words": "aktivisten",
-          "numbers": 6
-        },
-        {
-          "words": "köln",
-          "numbers": 6
-        },
-        {
-          "words": "deutschland",
-          "numbers": 6
-        },
-        {
-          "words": "corona",
-          "numbers": 6
-        },
-        {
-          "words": "videos",
-          "numbers": 6
-        },
-        {
-          "words": "mettmann",
-          "numbers": 6
-        },
-        {
-          "words": "zeiten",
-          "numbers": 5
-        },
-        {
-          "words": "gesehen",
-          "numbers": 5
-        },
-        {
-          "words": "regierung",
-          "numbers": 5
-        },
-        {
-          "words": "flughafen",
-          "numbers": 5
-        },
-        {
-          "words": "demos",
-          "numbers": 5
-        },
-        {
-          "words": "fightfor1point5",
-          "numbers": 5
-        },
-        {
-          "words": "schwänzen",
-          "numbers": 5
-        },
-        {
-          "words": "welt",
-          "numbers": 5
-        },
-        {
-          "words": "klimapolitik",
-          "numbers": 5
-        },
-        {
-          "words": "livestream",
-          "numbers": 5
-        },
-        {
-          "words": "demonstriert",
-          "numbers": 5
-        },
-        {
-          "words": "fliegen",
-          "numbers": 5
-        },
-        {
-          "words": "proteste",
-          "numbers": 5
-        },
-        {
-          "words": "unterwegs",
-          "numbers": 5
-        },
-        {
-          "words": "meinung",
-          "numbers": 5
-        },
-        {
-          "words": "dortmund",
-          "numbers": 5
-        },
-        {
-          "words": "lernen",
-          "numbers": 4
-        },
-        {
-          "words": "klimawandel",
-          "numbers": 4
-        },
-        {
-          "words": "reporterin",
-          "numbers": 4
-        },
-        {
-          "words": "wien",
-          "numbers": 4
-        },
-        {
-          "words": "demonstrationen",
-          "numbers": 4
-        },
-        {
-          "words": "eu",
-          "numbers": 4
-        },
-        {
-          "words": "kämpfen",
-          "numbers": 4
-        },
-        {
-          "words": "arbeiten",
-          "numbers": 4
-        },
-        {
-          "words": "umwelt",
-          "numbers": 4
-        },
-        {
-          "words": "straße",
-          "numbers": 4
-        },
-        {
-          "words": "live",
-          "numbers": 4
-        },
-        {
-          "words": "straßen",
-          "numbers": 4
-        },
-        {
-          "words": "zieht",
-          "numbers": 4
-        },
-        {
-          "words": "politikern",
-          "numbers": 4
-        },
-        {
-          "words": "schön",
-          "numbers": 4
-        },
-        {
-          "words": "rwe",
-          "numbers": 4
-        },
-        {
-          "words": "schwachsinn",
-          "numbers": 4
-        },
-        {
-          "words": "jugendliche",
-          "numbers": 4
-        },
-        {
-          "words": "generation",
-          "numbers": 4
-        },
-        {
-          "words": "bitte",
-          "numbers": 4
-        },
-        {
-          "words": "kohle",
-          "numbers": 4
-        },
-        {
-          "words": "wichtig",
-          "numbers": 4
-        },
-        {
-          "words": "hannover",
-          "numbers": 4
-        },
-        {
-          "words": "umweltschutz",
-          "numbers": 4
-        },
-        {
-          "words": "diesel",
-          "numbers": 4
-        },
-        {
-          "words": "kinder",
-          "numbers": 4
-        },
-        {
-          "words": "voller",
-          "numbers": 4
-        },
-        {
-          "words": "engagement",
-          "numbers": 4
-        },
-        {
-          "words": "arbeit",
-          "numbers": 4
-        },
-        {
-          "words": "klimaproteste",
-          "numbers": 4
-        },
-        {
-          "words": "siemens",
-          "numbers": 4
-        },
-        {
-          "words": "schinkel",
-          "numbers": 4
-        }
-      ]
+          {
+            "words": "future",
+            "numbers": 129
+          },
+          {
+            "words": "klima",
+            "numbers": 29
+          },
+          {
+            "words": "demo",
+            "numbers": 29
+          },
+          {
+            "words": "greta",
+            "numbers": 27
+          },
+          {
+            "words": "klimaschutz",
+            "numbers": 22
+          },
+          {
+            "words": "thunberg",
+            "numbers": 21
+          },
+          {
+            "words": "friday",
+            "numbers": 18
+          },
+          {
+            "words": "klimastreik",
+            "numbers": 17
+          },
+          {
+            "words": "schule",
+            "numbers": 17
+          },
+          {
+            "words": "danke",
+            "numbers": 16
+          },
+          {
+            "words": "einfach",
+            "numbers": 15
+          },
+          {
+            "words": "schüler",
+            "numbers": 15
+          },
+          {
+            "words": "zukunft",
+            "numbers": 14
+          },
+          {
+            "words": "co2",
+            "numbers": 14
+          },
+          {
+            "words": "forderungen",
+            "numbers": 13
+          },
+          {
+            "words": "demonstrieren",
+            "numbers": 12
+          },
+          {
+            "words": "berlin",
+            "numbers": 12
+          },
+          {
+            "words": "fridaysforfuture",
+            "numbers": 12
+          },
+          {
+            "words": "interview",
+            "numbers": 10
+          },
+          {
+            "words": "menschen",
+            "numbers": 10
+          },
+          {
+            "words": "rede",
+            "numbers": 10
+          },
+          {
+            "words": "streiken",
+            "numbers": 9
+          },
+          {
+            "words": "politik",
+            "numbers": 9
+          },
+          {
+            "words": "jugend",
+            "numbers": 9
+          },
+          {
+            "words": "leute",
+            "numbers": 8
+          },
+          {
+            "words": "hamburg",
+            "numbers": 8
+          },
+          {
+            "words": "mainz",
+            "numbers": 8
+          },
+          {
+            "words": "fff",
+            "numbers": 8
+          },
+          {
+            "words": "beitrag",
+            "numbers": 7
+          },
+          {
+            "words": "aachen",
+            "numbers": 7
+          },
+          {
+            "words": "lächerlich",
+            "numbers": 7
+          },
+          {
+            "words": "unterstützen",
+            "numbers": 7
+          },
+          {
+            "words": 2020,
+            "numbers": 7
+          },
+          {
+            "words": "stuttgart",
+            "numbers": 7
+          },
+          {
+            "words": "videos",
+            "numbers": 6
+          },
+          {
+            "words": "climate",
+            "numbers": 6
+          },
+          {
+            "words": "köln",
+            "numbers": 6
+          },
+          {
+            "words": "deutschland",
+            "numbers": 6
+          },
+          {
+            "words": "bewegung",
+            "numbers": 6
+          },
+          {
+            "words": "corona",
+            "numbers": 6
+          },
+          {
+            "words": "mettmann",
+            "numbers": 6
+          },
+          {
+            "words": "protest",
+            "numbers": 6
+          },
+          {
+            "words": "ferien",
+            "numbers": 6
+          },
+          {
+            "words": "aktivisten",
+            "numbers": 6
+          },
+          {
+            "words": "welt",
+            "numbers": 5
+          },
+          {
+            "words": "klimapolitik",
+            "numbers": 5
+          },
+          {
+            "words": "demonstriert",
+            "numbers": 5
+          },
+          {
+            "words": "unterwegs",
+            "numbers": 5
+          },
+          {
+            "words": "meinung",
+            "numbers": 5
+          },
+          {
+            "words": "schwänzen",
+            "numbers": 5
+          },
+          {
+            "words": "fightfor1point5",
+            "numbers": 5
+          },
+          {
+            "words": "livestream",
+            "numbers": 5
+          },
+          {
+            "words": "fliegen",
+            "numbers": 5
+          },
+          {
+            "words": "proteste",
+            "numbers": 5
+          },
+          {
+            "words": "flughafen",
+            "numbers": 5
+          },
+          {
+            "words": "dortmund",
+            "numbers": 5
+          },
+          {
+            "words": "demos",
+            "numbers": 5
+          },
+          {
+            "words": "regierung",
+            "numbers": 5
+          },
+          {
+            "words": "gesehen",
+            "numbers": 5
+          },
+          {
+            "words": "zeiten",
+            "numbers": 5
+          },
+          {
+            "words": "klimaproteste",
+            "numbers": 4
+          },
+          {
+            "words": "reporterin",
+            "numbers": 4
+          },
+          {
+            "words": "schwachsinn",
+            "numbers": 4
+          },
+          {
+            "words": "straßen",
+            "numbers": 4
+          },
+          {
+            "words": "kämpfen",
+            "numbers": 4
+          },
+          {
+            "words": "eu",
+            "numbers": 4
+          },
+          {
+            "words": "umwelt",
+            "numbers": 4
+          },
+          {
+            "words": "bitte",
+            "numbers": 4
+          },
+          {
+            "words": "wichtig",
+            "numbers": 4
+          },
+          {
+            "words": "voller",
+            "numbers": 4
+          },
+          {
+            "words": "wien",
+            "numbers": 4
+          },
+          {
+            "words": "schinkel",
+            "numbers": 4
+          },
+          {
+            "words": "rwe",
+            "numbers": 4
+          },
+          {
+            "words": "demonstrationen",
+            "numbers": 4
+          },
+          {
+            "words": "hannover",
+            "numbers": 4
+          },
+          {
+            "words": "umweltschutz",
+            "numbers": 4
+          },
+          {
+            "words": "lernen",
+            "numbers": 4
+          },
+          {
+            "words": "arbeiten",
+            "numbers": 4
+          },
+          {
+            "words": "straße",
+            "numbers": 4
+          },
+          {
+            "words": "klimawandel",
+            "numbers": 4
+          },
+          {
+            "words": "politikern",
+            "numbers": 4
+          },
+          {
+            "words": "arbeit",
+            "numbers": 4
+          },
+          {
+            "words": "diesel",
+            "numbers": 4
+          },
+          {
+            "words": "live",
+            "numbers": 4
+          },
+          {
+            "words": "zieht",
+            "numbers": 4
+          },
+          {
+            "words": "siemens",
+            "numbers": 4
+          },
+          {
+            "words": "kinder",
+            "numbers": 4
+          },
+          {
+            "words": "kohle",
+            "numbers": 4
+          },
+          {
+            "words": "schön",
+            "numbers": 4
+          },
+          {
+            "words": "engagement",
+            "numbers": 4
+          },
+          {
+            "words": "generation",
+            "numbers": 4
+          },
+          {
+            "words": "jugendliche",
+            "numbers": 4
+          },
+          {
+            "words": "sommerkongress",
+            "numbers": 3
+          },
+          {
+            "words": "globalen",
+            "numbers": 3
+          },
+          {
+            "words": "klimademo",
+            "numbers": 3
+          },
+          {
+            "words": "klimaschützer",
+            "numbers": 3
+          },
+          {
+            "words": "weltweite",
+            "numbers": 3
+          },
+          {
+            "words": "september",
+            "numbers": 3
+          },
+          {
+            "words": "junge",
+            "numbers": 3
+          },
+          {
+            "words": "interessieren",
+            "numbers": 3
+          },
+          {
+            "words": "geil",
+            "numbers": 3
+          },
+          {
+            "words": "wandel",
+            "numbers": 3
+          },
+          {
+            "words": "cool",
+            "numbers": 3
+          },
+          {
+            "words": "emissionen",
+            "numbers": 3
+          },
+          {
+            "words": "großartig",
+            "numbers": 3
+          },
+          {
+            "words": "lehrerin",
+            "numbers": 3
+          },
+          {
+            "words": "klimakatastrophe",
+            "numbers": 3
+          },
+          {
+            "words": "youtube",
+            "numbers": 3
+          },
+          {
+            "words": "denken",
+            "numbers": 3
+          },
+          {
+            "words": "klasse",
+            "numbers": 3
+          },
+          {
+            "words": "cestino",
+            "numbers": 3
+          },
+          {
+            "words": "hanau",
+            "numbers": 3
+          },
+          {
+            "words": "düsseldorf",
+            "numbers": 3
+          },
+          {
+            "words": "anfang",
+            "numbers": 3
+          },
+          {
+            "words": "tausende",
+            "numbers": 3
+          },
+          {
+            "words": "globaler",
+            "numbers": 3
+          },
+          {
+            "words": "schlechtes",
+            "numbers": 3
+          },
+          {
+            "words": "hubraum",
+            "numbers": 3
+          },
+          {
+            "words": "globalstrike",
+            "numbers": 3
+          },
+          {
+            "words": "münchen",
+            "numbers": 3
+          },
+          {
+            "words": "beste",
+            "numbers": 3
+          },
+          {
+            "words": "wissenschaftler",
+            "numbers": 3
+          },
+          {
+            "words": "schönes",
+            "numbers": 3
+          },
+          {
+            "words": "good",
+            "numbers": 3
+          },
+          {
+            "words": "verursacht",
+            "numbers": 3
+          },
+          {
+            "words": "streik",
+            "numbers": 3
+          },
+          {
+            "words": "geschwänzt",
+            "numbers": 3
+          },
+          {
+            "words": "schönen",
+            "numbers": 3
+          },
+          {
+            "words": "politiker",
+            "numbers": 3
+          },
+          {
+            "words": "hop",
+            "numbers": 3
+          },
+          {
+            "words": "seebrücke",
+            "numbers": 3
+          },
+          {
+            "words": "starke",
+            "numbers": 3
+          },
+          {
+            "words": "wissen",
+            "numbers": 3
+          },
+          {
+            "words": "wirtschaft",
+            "numbers": 3
+          },
+          {
+            "words": "hater",
+            "numbers": 3
+          },
+          {
+            "words": "atomkraftwerke",
+            "numbers": 3
+          },
+          {
+            "words": "ziemlich",
+            "numbers": 3
+          },
+          {
+            "words": "chemie",
+            "numbers": 3
+          },
+          {
+            "words": "unglaublich",
+            "numbers": 3
+          },
+          {
+            "words": "freitag",
+            "numbers": 3
+          },
+          {
+            "words": "zehntausende",
+            "numbers": 3
+          },
+          {
+            "words": "milano",
+            "numbers": 3
+          },
+          {
+            "words": "rechtsanwalt",
+            "numbers": 3
+          },
+          {
+            "words": "verdi",
+            "numbers": 3
+          },
+          {
+            "words": "neubauer",
+            "numbers": 3
+          },
+          {
+            "words": "leverkusen",
+            "numbers": 3
+          },
+          {
+            "words": "münster",
+            "numbers": 3
+          },
+          {
+            "words": 17,
+            "numbers": 3
+          },
+          {
+            "words": "klimaaktivisten",
+            "numbers": 3
+          },
+          {
+            "words": "gerd",
+            "numbers": 3
+          },
+          {
+            "words": "grüße",
+            "numbers": 3
+          },
+          {
+            "words": "super",
+            "numbers": 3
+          },
+          {
+            "words": "bundestag",
+            "numbers": 3
+          },
+          {
+            "words": "liebe",
+            "numbers": 3
+          },
+          {
+            "words": "streiks",
+            "numbers": 3
+          },
+          {
+            "words": "ländern",
+            "numbers": 3
+          },
+          {
+            "words": "essen",
+            "numbers": 3
+          },
+          {
+            "words": "gezeigt",
+            "numbers": 3
+          }
+        ]
     },
     "VideosPerDay": {
       "combined_numbers": [

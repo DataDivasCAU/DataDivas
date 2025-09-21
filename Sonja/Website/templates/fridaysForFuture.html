@@ -183,6 +183,7 @@
 
         let barChart, scatterChart, lineChart;
         let allItems = [];
+        let videosPerDay = [];
         let keywordRows = [];
         let keywordCountsCombined = [];
         let resizeTimer = null;
@@ -192,10 +193,14 @@
         let sortDir = 'desc'; // 'asc' | 'desc'
 
         function parseData(json) {
-            // Expected structure: { folders: { DataSortedByViews: { data1_sort: [ {title, views, likes, comments, 'upload time'} ] } } }
-            const dataSorted = json?.folders?.DataSortedByViews?.data1_sort || [];
+            // Use all available sorted datasets: data1_sort, data2_sort, data3_sort
+            const ds = json?.folders?.DataSortedByViews || {};
+            const combined = []
+                .concat(Array.isArray(ds.data1_sort) ? ds.data1_sort : [])
+                .concat(Array.isArray(ds.data2_sort) ? ds.data2_sort : [])
+                .concat(Array.isArray(ds.data3_sort) ? ds.data3_sort : []);
             // Normalize and filter plausible entries
-            return dataSorted.map((d) => ({
+            return combined.map((d) => ({
                 title: String(d.title || ''),
                 views: Number(d.views || 0),
                 likes: Number(d.likes || 0),
@@ -264,22 +269,21 @@
             });
         }
 
-        function renderUploadsOverTime(items) {
-            const byMonth = new Map();
-            items.forEach(d => {
-                if (!d.upload) return;
-                const key = d.upload.getFullYear() + '-' + String(d.upload.getMonth() + 1).padStart(2, '0');
-                byMonth.set(key, (byMonth.get(key) || 0) + 1);
-            });
-            const labels = Array.from(byMonth.keys()).sort();
-            const data = labels.map(l => byMonth.get(l));
+        function renderUploadsOverTime() {
+            // Build time series from VideosPerDay.combined_numbers in the JSON
+            const parsed = (Array.isArray(videosPerDay) ? videosPerDay : [])
+                .map(d => ({date: String(d.year_month_day || ''), count: Number(d.video_count || 0)}))
+                .filter(x => x.date && Number.isFinite(x.count))
+                .sort((a, b) => a.date.localeCompare(b.date));
+            const labels = parsed.map(x => x.date);
+            const data = parsed.map(x => x.count);
             if (lineChart) lineChart.destroy();
             lineChart = new Chart(lineCtx, {
                 type: 'line',
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Uploads',
+                        label: 'Uploads pro Tag',
                         data,
                         borderColor: '#3b82f6',
                         backgroundColor: 'rgba(59,130,246,0.2)',
@@ -405,11 +409,18 @@
         function renderHeatmap() {
             const tbl = document.getElementById('heatmapTable');
             const rows = Array.isArray(keywordCountsCombined) ? keywordCountsCombined : [];
+            console.log(rows)
             if (!rows.length) {
                 tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>';
                 return;
             }
-            const periods = Object.keys(rows[0]).filter(k => k && k !== '');
+            let periods = Object.keys(rows[0]).filter(k => k && k !== '');
+            // Swap the middle and the right column to make chronological sense
+            if (periods.length === 3) {
+                const tmp = periods[1];
+                periods[1] = periods[2];
+                periods[2] = tmp;
+            }
             // Compute totals to select top keywords similar to Seaborn view
             const enriched = rows.map(r => ({
                 key: String(r[''] || r.keyword || ''),
@@ -484,7 +495,7 @@
         function renderAll(n) {
             renderBarTopViews(allItems, n);
             renderScatterLikesViews(allItems, n);
-            renderUploadsOverTime(allItems);
+            renderUploadsOverTime();
             renderTable(allItems, n);
             safeRenderWordcloud();
         }
@@ -525,6 +536,8 @@
 
         fetch('/fridaysForFuture.json').then(r => r.json()).then(json => {
             allItems = parseData(json);
+            // New: use VideosPerDay.combined_numbers for the uploads-over-time chart
+            videosPerDay = json?.folders?.VideosPerDay?.combined_numbers || [];
             const kw = json?.folders?.KeywordCounts || {};
             keywordRows = kw?.keywords || [];
             keywordCountsCombined = kw?.keyword_counts_combined || [];
