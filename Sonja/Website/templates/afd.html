@@ -194,6 +194,14 @@
       return src.slice(s, e+1);
     }
 
+    function getRangeDates(){
+      if (!currentRange || !dateLabels?.length) return null;
+      const [s,e] = currentRange;
+      const start = dateLabels[Math.max(0, Math.min(s, dateLabels.length-1))];
+      const end = dateLabels[Math.max(0, Math.min(e, dateLabels.length-1))];
+      return [start, end];
+    }
+
     function renderLine(){
       const subset = getFilteredDaily();
       const labels = subset.map(d=> new Date(Number(d['Published At'])).toISOString().slice(0,10));
@@ -215,10 +223,13 @@
 
 
     function renderWeekly(){
-      // Build weekly aligned labels
+      // Build weekly aligned labels, filtered by current date range if set
       const labels = [];
-      const ytMap = new Map(ytWeekly.map(d=>[d._dateStr, Number(d['Number of Videos'])]));
-      const wkMap = new Map(wikiWeekly.map(d=>[d._dateStr, Number(d._value)]));
+      const range = getRangeDates();
+      const ytSrc = range ? ytWeekly.filter(d => d._date >= range[0] && d._date <= range[1]) : ytWeekly;
+      const wkSrc = range ? wikiWeekly.filter(d => d._date >= range[0] && d._date <= range[1]) : wikiWeekly;
+      const ytMap = new Map(ytSrc.map(d=>[d._dateStr, Number(d['Number of Videos'])]));
+      const wkMap = new Map(wkSrc.map(d=>[d._dateStr, Number(d._value)]));
       const allKeys = new Set([...ytMap.keys(), ...wkMap.keys()]);
       const sortedKeys = [...allKeys].sort();
       const ytSeries = [];
@@ -239,8 +250,10 @@
     }
 
     function renderWikiDaily(){
-      const labels = wikiDaily.map(d=> d._dateStr);
-      const values = wikiDaily.map(d=> d._value);
+      const range = getRangeDates();
+      const subset = range ? wikiDaily.filter(d => d._date >= range[0] && d._date <= range[1]) : wikiDaily;
+      const labels = subset.map(d=> d._dateStr);
+      const values = subset.map(d=> d._value);
       if (wikiDailyChart) wikiDailyChart.destroy();
       wikiDailyChart = new Chart(wikiDailyCtx, {
         type: 'line',
@@ -288,6 +301,8 @@
           currentRange = [s,e];
           updateLabels(s,e);
           renderLine();
+          renderWeekly();
+          renderWikiDaily();
         });
       }
 
@@ -312,11 +327,15 @@
             if (slider?.noUiSlider){ slider.noUiSlider.set([minIndex, maxIndex]); }
             currentRange = [minIndex, maxIndex];
             renderLine();
+            renderWeekly();
+            renderWikiDaily();
           } else {
             const [s,e] = yearRanges[val];
             currentRange = [s,e];
             if (slider?.noUiSlider){ slider.noUiSlider.set([s,e]); }
             renderLine();
+            renderWeekly();
+            renderWikiDaily();
           }
         });
       }
@@ -328,6 +347,8 @@
           currentRange = [minIndexR, maxIndexR];
           if (slider?.noUiSlider){ slider.noUiSlider.set([minIndexR, maxIndexR]); }
           renderLine();
+          renderWeekly();
+          renderWikiDaily();
         });
       }
     }
