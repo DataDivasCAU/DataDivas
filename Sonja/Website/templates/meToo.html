@@ -37,6 +37,21 @@
     </div>
 </div>
 <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <!-- Intro: What is #MeToo? -->
+    <section class="bg-white rounded-2xl shadow p-6 space-y-3">
+        <h2 class="text-xl font-semibold">What is #MeToo?</h2>
+        <p class="text-gray-700">#MeToo is a social and political movement that stands against sexual harassment and assault. Its primary goal is to support survivors by encouraging them to share their stories, often through social media. The widespread use of social media transformed #MeToo into a global conversation, compelling governments, political leaders, and institutions to address gender-based violence by introducing or reinforcing laws and policies aimed at prevention.</p>
+    </section>
+
+    <!-- Data gathered -->
+    <section class="bg-white rounded-2xl shadow p-6 space-y-3">
+        <h2 class="text-xl font-semibold">What data did we gather?</h2>
+        <p class="text-gray-700">To study the movement’s impact and public engagement, we collected two types of data:</p>
+        <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li>Wikipedia pageviews from the #MeToo page, covering the period from January 2016 to August 2025</li>
+            <li>YouTube comments, consisting of 50 selected videos with 100 comments each sorted on relevant, allowing us to capture user sentiment and engagement in greater depth</li>
+        </ul>
+    </section>
     <section class="space-y-3">
         <div class="flex items-end justify-between flex-wrap gap-2">
             <div>
@@ -47,6 +62,7 @@
         <div class="bg-white rounded-2xl shadow p-4">
             <canvas id="viewsChart" height="120"></canvas>
         </div>
+        <p class="text-sm text-gray-700">Graph: We created a graph that showcases the monthly pageviews of the #MeToo Wikipedia page between 01.01.2016 and 01.08.2025.</p>
     </section>
 
     <section class="space-y-3">
@@ -63,6 +79,18 @@
                 <h3 class="font-medium mb-2">Verteilung pro Phase</h3>
                 <canvas id="sentimentStacked"></canvas>
             </div>
+        </div>
+        <div class="space-y-3 text-sm text-gray-700">
+            <p>Stacked bar plot: We created a stacked bar plot, that showcases how the (relative) sentiment changes over five different periods:</p>
+            <ul class="list-disc pl-6">
+                <li>01.01.2018 - 01.06.2021: Before the hype</li>
+                <li>01.06.2021 - 01.01.2022: During the early hype</li>
+                <li>01.01.2022 - 01.01.2023: During the peak hype</li>
+                <li>01.01.2023 - 01.01.2024: During the sustained hype:</li>
+                <li>after 01.01.2024: During the decline of the hype</li>
+            </ul>
+            <p>The sentiment was calculated using VADER, a language model specifically designed for analyzing social media and informal text. While no sentiment tool can perfectly interpret nuances such as sarcasm, VADER provides a reliable approximation of overall emotional tone, making it highly useful for tracking broad sentiment shifts over time.</p>
+            <p>The pageview graph highlights fluctuations in public interest, while the sentiment analysis reveals key changes in how people responded to #MeToo. During the early to peak hype phase, positive sentiment dropped from 42% to 33%, and negative sentiment rose from 30% to 41%. The peak phase coincided with the Amber Heard case, which brought #MeToo’s core issue of survivor credibility into the spotlight and fueled widespread public debate, helping explain the sudden spike in polarized sentiment.</p>
         </div>
     </section>
 </main>
