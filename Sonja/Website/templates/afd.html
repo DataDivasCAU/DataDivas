@@ -29,9 +29,9 @@
     <div class="flex items-center gap-3 flex-wrap justify-center w-full">
       <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
       <div class="flex items-center gap-3 grow w-full md:w-auto">
-        <span class="font-medium">Zeitraum:</span>
+        <span class="font-medium pe-2">Zeitraum:</span>
         <div id="date-range-slider" class="w-64 md:w-96"></div>
-        <div class="text-sm text-gray-600">
+        <div class="text-sm text-gray-600 ps-2">
           <span id="range-start" class="font-medium"></span>
           <span class="mx-1">bis</span>
           <span id="range-end" class="font-medium"></span>
@@ -217,8 +217,8 @@
     function renderWeekly(){
       // Build weekly aligned labels
       const labels = [];
-      const ytMap = new Map(ytWeekly.map(d=>[new Date(d['Published At']).toISOString().slice(0,10), Number(d['Number of Videos'])]));
-      const wkMap = new Map(wikiWeekly.map(d=>[new Date(d._date).toISOString().slice(0,10), Number(d._value)]));
+      const ytMap = new Map(ytWeekly.map(d=>[d._dateStr, Number(d['Number of Videos'])]));
+      const wkMap = new Map(wikiWeekly.map(d=>[d._dateStr, Number(d._value)]));
       const allKeys = new Set([...ytMap.keys(), ...wkMap.keys()]);
       const sortedKeys = [...allKeys].sort();
       const ytSeries = [];
@@ -346,11 +346,12 @@
         return { _date: d, _dateStr: d.toISOString().slice(0,10), _value: Number(r['Alternative_für_Deutschland']||0) };
       }).filter(x=> !isNaN(x._date.getTime()));
       // Parse yt weekly (already with proper keys)
-      ytWeekly = (Array.isArray(ytWeeklyJson)? ytWeeklyJson: []).map(r=>({
-        _date: new Date(r['Published At']),
-        _dateStr: new Date(r['Published At']).toISOString().slice(0,10),
-        'Number of Videos': Number(r['Number of Videos']||0)
-      })).filter(r=> !isNaN(r._date.getTime()));
+      ytWeekly = (Array.isArray(ytWeeklyJson)? ytWeeklyJson: []).map(r=>{
+        const raw = String(r['Published At']||'');
+        const iso = raw.includes('T') ? raw : raw.replace(' ', 'T');
+        const d = new Date(iso);
+        return { _date: d, _dateStr: isNaN(d.getTime()) ? '' : d.toISOString().slice(0,10), 'Number of Videos': Number(r['Number of Videos']||0) };
+      }).filter(r=> r._dateStr);
 
       // Build combined weekly points by aligning dates
       const ytWkMap = new Map(ytWeekly.map(d=>[d._dateStr, d['Number of Videos']]));
@@ -367,9 +368,11 @@
       }).filter(x=> !isNaN(x._date.getTime()));
       // Parse yt daily
       const ytDaily = (Array.isArray(ytDailyJson)? ytDailyJson: []).map(r=>{
-        const d = new Date(r['Published At']);
-        return { _date: d, _dateStr: d.toISOString().slice(0,10), _value: Number(r['Number of Videos']||0) };
-      }).filter(x=> !isNaN(x._date.getTime()));
+        const raw = String(r['Published At']||'');
+        const iso = raw.includes('T') ? raw : raw.replace(' ', 'T');
+        const d = new Date(iso);
+        return { _date: d, _dateStr: isNaN(d.getTime()) ? '' : d.toISOString().slice(0,10), _value: Number(r['Number of Videos']||0) };
+      }).filter(x=> x._dateStr);
 
       // Build daily combined array expected by charts
       const ytDailyMap = new Map(ytDaily.map(d=>[d._dateStr, d._value]));
