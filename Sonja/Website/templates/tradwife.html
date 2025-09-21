@@ -301,25 +301,24 @@
             });
 
             // Add total (sum) data points for 2024 and 2025 to allData
-            if (year2024Data.periods > 0) {
-                allData.push({
-                    period: "2024",
-                    prettyPeriod: "2024",
-                    videos: year2024Data.videos,
-                    views: year2024Data.views,
-                    likes: year2024Data.likes,
-                    viewsPerVideo: Math.round(year2024Data.views / year2024Data.videos),
-                    likesPerVideo: Math.round(year2024Data.likes / year2024Data.videos),
-                    likesPerView: ((year2024Data.likes / year2024Data.views) * 100).toFixed(2)
-                });
-            }
+            // if (year2024Data.periods > 0) {
+               // allData.push({
+                 //   period: "2024",
+                   // prettyPeriod: "2024",
+                   // videos: year2024Data.videos,
+                   // views: year2024Data.views,
+                   // likes: year2024Data.likes,
+                   // viewsPerVideo: Math.round(year2024Data.views / year2024Data.videos),
+                   // likesPerVideo: Math.round(year2024Data.likes / year2024Data.videos),
+                   // likesPerView: ((year2024Data.likes / year2024Data.views) * 100).toFixed(2)
+              //  });
+           // }
 
-<<<<<<< HEAD
         // Add sum data points for 2024 and 2025 to allData
         if (year2024Data.periods > 0) {
           allData.push({
             period: "2024",
-            prettyPeriod: "2024 (Total)",
+            prettyPeriod: "2024",
             videos: Math.round(year2024Data.videos),
             views: Math.round(year2024Data.views),
             likes: Math.round(year2024Data.likes),
@@ -332,7 +331,7 @@
         if (year2025Data.periods > 0) {
           allData.push({
             period: "2025",
-            prettyPeriod: "2025 (Total)",
+            prettyPeriod: "2025",
             videos: Math.round(year2025Data.videos),
             views: Math.round(year2025Data.views),
             likes: Math.round(year2025Data.likes),
@@ -341,27 +340,6 @@
             likesPerView: (((year2025Data.likes) / (year2025Data.views)) * 100).toFixed(2)
           });
         }
-=======
-            if (year2025Data.periods > 0) {
-                allData.push({
-                    period: "2025",
-                    prettyPeriod: "2025",
-                    videos: year2025Data.videos,
-                    views: year2025Data.views,
-                    likes: year2025Data.likes,
-                    viewsPerVideo: Math.round(year2025Data.views / year2025Data.videos),
-                    likesPerVideo: Math.round(year2025Data.likes / year2025Data.videos),
-                    likesPerView: ((year2025Data.likes / year2025Data.views) * 100).toFixed(2)
-                });
-            }
-
-            // Sort by period
-            allData.sort((a, b) => a.period.localeCompare(b.period));
-            detailedData.sort((a, b) => a.period.localeCompare(b.period));
-            Object.keys(yearData).forEach(year => {
-                yearData[year].sort((a, b) => a.period.localeCompare(b.period));
-            });
->>>>>>> c833bec6f21783b8edc0914bd834c27791cc3f59
 
             dataStore.all = allData;
             dataStore.detailed = detailedData;
