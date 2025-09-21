@@ -17,43 +17,43 @@
 
 <!-- Introduction -->
 <section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
-    <h2 class="text-xl font-semibold">Einführung</h2>
-    <p class="text-gray-700">Diese Seite vergleicht die Social‑Media‑Posting‑Aktivität der Parteien (Anzahl der Posts) mit ihren Wahlergebnissen. Wir betrachten zwei Wahlperioden (2021 und 2025) und untersuchen sowohl die Verteilung innerhalb eines Jahres als auch Veränderungen zwischen den Jahren.</p>
-    <p class="text-gray-700">Über die Steuerelemente oben können Sie die betrachtete Wahlperiode wählen, einzelne Parteien gezielt ein‑ oder ausblenden und die Ansicht als PDF exportieren. Die Diagramme und die Tabelle aktualisieren sich entsprechend Ihrer Auswahl.</p>
+    <h2 class="text-xl font-semibold">Introduction</h2>
+    <p class="text-gray-700">This page compares parties’ social media posting activity (number of posts) with their election results. We look at two election periods (2021 and 2025) and examine both the distribution within a year and the changes between years.</p>
+    <p class="text-gray-700">Using the controls above, you can choose the election period, include or exclude specific parties, and export the view as a PDF. The charts and the table update based on your selection.</p>
 </section>
 
-<!-- Verwendete Analysemethoden -->
+<!-- Methods used -->
 <section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
-    <h2 class="text-xl font-semibold">Verwendete Analysemethoden</h2>
+    <h2 class="text-xl font-semibold">Methods used</h2>
     <ul class="list-disc pl-6 text-gray-700 space-y-2">
-        <li><span class="font-medium">Datenquellen:</span> Die Anzahl der Posts pro Partei und Jahr stammt aus <code>data.json</code> (Schlüssel: <code>electionPosts2021</code> und <code>electionPosts2025</code>). Die Wahlergebnisse (in Prozentpunkten) stammen aus <code>election.json</code> (<code>election2021</code>, <code>election2025</code> sowie <code>diffElection</code>).</li>
-        <li><span class="font-medium">Aggregation:</span> Für jedes Jahr summieren wir die Posts pro Partei. Wahlergebnisse werden als prozentuale Stimmenanteile pro Partei übernommen.</li>
-        <li><span class="font-medium">Visualisierung:</span> 
+        <li><span class="font-medium">Data sources:</span> The number of posts per party and year comes from <code>data.json</code> (keys: <code>electionPosts2021</code> and <code>electionPosts2025</code>). The election results (in percentage points) come from <code>election.json</code> (<code>election2021</code>, <code>election2025</code>, and <code>diffElection</code>).</li>
+        <li><span class="font-medium">Aggregation:</span> For each year, we sum the posts per party. Election results are taken as percentage vote shares per party.</li>
+        <li><span class="font-medium">Visualization:</span> 
             <ul class="list-disc pl-6 space-y-1">
-                <li>Kreis-/Balkendiagramme für die Verteilung der Posts bzw. Wahlergebnisse pro Jahr.</li>
-                <li>Kombiniertes Diagramm, das die Posts (skaliert auf 0–100) den Wahlergebnissen (%) gegenüberstellt, um Muster auf einen Blick zu erkennen.</li>
-                <li>Streudiagramm (nur bei „Beide Wahlen“): ΔPosts (2025–2021) gegen ΔWahlergebnis (pp), um Veränderungen zwischen den Jahren zu vergleichen.</li>
+                <li>Pie/bar charts for the distribution of posts and election results per year.</li>
+                <li>Combined chart that compares posts (scaled to 0–100) with election results (%), to reveal patterns at a glance.</li>
+                <li>Scatter plot (only for “Both elections”): ΔPosts (2025–2021) vs. ΔElection (pp) to compare changes between years.</li>
             </ul>
         </li>
-        <li><span class="font-medium">Interaktive Filter:</span> Auswahl einzelner Parteien; alle Tabellen und Diagramme reagieren dynamisch auf die Auswahl.</li>
-        <li><span class="font-medium">Hinweise zur Interpretation:</span> Die Anzahl an Posts misst Sichtbarkeit/Aktivität, ist jedoch kein direkter Indikator für Stimmenanteile. Externe Faktoren (Kampagnen, Medienereignisse, Themenagenda) können beide Größen beeinflussen.</li>
+        <li><span class="font-medium">Interactive filters:</span> Select individual parties; all tables and charts react dynamically to your selection.</li>
+        <li><span class="font-medium">Interpretation notes:</span> The number of posts measures visibility/activity but is not a direct indicator of vote share. External factors (campaign phases, media events, issue salience) can influence both.</li>
     </ul>
 </section>
 
 <div class="max-w-5xl mx-auto">
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
-        <label for="dataset" class="font-medium">Wahlperiode:</label>
+        <label for="dataset" class="font-medium">Election period:</label>
         <select id="dataset" class="border rounded p-2 bg-white">
-            <option value="first">Wahl 2025</option>
-            <option value="second">Wahl 2021</option>
-            <option value="both">Beide Wahlen</option>
+            <option value="first">Election 2025</option>
+            <option value="second">Election 2021</option>
+            <option value="both">Both elections</option>
         </select>
 
-        <label for="partyDropdown" class="font-medium">Parteien:</label>
+        <label for="partyDropdown" class="font-medium">Parties:</label>
         <div class="relative inline-block">
             <button id="partyDropdown" type="button"
                     class="border rounded p-2 bg-white flex items-center justify-between min-w-[150px] party-dropdown-button">
-                <span>Keine Partei</span>
+                <span>No party</span>
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -64,7 +64,7 @@
                 <div class="p-2 border-b">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" id="selectAllParties" class="mr-2 custom-checkbox">
-                        <span>Alle auswählen</span>
+                        <span>Select all</span>
                     </label>
                 </div>
                 <div id="partyCheckboxes" class="p-2">
@@ -76,11 +76,11 @@
         <a id="btnExport"
            href="/export-pdf"
            class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 whitespace-nowrap">
-            Export als PDF
+            Export as PDF
         </a>
     </div>
 
-    <div id="subtitle" class="text-sm text-gray-500 mt-1 text-center mb-5">Ansicht: 2025</div>
+    <div id="subtitle" class="text-sm text-gray-500 mt-1 text-center mb-5">View: 2025</div>
 
     <!-- Tabelle -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
@@ -103,13 +103,13 @@
 
         <!-- Election Pie Chart -->
         <div class="max-w-xl">
-            <div id="electionChartTitle" class="mb-2 font-semibold">Wahlergebnisse 2025 (Pie)</div>
+            <div id="electionChartTitle" class="mb-2 font-semibold">Election results 2025 (Pie)</div>
             <canvas id="electionPieChart"></canvas>
         </div>
 
         <!-- Combined Chart -->
         <div class="max-w-xl">
-            <div id="combinedChartTitle" class="mb-2 font-semibold">Posts und Wahlergebnisse 2025</div>
+            <div id="combinedChartTitle" class="mb-2 font-semibold">Posts and election results 2025</div>
             <canvas id="combinedChart"></canvas>
         </div>
 
@@ -124,17 +124,17 @@
 
     <!-- Individual Party Charts -->
     <section id="partyChartsSection" class="mt-8">
-        <h2 class="text-xl font-bold mb-4">Einzelne Parteien</h2>
-        <div id="partyCharts" class="grid gap-8 lg:grid-cols-2">
-            <!-- Will be populated dynamically -->
-        </div>
-    </section>
+            <h2 class="text-xl font-bold mb-4">Individual parties</h2>
+            <div id="partyCharts" class="grid gap-8 lg:grid-cols-2">
+                <!-- Will be populated dynamically -->
+            </div>
+        </section>
 
-    <!-- Karten-Buttons -->
+    <!-- Cards -->
     <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
         <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
-            <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Daten (Posts)</h2>
-            <p class="text-gray-600">Rohdaten zu Posts pro Partei.</p>
+            <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Data (Posts)</h2>
+            <p class="text-gray-600">Raw data for posts per party.</p>
             <div class="flex mt-4 space-x-3">
                 <button onclick="viewJsonData('/data.json')"
                         class="px-3 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 flex items-center">
@@ -145,7 +145,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                     </svg>
-                    Anzeigen
+                    View
                 </button>
                 <div class="relative">
                     <button onclick="toggleDownloadOptions('data')"
@@ -159,18 +159,16 @@
                     </button>
                     <div id="data-download-options"
                          class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                        <a href="/data.json" download class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">JSON
-                            herunterladen</a>
-                        <a href="/download/posts-csv" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CSV
-                            herunterladen</a>
+                        <a href="/data.json" download class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download JSON</a>
+                        <a href="/download/posts-csv" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download CSV</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
-            <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Wahldaten</h2>
-            <p class="text-gray-600">Wahlergebnisse der Parteien.</p>
+            <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Election data</h2>
+            <p class="text-gray-600">Parties’ election results.</p>
             <div class="flex mt-4 space-x-3">
                 <button onclick="viewJsonData('/election.json')"
                         class="px-3 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 flex items-center">
@@ -181,14 +179,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                     </svg>
-                    Anzeigen
+                    View
                 </button>
                 <div class="relative">
                     <button onclick="toggleDownloadOptions('election')"
                             class="px-3 py-2 rounded bg-green-100 hover:bg-green-200 text-green-800 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                         </svg>
                         Download
@@ -196,9 +194,9 @@
                     <div id="election-download-options"
                          class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                         <a href="/election.json" download
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">JSON herunterladen</a>
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download JSON</a>
                         <a href="/download/election-csv"
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CSV herunterladen</a>
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download CSV</a>
                     </div>
                 </div>
             </div>
@@ -207,7 +205,7 @@
         <a href="{{ url_for('post_per_party_stats') }}"
            class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
             <h2 class="text-xl font-bold text-indigo-700 mb-2">📈 Stats</h2>
-            <p class="text-gray-600">Zeigt Tabelle und Diagramm mit aktuellen YouTube-Statistiken der Parteien.</p>
+            <p class="text-gray-600">Shows a table and chart with current YouTube statistics for the parties.</p>
         </a>
     </section>
 
@@ -215,7 +213,7 @@
     <div id="jsonViewerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
             <div class="flex justify-between items-center border-b p-4">
-                <h3 class="text-xl font-semibold" id="jsonViewerTitle">JSON Daten</h3>
+                <h3 class="text-xl font-semibold" id="jsonViewerTitle">JSON Data</h3>
                 <button onclick="closeJsonViewer()" class="text-gray-500 hover:text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
@@ -246,7 +244,7 @@
             .then(response => response.json())
             .then(data => {
                 // Set the title based on the URL
-                const title = url.includes('data.json') ? 'Posts pro Partei Daten' : 'Wahlergebnisse Daten';
+                const title = url.includes('data.json') ? 'Posts per party data' : 'Election results data';
                 document.getElementById('jsonViewerTitle').textContent = title;
 
                 // Format JSON with 2 spaces indentation and display it
@@ -257,7 +255,7 @@
             })
             .catch(error => {
                 console.error('Error fetching JSON data:', error);
-                alert('Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+                alert('Error loading data. Please try again later.');
             });
     }
 
@@ -391,7 +389,7 @@
             })
             .catch(error => {
                 console.error('Error converting to CSV:', error);
-                alert('Fehler beim Konvertieren der Daten. Bitte versuchen Sie es später erneut.');
+                alert('Error converting data. Please try again later.');
             });
     }
 
@@ -514,7 +512,7 @@
 
     function renderTableSingle(rows, year) {
         renderHeader([
-            {key: "party", label: "Partei"},
+            {key: "party", label: "Party"},
             {key: "posts", label: `Posts ${year}`},
             {key: "electionCount", label: `Election ${year} (%)`},
         ]);
@@ -578,7 +576,7 @@
         }
 
         renderHeader([
-            {key: "party", label: "Partei"},
+            {key: "party", label: "Party"},
             {key: "posts2025", label: "Posts 2025"},
             {key: "election2025", label: "Election 2025 (%)"},
             {key: "posts2021", label: "Posts 2021"},
@@ -698,7 +696,7 @@
             }
         });
 
-        document.getElementById("chartTitle").textContent = `1. Diagramm: Nur Posts (${year})`;
+        document.getElementById("chartTitle").textContent = `1. Chart: Posts only (${year})`;
     }
 
     function renderElectionPie(year) {
@@ -737,7 +735,7 @@
             }
         });
 
-        document.getElementById("electionChartTitle").textContent = `2. Diagramm: Nur Wahlergebnisse (${year})`;
+        document.getElementById("electionChartTitle").textContent = `2. Chart: Election results only (${year})`;
     }
 
     function renderCombinedChart(year) {
@@ -779,14 +777,14 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: "Posts (skaliert)",
+                        label: "Posts (scaled)",
                         data: scaledPosts,
                         backgroundColor: backgroundColor.map(c => c + "80"), // Add transparency
                         borderColor: backgroundColor,
                         borderWidth: 1
                     },
                     {
-                        label: "Wahlergebnisse (%)",
+                        label: "Election results (%)",
                         data: electionValues,
                         backgroundColor: backgroundColor,
                         borderColor: backgroundColor.map(c => c + "80"),
@@ -801,7 +799,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Prozent (%)'
+                            text: 'Percent (%)'
                         }
                     }
                 },
@@ -813,9 +811,9 @@
                                 const value = context.raw;
                                 if (datasetLabel.includes("Posts")) {
                                     const originalValue = postValues[context.dataIndex];
-                                    return `Posts: ${originalValue} (${value.toFixed(1)}% skaliert)`;
+                                    return `Posts: ${originalValue} (${value.toFixed(1)}% scaled)`;
                                 } else {
-                                    return `Wahlergebnis: ${fmtPct(value)}`;
+                                    return `Election result: ${fmtPct(value)}`;
                                 }
                             }
                         }
@@ -824,7 +822,7 @@
             }
         });
 
-        document.getElementById("combinedChartTitle").textContent = `3. Diagramm: Posts und Wahlergebnisse zusammen (${year})`;
+        document.getElementById("combinedChartTitle").textContent = `3. Chart: Posts and election results together (${year})`;
     }
 
     function populatePartyDropdown() {
@@ -922,13 +920,13 @@
             const checkedCheckboxes = document.querySelectorAll(".party-checkbox:checked");
 
             if (checkedCheckboxes.length === 0) {
-                dropdownButton.querySelector("span").textContent = "Keine Partei";
+                dropdownButton.querySelector("span").textContent = "No party";
             } else if (checkedCheckboxes.length === allCheckboxes.length) {
-                dropdownButton.querySelector("span").textContent = "Alle Parteien";
+                dropdownButton.querySelector("span").textContent = "All parties";
             } else if (checkedCheckboxes.length === 1) {
                 dropdownButton.querySelector("span").textContent = checkedCheckboxes[0].value;
             } else {
-                dropdownButton.querySelector("span").textContent = `${checkedCheckboxes.length} Parteien`;
+                dropdownButton.querySelector("span").textContent = `${checkedCheckboxes.length} parties`;
             }
         }
     }
@@ -1185,14 +1183,14 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Anzahl Posts'
+                            text: 'Number of posts'
                         }
                     }
                 }
             }
         });
 
-        document.getElementById("chartTitle").textContent = "1. Diagramm: Nur Posts";
+        document.getElementById("chartTitle").textContent = "1. Chart: Posts only";
     }
 
     function renderElectionChartBoth() {
@@ -1223,14 +1221,14 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: "Wahlergebnisse 2025 (%)",
+                        label: "Election results 2025 (%)",
                         data: values2025,
                         backgroundColor: backgroundColor,
                         borderColor: backgroundColor.map(c => c + "80"),
                         borderWidth: 1
                     },
                     {
-                        label: "Wahlergebnisse 2021 (%)",
+                        label: "Election results 2021 (%)",
                         data: values2021,
                         backgroundColor: backgroundColor.map(c => c + "80"),
                         borderColor: backgroundColor,
@@ -1255,7 +1253,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Prozent (%)'
+                            text: 'Percent (%)'
                         }
                     }
                 }
@@ -1270,7 +1268,7 @@
         const scatterTitle = document.getElementById("scatterTitle");
 
         if (currentPeriod === "both") {
-            subtitle.textContent = "Ansicht: 2025 vs. 2021";
+            subtitle.textContent = "View: 2025 vs. 2021";
             renderTableBoth();
 
             // Hide combined chart
@@ -1299,7 +1297,7 @@
         const year = currentPeriod === "first" ? 2025 : 2021;
         const rows = currentPeriod === "first" ? dataStore.posts2025 : dataStore.posts2021;
 
-        subtitle.textContent = `Ansicht: ${year}`;
+        subtitle.textContent = `View: ${year}`;
         renderTableSingle(rows, year);
         renderPie(rows, year);
         renderElectionPie(year);
@@ -1314,10 +1312,10 @@
     });
 </script>
 
-<!-- Fazit / Conclusion -->
+<!-- Conclusion -->
 <section class="max-w-5xl mx-auto mt-6 bg-white rounded-2xl shadow p-6 space-y-3">
-    <h2 class="text-xl font-semibold">Fazit</h2>
-    <p class="text-gray-700">Die Auswertungen zeigen: Hohe Posting‑Aktivität einzelner Parteien geht nicht automatisch mit besseren Wahlergebnissen einher. Sichtbarkeit und Mobilisierung können zusammenhängen, werden jedoch von vielen weiteren Faktoren geprägt (z. B. Kampagnenphase, mediale Ereignisse, Themenkonjunktur). Der Vergleich zwischen 2021 und 2025 sowie das Streudiagramm der Veränderungen helfen, Muster zu erkennen – sie ersetzen jedoch keine tiefergehende inhaltliche Analyse.</p>
+    <h2 class="text-xl font-semibold">Conclusion</h2>
+    <p class="text-gray-700">The analyses show that high posting activity by individual parties does not automatically translate into better election results. Visibility and mobilization can be related, but they are shaped by many other factors (e.g., campaign phase, media events, issue salience). Comparing 2021 and 2025, as well as the scatter plot of changes, helps reveal patterns — but it does not replace deeper substantive analysis.</p>
 </section>
 
 {% include 'partials/footer.html' %}
