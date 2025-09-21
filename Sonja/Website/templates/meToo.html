@@ -7,45 +7,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
-<!-- Dark Mode Toggle Button -->
-<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-</button>
-<div class="max-w-6xl mx-auto pt-6">
-    <header class="flex flex-col items-center mb-6 gap-4 text-center">
-        <div class="min-w-0">
-            <h1 class="text-2xl font-bold">#MeToo Trend & Sentiment</h1>
-            <div id="subtitle" class="text-sm text-gray-500 mt-1">Analyse der #MeToo-Bewegung: Wikipedia-Aufrufe und
-                Stimmungsphasen
-            </div>
-        </div>
+{% include 'partials/dark_mode_toggle.html' %}
 
-        <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap justify-center w-full">
-            <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
-
-            <div class="flex items-center gap-3 grow w-full md:w-auto">
-                <span class="font-medium">Zeitraum:</span>
-                <div id="date-range-slider" class="w-64 md:w-96"></div>
-                <div class="text-sm text-gray-600">
-                    <span id="range-start" class="font-medium"></span>
-                    <span class="mx-1">bis</span>
-                    <span id="range-end" class="font-medium"></span>
-                </div>
-                <label for="year-select" class="ml-2 text-sm text-gray-600">Jahr:</label>
-                <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
-                    <option value="">Alle Jahre</option>
-                </select>
-                <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Zurücksetzen</button>
+{% set page_title = '#MeToo Trend & Sentiment' %}
+{% include 'partials/page_header.html' %}
+<div class="max-w-5xl mx-auto pt-6">
+    <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap justify-center w-full">
+        <div class="flex items-center gap-3 grow w-full md:w-auto">
+            <span class="font-medium pe-2">Zeitraum:</span>
+            <div id="date-range-slider" class="w-64 md:w-96"></div>
+            <div class="text-sm text-gray-600 ps-2">
+                <span id="range-start" class="font-medium"></span>
+                <span class="mx-1">bis</span>
+                <span id="range-end" class="font-medium"></span>
             </div>
+            <label for="year-select" class="ml-2 text-sm text-gray-600">Jahr:</label>
+            <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
+                <option value="">Alle Jahre</option>
+            </select>
+            <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
+                Zurücksetzen
+            </button>
         </div>
-    </header>
+    </div>
 </div>
-<main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+<main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
     <section class="space-y-3">
         <div class="flex items-end justify-between flex-wrap gap-2">
             <div>
@@ -76,7 +67,6 @@
     </section>
 </main>
 
-{% set footer_max_w = 'max-w-6xl' %}
 {% include 'partials/footer.html' %}
 
 <script>
@@ -86,14 +76,44 @@
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const savedTheme = localStorage.getItem('theme');
 
+        function getColors() {
+            const isDark = root.classList.contains('dark');
+            return {
+                axis: isDark ? '#e2e8f0' : '#0f172a',
+                grid: isDark ? '#475569' : '#e5e7eb',
+                legend: isDark ? '#e2e8f0' : '#0f172a'
+            };
+        }
+
+        function applyChartColors(chart) {
+            const c = getColors();
+            // default text color
+            Chart.defaults.color = c.axis;
+            // legend labels
+            if (chart.options?.plugins?.legend?.labels) {
+                chart.options.plugins.legend.labels.color = c.legend;
+            } else if (chart.options?.plugins?.legend) {
+                chart.options.plugins.legend.labels = { color: c.legend };
+            }
+            // tooltips use default; fine
+            // scales
+            if (chart.options?.scales) {
+                Object.values(chart.options.scales).forEach(scale => {
+                    if (!scale.ticks) scale.ticks = {};
+                    if (!scale.grid) scale.grid = {};
+                    scale.ticks.color = c.axis;
+                    scale.grid.color = c.grid;
+                });
+            }
+        }
+
         function applyTheme(theme) {
             if (theme === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
             // Update Chart.js default color for axes/labels
-            const isDark = root.classList.contains('dark');
-            const color = isDark ? '#e2e8f0' : '#0f172a';
-            Chart.defaults.color = color;
+            const colors = getColors();
+            Chart.defaults.color = colors.axis;
             // Update existing charts if any
-            window.__charts?.forEach(ch => ch.update());
+            window.__charts?.forEach(ch => { applyChartColors(ch); ch.update(); });
         }
 
         applyTheme(savedTheme ? savedTheme : (prefersDark.matches ? 'dark' : 'light'));
@@ -149,6 +169,7 @@
                     }
                 }
             });
+            applyChartColors(line);
             window.__charts.push(line);
 
             // Date range slider (drag to select timeframe)
@@ -176,7 +197,7 @@
                     start: [minIndex, maxIndex],
                     connect: true,
                     step: 1,
-                    range: { min: minIndex, max: maxIndex }
+                    range: {min: minIndex, max: maxIndex}
                 });
 
                 // Populate year dropdown and wire it to the slider
@@ -293,6 +314,7 @@
                 },
                 options: {plugins: {legend: {position: 'bottom'}}}
             });
+            applyChartColors(pie);
             window.__charts.push(pie);
 
             // Stacked bar per phase
@@ -313,6 +335,7 @@
                     scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true}}
                 }
             });
+            applyChartColors(bar);
             window.__charts.push(bar);
         } catch (e) {
             console.error('Fehler beim Laden des Sentiments', e);

@@ -18,6 +18,8 @@ ELECTION_PATH   = "data/postPerParty/election.json"
 DATA_CSV_PATH   = BASE / "data" / "postPerParty" / "data.csv"
 ELECTION_CSV_PATH = BASE / "data" / "postPerParty" / "election.csv"
 FRIDAYS_JSON_PATH = BASE / "data" / "fridaysForFuture" / "fridaysForFuture.json"
+AFD_COMBINED_JSON_PATH = BASE / "data" / "afd" / "AfD_combined_relative.json"
+AFD_DAILY_JSON_PATH = BASE / "data" / "afd" / "AfD_combined_daily_relative.json"
 
 def load_json(path: str):
     """Hilfsfunktion: JSON-Datei laden und als Python-Dict zurückgeben."""
@@ -47,6 +49,12 @@ def post_per_party_stats():
 def antivax():
     return render_template("antivax.html")
 
+# Antivax data endpoint (like tradwife pattern): serves the antivax answer_one.json
+@app.route("/answer_one.json")
+def antivax_answer_one():
+    path = Path(BASE) / "data" / "antivax" / "answer_one.json"
+    return jsonify(load_json(str(path)))
+
 @app.route("/afd")
 def afd():
     return render_template("afd.html")
@@ -59,6 +67,35 @@ def fridaysForFuture():
 def fridaysForFuture_json():
     return jsonify(load_json(str(FRIDAYS_JSON_PATH)))
 
+@app.route("/afd_combined.json")
+def afd_combined_json():
+    return jsonify(load_json(str(AFD_COMBINED_JSON_PATH)))
+
+@app.route("/afd_daily.json")
+def afd_daily_json():
+    return jsonify(load_json(str(AFD_DAILY_JSON_PATH)))
+
+# AfD: expose individual datasets (weekly and daily)
+@app.route("/afd_wiki.json")
+def afd_wiki_json():
+    path = Path(BASE) / "data" / "afd" / "afd_wiki.json"
+    return jsonify(load_json(str(path)))
+
+@app.route("/afd_yt.json")
+def afd_yt_json():
+    path = Path(BASE) / "data" / "afd" / "afd_yt.json"
+    return jsonify(load_json(str(path)))
+
+@app.route("/afd_wiki_daily.json")
+def afd_wiki_daily_json():
+    path = Path(BASE) / "data" / "afd" / "afd_wiki_daily.json"
+    return jsonify(load_json(str(path)))
+
+@app.route("/afd_yt_daily.json")
+def afd_yt_daily_json():
+    path = Path(BASE) / "data" / "afd" / "afd_yt_daily.json"
+    return jsonify(load_json(str(path)))
+
 @app.route("/meToo")
 def meToo():
     return render_template("meToo.html")
@@ -66,6 +103,41 @@ def meToo():
 @app.route("/wagenknecht")
 def wagenknecht():
     return render_template("wagenknecht.html")
+
+@app.route("/wagenknecht_words_a.json")
+def wagenknecht_words_a():
+    path = Path(BASE) / "data" / "wagenknecht" / "Sahra_Wagenknecht_Words_A.json"
+    return jsonify(load_json(str(path)))
+
+@app.route("/wagenknecht_words_b.json")
+def wagenknecht_words_b():
+    path = Path(BASE) / "data" / "wagenknecht" / "Sahra_Wagenknecht_Words_B.json"
+    return jsonify(load_json(str(path)))
+
+@app.route("/wagenknecht_words_combined.json")
+def wagenknecht_words_combined():
+    """Summiert die Häufigkeiten aus A und B pro Wort und gibt eine kombinierte Liste zurück.
+    Ausgabeformat: [{"words": <wort>, "numbers": <summe>}, ...] sortiert nach numbers desc.
+    """
+    path_a = Path(BASE) / "data" / "wagenknecht" / "Sahra_Wagenknecht_Words_A.json"
+    path_b = Path(BASE) / "data" / "wagenknecht" / "Sahra_Wagenknecht_Words_B.json"
+    try:
+        data_a = load_json(str(path_a)) or []
+        data_b = load_json(str(path_b)) or []
+        freq = {}
+        # beide listen zusammenführen und zählen (case-insensitive)
+        for entry in [*(data_a or []), *(data_b or [])]:
+            w = str(entry.get("words", "")).strip()
+            if not w:
+                continue
+            key = w.lower()
+            n = int(entry.get("numbers", 0) or 0)
+            freq[key] = freq.get(key, 0) + n
+        combined = [{"words": w, "numbers": c} for w, c in freq.items()]
+        combined.sort(key=lambda x: x["numbers"], reverse=True)
+        return jsonify(combined)
+    except Exception as e:
+        abort(500, description=f"Fehler beim Kombinieren der Wagenknecht-Wortlisten: {type(e).__name__}: {e}")
 
 @app.route("/tradwife")
 def tradwife():

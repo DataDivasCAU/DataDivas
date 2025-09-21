@@ -1,434 +1,540 @@
 <!DOCTYPE html>
 <html lang="de" class="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fridays For Future – YouTube Analyse</title>
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <style>
-    .chart-box { background: white; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.06); padding: 1rem; }
-    .dark .chart-box { background: #111827; }
-    .table th, .table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #e5e7eb; }
-    .dark .table th, .dark .table td { border-color: #374151; }
-    #wordcloud { position: relative; overflow: hidden; margin: 0 auto; width: min(100%, 900px); }
-    #wordcloud canvas { width: 100% !important; height: 100% !important; display: block; }
-  </style>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 p-6">
-<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-</button>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fridays For Future – YouTube Analyse</title>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .chart-box {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+        }
 
-  <main class="max-w-6xl mx-auto p-6">
-    <header class="flex flex-col items-center mb-6 gap-4 text-center">
-      <div class="min-w-0">
-        <h1 class="text-2xl font-bold">Fridays For Future – YouTube Analyse</h1>
-        <div class="text-sm text-gray-500 mt-1">Datenbasis: fridaysForFuture.json</div>
-      </div>
-      <div class="flex items-center gap-3 flex-wrap justify-center">
+        .dark .chart-box {
+            background: #111827;
+        }
+
+        .table th, .table td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dark .table th, .dark .table td {
+            border-color: #374151;
+        }
+
+        #wordcloud {
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            width: min(100%, 900px);
+        }
+
+        #wordcloud canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+{% include 'partials/dark_mode_toggle.html' %}
+
+{% set page_title = 'Fridays For Future – YouTube Analyse' %}
+{% include 'partials/page_header.html' %}
+
+<main class="max-w-5xl mx-auto p-6">
+
+    <!-- Context dialog: inserted per issue description -->
+    <section class="chart-box mb-8" id="fff-dialog">
+        <h2 class="text-xl font-bold mb-3">Fridays for Future – Kontext</h2>
+        <div class="prose max-w-none text-sm leading-relaxed">
+            <h3 class="font-semibold mb-1">What is Fridays for Future?</h3>
+            <p>Fridays for Future is a global political movement focused on climate-related issues. Also known as the
+                School Strike for Climate, it began with school students skipping Friday classes to participate in
+                demonstrations. The goal is to make political leaders take stronger action in fighting climate change as
+                well as accelerating the transition to renewable energy.</p>
+            <h3 class="font-semibold mt-4 mb-1">What data did we gather?</h3>
+            <p>We collected the statistics of 100 German-language videos related to Fridays for Future, along with the
+                10 most relevant comments for each video. This includes the title, upload-time, descriptions, like- and
+                view-count.</p>
+        </div>
+    </section>
+
+    <div class="flex items-center gap-3 flex-wrap justify-center">
         <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
-        <label class="font-medium">Top-N:</label>
+        <label for="topN" class="font-medium">Top-N:</label>
         <select id="topN" class="border rounded p-2 bg-white">
-          <option value="5">5</option>
-          <option value="10" selected>10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
         </select>
-      </div>
-    </header>
+    </div>
 
     <section class="chart-box mb-8">
-      <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos nach Views</h2>
-      <canvas id="barTopViews" height="120"></canvas>
+        <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos nach Views</h2>
+        <canvas id="barTopViews" height="120"></canvas>
     </section>
 
     <section class="grid gap-6 md:grid-cols-2 mb-8">
-      <div class="chart-box">
-        <h2 class="text-lg font-semibold mb-2 text-center">Likes vs. Views (Top‑N)</h2>
-        <canvas id="scatterLikesViews" height="140"></canvas>
-      </div>
-      <div class="chart-box">
-        <h2 class="text-lg font-semibold mb-2 text-center">Uploads über die Zeit</h2>
-        <canvas id="lineUploadsOverTime" height="140"></canvas>
-      </div>
+        <div class="chart-box">
+            <h2 class="text-lg font-semibold mb-2 text-center">Likes vs. Views (Top‑N)</h2>
+            <canvas id="scatterLikesViews" height="140"></canvas>
+        </div>
+        <div class="chart-box">
+            <h2 class="text-lg font-semibold mb-2 text-center">Uploads über die Zeit</h2>
+            <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">This graph shows the
+                amount of videos uploaded in 2019 and 2020 and marks German protest days, which explain many spikes.</p>
+            <canvas id="lineUploadsOverTime" height="140"></canvas>
+        </div>
     </section>
 
     <section class="chart-box mb-8">
-      <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
-      <div id="wordcloud" style="height: 820px;"></div>
+        <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
+        <p class="text-sm dark:text-gray-200 text-center max-w-3xl mx-auto mb-2">We generated a WordCloud using keybert
+            based on keywords extracted from the video titles, descriptions and comments.</p>
+        <div id="wordcloud" style="height: 820px;"></div>
     </section>
 
     <section class="chart-box mb-8">
-      <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords je Zeitraum</h2>
-      <div id="heatmap" class="overflow-x-auto">
-        <table id="heatmapTable" class="min-w-full table"></table>
-      </div>
+        <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords je Zeitraum</h2>
+        <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">We tracked how often these
+            keywords appeared in the 15 most-viewed videos during three periods: 01.01.2019–01.06.2019,
+            01.07.2019–01.12.2019, and 01.01.2020–01.12.2020.</p>
+        <div id="heatmap" class="overflow-x-auto">
+            <table id="heatmapTable" class="min-w-full table"></table>
+        </div>
     </section>
 
     <section class="chart-box mb-8 overflow-x-auto">
-      <h2 class="text-xl font-bold mb-3 text-center">Tabelle (Top‑N nach Views)</h2>
-      <table id="topTable" class="min-w-full table">
-        <thead id="topTableHead" class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold">
-          <tr>
-            <th class="text-left cursor-pointer select-none" data-key="#" scope="col" aria-sort="none">#</th>
-            <th class="text-left cursor-pointer select-none" data-key="title" scope="col" aria-sort="none">Titel</th>
-            <th class="text-right cursor-pointer select-none" data-key="views" scope="col" aria-sort="descending">Views</th>
-            <th class="text-right cursor-pointer select-none" data-key="likes" scope="col" aria-sort="none">Likes</th>
-            <th class="text-right cursor-pointer select-none" data-key="comments" scope="col" aria-sort="none">Kommentare</th>
-            <th class="text-left cursor-pointer select-none" data-key="upload" scope="col" aria-sort="none">Upload</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+        <h2 class="text-xl font-bold mb-3 text-center">Tabelle (Top‑N nach Views)</h2>
+        <table id="topTable" class="min-w-full table">
+            <thead id="topTableHead"
+                   class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold">
+            <tr>
+                <th class="text-left cursor-pointer select-none" data-key="#" scope="col" aria-sort="none">#</th>
+                <th class="text-left cursor-pointer select-none" data-key="title" scope="col" aria-sort="none">Titel
+                </th>
+                <th class="text-right cursor-pointer select-none" data-key="views" scope="col" aria-sort="descending">
+                    Views
+                </th>
+                <th class="text-right cursor-pointer select-none" data-key="likes" scope="col" aria-sort="none">Likes
+                </th>
+                <th class="text-right cursor-pointer select-none" data-key="comments" scope="col" aria-sort="none">
+                    Kommentare
+                </th>
+                <th class="text-left cursor-pointer select-none" data-key="upload" scope="col" aria-sort="none">Upload
+                </th>
+            </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
     </section>
-  </main>
+</main>
 
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
-      const htmlEl = document.documentElement;
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      const moonIcon = '<i class="fas fa-moon"></i>';
-      const sunIcon = '<i class="fas fa-sun"></i>';
+        const htmlEl = document.documentElement;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const moonIcon = '<i class="fas fa-moon"></i>';
+        const sunIcon = '<i class="fas fa-sun"></i>';
 
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        htmlEl.classList.add('dark');
-        darkModeToggle.innerHTML = sunIcon;
-        document.body.classList.add('bg-gray-900','text-gray-100');
-      }
-      darkModeToggle.addEventListener('click', () => {
-        const isDark = htmlEl.classList.toggle('dark');
-        darkModeToggle.innerHTML = isDark ? sunIcon : moonIcon;
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        // Toggle body styles
-        document.body.classList.toggle('bg-gray-900', isDark);
-        document.body.classList.toggle('text-gray-100', isDark);
-        // Re-render visuals to adapt colors
-        const n = Number(topNEl.value);
-        renderAll(n);
-        renderHeatmap();
-      });
-
-      const topNEl = document.getElementById('topN');
-      const tableBody = document.getElementById('tableBody');
-      const tableHead = document.getElementById('topTableHead');
-      const barCtx = document.getElementById('barTopViews').getContext('2d');
-      const scatterCtx = document.getElementById('scatterLikesViews').getContext('2d');
-      const lineCtx = document.getElementById('lineUploadsOverTime').getContext('2d');
-
-      let barChart, scatterChart, lineChart;
-      let allItems = [];
-      let keywordRows = [];
-      let keywordCountsCombined = [];
-      let resizeTimer = null;
-
-      // Table sorting state
-      let sortKey = 'views'; // default sort by views desc
-      let sortDir = 'desc'; // 'asc' | 'desc'
-
-      function parseData(json) {
-        // Expected structure: { folders: { DataSortedByViews: { data1_sort: [ {title, views, likes, comments, 'upload time'} ] } } }
-        const dataSorted = json?.folders?.DataSortedByViews?.data1_sort || [];
-        // Normalize and filter plausible entries
-        return dataSorted.map((d) => ({
-          title: String(d.title || ''),
-          views: Number(d.views || 0),
-          likes: Number(d.likes || 0),
-          comments: Number(d.comments || 0),
-          upload: d['upload time'] ? new Date(d['upload time']) : null
-        })).filter(d => !!d.title && Number.isFinite(d.views));
-      }
-
-      function renderBarTopViews(items, n) {
-        const top = [...items].sort((a,b)=>b.views-a.views).slice(0, n);
-        const labels = top.map(d=> d.title.length>40 ? d.title.slice(0,37)+'…' : d.title);
-        const data = top.map(d=> d.views);
-        const colors = top.map((_,i)=> ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#84cc16','#f97316','#e11d48','#14b8a6'][i%10]);
-        if (barChart) barChart.destroy();
-        barChart = new Chart(barCtx, {
-          type: 'bar',
-          data: { labels, datasets: [{ label: 'Views', data, backgroundColor: colors }] },
-          options: {
-            responsive: true,
-            scales: {
-              x: { ticks: { color: getAxis() } },
-              y: { ticks: { color: getAxis() }, grid: { color: getGrid() } }
-            },
-            plugins: { legend: { display: false } }
-          }
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            htmlEl.classList.add('dark');
+            darkModeToggle.innerHTML = sunIcon;
+            // Ensure only light text in dark mode
+            document.body.classList.remove('text-gray-900');
+            document.body.classList.add('bg-gray-900', 'text-gray-100');
+        } else {
+            // Ensure only dark text in light mode
+            document.body.classList.add('text-gray-900');
+            document.body.classList.remove('text-gray-100', 'bg-gray-900');
+        }
+        darkModeToggle.addEventListener('click', () => {
+            const isDark = htmlEl.classList.toggle('dark');
+            darkModeToggle.innerHTML = isDark ? sunIcon : moonIcon;
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            // Toggle body styles
+            document.body.classList.toggle('bg-gray-900', isDark);
+            document.body.classList.toggle('text-gray-100', isDark);
+            document.body.classList.toggle('text-gray-900', !isDark);
+            // Re-render visuals to adapt colors
+            const n = Number(topNEl.value);
+            renderAll(n);
+            renderHeatmap();
         });
-      }
 
-      function renderScatterLikesViews(items, n) {
-        const top = [...items].sort((a,b)=>b.views-a.views).slice(0, n);
-        if (scatterChart) scatterChart.destroy();
-        scatterChart = new Chart(scatterCtx, {
-          type: 'scatter',
-          data: {
-            datasets: [{
-              label: 'Video',
-              // include title on each point for clearer tooltips
-              data: top.map(d=>({x: d.views, y: d.likes, title: d.title})),
-              backgroundColor: '#10b981',
-              pointRadius: 4
-            }]
-          },
-          options: {
-            scales: {
-              x: { title: { display: true, text: 'Views' }, ticks: { color: getAxis() }, grid: { color: getGrid() } },
-              y: { title: { display: true, text: 'Likes' }, ticks: { color: getAxis() }, grid: { color: getGrid() } }
-            },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  // Title row: show full video title (escaped via DOM)
-                  title: (items) => {
-                    const raw = items?.[0]?.raw;
-                    return raw && raw.title ? `Titel: ${raw.title}` : '';
-                  },
-                  // Label row: show metrics with labels, in German
-                  label: (ctx) => {
-                    const x = ctx.parsed?.x ?? ctx.raw?.x;
-                    const y = ctx.parsed?.y ?? ctx.raw?.y;
-                    return `Views: ${formatNumber(x)} | Likes: ${formatNumber(y)}`;
-                  }
+        const topNEl = document.getElementById('topN');
+        const tableBody = document.getElementById('tableBody');
+        const tableHead = document.getElementById('topTableHead');
+        const barCtx = document.getElementById('barTopViews').getContext('2d');
+        const scatterCtx = document.getElementById('scatterLikesViews').getContext('2d');
+        const lineCtx = document.getElementById('lineUploadsOverTime').getContext('2d');
+
+        let barChart, scatterChart, lineChart;
+        let allItems = [];
+        let keywordRows = [];
+        let keywordCountsCombined = [];
+        let resizeTimer = null;
+
+        // Table sorting state
+        let sortKey = 'views'; // default sort by views desc
+        let sortDir = 'desc'; // 'asc' | 'desc'
+
+        function parseData(json) {
+            // Expected structure: { folders: { DataSortedByViews: { data1_sort: [ {title, views, likes, comments, 'upload time'} ] } } }
+            const dataSorted = json?.folders?.DataSortedByViews?.data1_sort || [];
+            // Normalize and filter plausible entries
+            return dataSorted.map((d) => ({
+                title: String(d.title || ''),
+                views: Number(d.views || 0),
+                likes: Number(d.likes || 0),
+                comments: Number(d.comments || 0),
+                upload: d['upload time'] ? new Date(d['upload time']) : null
+            })).filter(d => !!d.title && Number.isFinite(d.views));
+        }
+
+        function renderBarTopViews(items, n) {
+            const top = [...items].sort((a, b) => b.views - a.views).slice(0, n);
+            const labels = top.map(d => d.title.length > 40 ? d.title.slice(0, 37) + '…' : d.title);
+            const data = top.map(d => d.views);
+            const colors = top.map((_, i) => ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#e11d48', '#14b8a6'][i % 10]);
+            if (barChart) barChart.destroy();
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {labels, datasets: [{label: 'Views', data, backgroundColor: colors}]},
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {ticks: {color: getAxis()}},
+                        y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                    },
+                    plugins: {legend: {display: false}}
                 }
-              }
+            });
+        }
+
+        function renderScatterLikesViews(items, n) {
+            const top = [...items].sort((a, b) => b.views - a.views).slice(0, n);
+            if (scatterChart) scatterChart.destroy();
+            scatterChart = new Chart(scatterCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Video',
+                        // include title on each point for clearer tooltips
+                        data: top.map(d => ({x: d.views, y: d.likes, title: d.title})),
+                        backgroundColor: '#10b981',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {title: {display: true, text: 'Views'}, ticks: {color: getAxis()}, grid: {color: getGrid()}},
+                        y: {title: {display: true, text: 'Likes'}, ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                // Title row: show full video title (escaped via DOM)
+                                title: (items) => {
+                                    const raw = items?.[0]?.raw;
+                                    return raw && raw.title ? `Titel: ${raw.title}` : '';
+                                },
+                                // Label row: show metrics with labels, in German
+                                label: (ctx) => {
+                                    const x = ctx.parsed?.x ?? ctx.raw?.x;
+                                    const y = ctx.parsed?.y ?? ctx.raw?.y;
+                                    return `Views: ${formatNumber(x)} | Likes: ${formatNumber(y)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderUploadsOverTime(items) {
+            const byMonth = new Map();
+            items.forEach(d => {
+                if (!d.upload) return;
+                const key = d.upload.getFullYear() + '-' + String(d.upload.getMonth() + 1).padStart(2, '0');
+                byMonth.set(key, (byMonth.get(key) || 0) + 1);
+            });
+            const labels = Array.from(byMonth.keys()).sort();
+            const data = labels.map(l => byMonth.get(l));
+            if (lineChart) lineChart.destroy();
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Uploads',
+                        data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59,130,246,0.2)',
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {ticks: {color: getAxis()}},
+                        y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                    }
+                }
+            });
+        }
+
+        function applySort(arr) {
+            const copy = [...arr];
+            const dir = sortDir === 'asc' ? 1 : -1;
+            if (sortKey === '#') {
+                // Default ranking by views desc
+                return copy.sort((a, b) => (b.views - a.views));
             }
-          }
-        });
-      }
-
-      function renderUploadsOverTime(items) {
-        const byMonth = new Map();
-        items.forEach(d => {
-          if (!d.upload) return;
-          const key = d.upload.getFullYear() + '-' + String(d.upload.getMonth()+1).padStart(2,'0');
-          byMonth.set(key, (byMonth.get(key)||0)+1);
-        });
-        const labels = Array.from(byMonth.keys()).sort();
-        const data = labels.map(l=> byMonth.get(l));
-        if (lineChart) lineChart.destroy();
-        lineChart = new Chart(lineCtx, {
-          type: 'line',
-          data: { labels, datasets: [{ label: 'Uploads', data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', fill: true, tension: 0.2 }] },
-          options: { scales: { x: { ticks: { color: getAxis() } }, y: { ticks: { color: getAxis() }, grid: { color: getGrid() } } } }
-        });
-      }
-
-      function applySort(arr){
-        const copy = [...arr];
-        const dir = sortDir === 'asc' ? 1 : -1;
-        if (sortKey === '#'){
-          // Default ranking by views desc
-          return copy.sort((a,b)=> (b.views - a.views));
+            if (sortKey === 'title') {
+                return copy.sort((a, b) => a.title.localeCompare(b.title, 'de') * dir);
+            }
+            if (sortKey === 'upload') {
+                return copy.sort((a, b) => {
+                    const av = a.upload ? a.upload.getTime() : -Infinity;
+                    const bv = b.upload ? b.upload.getTime() : -Infinity;
+                    return (av - bv) * dir;
+                });
+            }
+            // numeric keys: views, likes, comments
+            return copy.sort((a, b) => ((a[sortKey] || 0) - (b[sortKey] || 0)) * dir);
         }
-        if (sortKey === 'title'){
-          return copy.sort((a,b)=> a.title.localeCompare(b.title,'de') * dir);
-        }
-        if (sortKey === 'upload'){
-          return copy.sort((a,b)=> {
-            const av = a.upload ? a.upload.getTime() : -Infinity;
-            const bv = b.upload ? b.upload.getTime() : -Infinity;
-            return (av - bv) * dir;
-          });
-        }
-        // numeric keys: views, likes, comments
-        return copy.sort((a,b)=> ((a[sortKey]||0) - (b[sortKey]||0)) * dir);
-      }
 
-      function updateHeaderSortIndicators(){
-        if (!tableHead) return;
-        const ths = tableHead.querySelectorAll('th[data-key]');
-        ths.forEach(th => {
-          const key = th.getAttribute('data-key');
-          let aria = 'none';
-          if (key === sortKey || (key === '#' && sortKey === 'views')){
-            aria = sortDir === 'asc' ? 'ascending' : 'descending';
-          }
-          th.setAttribute('aria-sort', aria);
-        });
-      }
+        function updateHeaderSortIndicators() {
+            if (!tableHead) return;
+            const ths = tableHead.querySelectorAll('th[data-key]');
+            ths.forEach(th => {
+                const key = th.getAttribute('data-key');
+                let aria = 'none';
+                if (key === sortKey || (key === '#' && sortKey === 'views')) {
+                    aria = sortDir === 'asc' ? 'ascending' : 'descending';
+                }
+                th.setAttribute('aria-sort', aria);
+            });
+        }
 
-      function renderTable(items, n) {
-        const sorted = applySort(items);
-        const top = sorted.slice(0, n);
-        tableBody.innerHTML = top.map((d,i)=> `
+        function renderTable(items, n) {
+            const sorted = applySort(items);
+            const top = sorted.slice(0, n);
+            tableBody.innerHTML = top.map((d, i) => `
           <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-            <td class="text-right">${i+1}</td>
+            <td class="text-right">${i + 1}</td>
             <td class="max-w-[420px]">${escapeHtml(d.title)}</td>
             <td class="text-right">${formatNumber(d.views)}</td>
             <td class="text-right">${formatNumber(d.likes)}</td>
             <td class="text-right">${formatNumber(d.comments)}</td>
-            <td>${d.upload ? d.upload.toISOString().slice(0,10) : ''}</td>
+            <td>${d.upload ? d.upload.toISOString().slice(0, 10) : ''}</td>
           </tr>`).join('');
-        updateHeaderSortIndicators();
-      }
-
-      function renderWordcloud(items) {
-        // Prefer precomputed keyword occurrences from the JSON if available
-        let list = [];
-        if (Array.isArray(keywordRows) && keywordRows.length) {
-          list = keywordRows
-            .map(r => [String(r.words).toLowerCase(), Number(r.numbers)])
-            .filter(([w, n]) => !!w && Number.isFinite(n) && n > 0)
-            .sort((a,b)=>b[1]-a[1])
-            .slice(0, 200);
-        } else {
-          // Fallback: build from title tokens (legacy)
-          const freq = new Map();
-          const stop = new Set(['der','die','das','und','oder','ein','eine','für','for','fridays','future','friday','greta','thunberg','mit','im','in','am','bei','von','den','dem','zu','zur','zum','auf','aus','ist','sind','nicht','the','of','to','a','an','um','wie','was','wir','ihr','er','sie','es']);
-          items.forEach(d => {
-            const words = d.title.toLowerCase().replace(/[^a-zäöüß0-9\s]/gi,' ').split(/\s+/).filter(Boolean);
-            words.forEach(w => { if (!stop.has(w) && w.length > 2) freq.set(w, (freq.get(w)||0)+1); });
-          });
-          list = Array.from(freq.entries()).sort((a,b)=>b[1]-a[1]).slice(0,150);
+            updateHeaderSortIndicators();
         }
-        const container = document.getElementById('wordcloud');
-        container.innerHTML = '';
-        WordCloud(container, {
-          list,
-          // Slightly denser grid for large canvas
-          gridSize: 10,
-          // Make words significantly larger, scale by sqrt to avoid extreme dominance
-          weightFactor: (count) => 6 + Math.sqrt(count) * 12,
-          // Use theme-aware color palette to ensure visibility in light mode
-          color: pickWordColor,
-          backgroundColor: getBg(),
-          rotateRatio: 0,
-          shape: 'circle',
-          ellipticity: 0.9,
-          // Drawing finished
-          drawn: () => {}
+
+        function renderWordcloud(items) {
+            // Prefer precomputed keyword occurrences from the JSON if available
+            let list = [];
+            if (Array.isArray(keywordRows) && keywordRows.length) {
+                list = keywordRows
+                    .map(r => [String(r.words).toLowerCase(), Number(r.numbers)])
+                    .filter(([w, n]) => !!w && Number.isFinite(n) && n > 0)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 200);
+            } else {
+                // Fallback: build from title tokens (legacy)
+                const freq = new Map();
+                const stop = new Set(['der', 'die', 'das', 'und', 'oder', 'ein', 'eine', 'für', 'for', 'fridays', 'future', 'friday', 'greta', 'thunberg', 'mit', 'im', 'in', 'am', 'bei', 'von', 'den', 'dem', 'zu', 'zur', 'zum', 'auf', 'aus', 'ist', 'sind', 'nicht', 'the', 'of', 'to', 'a', 'an', 'um', 'wie', 'was', 'wir', 'ihr', 'er', 'sie', 'es']);
+                items.forEach(d => {
+                    const words = d.title.toLowerCase().replace(/[^a-zäöüß0-9\s]/gi, ' ').split(/\s+/).filter(Boolean);
+                    words.forEach(w => {
+                        if (!stop.has(w) && w.length > 2) freq.set(w, (freq.get(w) || 0) + 1);
+                    });
+                });
+                list = Array.from(freq.entries()).sort((a, b) => b[1] - a[1]).slice(0, 150);
+            }
+            const container = document.getElementById('wordcloud');
+            container.innerHTML = '';
+            WordCloud(container, {
+                list,
+                // Slightly denser grid for large canvas
+                gridSize: 10,
+                // Make words significantly larger, scale by sqrt to avoid extreme dominance
+                weightFactor: (count) => 6 + Math.sqrt(count) * 12,
+                // Use theme-aware color palette to ensure visibility in light mode
+                color: pickWordColor,
+                backgroundColor: getBg(),
+                rotateRatio: 0,
+                shape: 'circle',
+                ellipticity: 0.9,
+                // Drawing finished
+                drawn: () => {
+                }
+            });
+        }
+
+
+        // Render wordcloud only when container has stable size (prevents missing render on initial load)
+        function safeRenderWordcloud(attempt = 0) {
+            const container = document.getElementById('wordcloud');
+            if (!container) return;
+            // Ensure it participates in layout
+            container.style.display = 'block';
+            const ready = container.clientWidth > 50 && container.clientHeight > 50;
+            if (!ready && attempt < 20) {
+                // Wait a bit for layout to settle (fonts, CSS, flex/grid sizes)
+                return setTimeout(() => safeRenderWordcloud(attempt + 1), 120);
+            }
+            renderWordcloud(allItems);
+        }
+
+        // Heatmap (keyword_counts_combined)
+        function renderHeatmap() {
+            const tbl = document.getElementById('heatmapTable');
+            const rows = Array.isArray(keywordCountsCombined) ? keywordCountsCombined : [];
+            if (!rows.length) {
+                tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>';
+                return;
+            }
+            const periods = Object.keys(rows[0]).filter(k => k && k !== '');
+            // Compute totals to select top keywords similar to Seaborn view
+            const enriched = rows.map(r => ({
+                key: String(r[''] || r.keyword || ''),
+                values: periods.map(p => Number(r[p] || 0))
+            }));
+            // Sort by total desc and keep top 25
+            const sorted = enriched.map(o => ({
+                key: o.key,
+                values: o.values,
+                total: o.values.reduce((a, b) => a + b, 0)
+            }))
+                .sort((a, b) => b.total - a.total)
+                .slice(0, 25);
+            const minVal = 0;
+            const maxVal = Math.max(1, ...sorted.flatMap(o => o.values));
+            const isDark = document.documentElement.classList.contains('dark');
+            // Build header
+            let thead = '<thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold"><tr><th class="text-left">Keyword</th>' + periods.map(p => `<th class="text-center">${p}</th>`).join('') + '</tr></thead>';
+            // Build body
+            let tbody = '<tbody>' + sorted.map(o => {
+                const cells = o.values.map(v => heatmapCell(v, minVal, maxVal, isDark)).join('');
+                return `<tr><td class="text-left">${escapeHtml(o.key)}</td>${cells}</tr>`;
+            }).join('') + '</tbody>';
+            tbl.innerHTML = thead + tbody;
+        }
+
+        function heatmapCell(v, minV, maxV, isDark) {
+            if (v == null || !Number.isFinite(v)) {
+                return `<td class="text-center">-</td>`;
+            }
+            const t = maxV === minV ? 1 : (v - minV) / (maxV - minV);
+            // Color scale (blue) with opacity depending on value and theme
+            const base = isDark ? '59,130,246' : '59,130,246'; // rgb components of #3b82f6
+            const alpha = isDark ? (0.25 + 0.65 * t) : (0.15 + 0.75 * t);
+            const textColor = t > 0.6 ? '#ffffff' : (isDark ? '#e5e7eb' : '#111827');
+            const border = isDark ? '#374151' : '#e5e7eb';
+            return `<td class="text-center" style="background: rgba(${base}, ${alpha}); color:${textColor}; border: 1px solid ${border};">${v}</td>`;
+        }
+
+        function getAxis() {
+            return htmlEl.classList.contains('dark') ? '#e2e8f0' : '#0f172a';
+        }
+
+        function getGrid() {
+            return htmlEl.classList.contains('dark') ? '#374151' : '#e5e7eb';
+        }
+
+        function getBg() {
+            return htmlEl.classList.contains('dark') ? '#111827' : '#ffffff';
+        }
+
+        // Theme-aware word color picker to ensure good contrast, especially in light mode
+        function pickWordColor() {
+            const isDark = document.documentElement.classList.contains('dark');
+            // Vibrant palettes for both themes; light mode uses medium/dark saturated tones for contrast on white.
+            const lightPalette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#17becf', '#bcbd22', '#ff6384', '#36a2eb', '#4bc0c0', '#f59e0b', '#ef4444', '#10b981', '#8b5cf6'];
+            const darkPalette = ['#93c5fd', '#34d399', '#fbbf24', '#f87171', '#a78bfa', '#22d3ee', '#a3e635', '#fb923c', '#fb7185', '#2dd4bf', '#fde68a', '#60a5fa'];
+            const pal = isDark ? darkPalette : lightPalette;
+            return pal[Math.floor(Math.random() * pal.length)];
+        }
+
+        function formatNumber(x) {
+            return x.toLocaleString('de-DE');
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function renderAll(n) {
+            renderBarTopViews(allItems, n);
+            renderScatterLikesViews(allItems, n);
+            renderUploadsOverTime(allItems);
+            renderTable(allItems, n);
+            safeRenderWordcloud();
+        }
+
+        topNEl.addEventListener('change', () => {
+            const n = Number(topNEl.value);
+            renderAll(n);
         });
-      }
 
-
-      // Render wordcloud only when container has stable size (prevents missing render on initial load)
-      function safeRenderWordcloud(attempt = 0){
-        const container = document.getElementById('wordcloud');
-        if (!container) return;
-        // Ensure it participates in layout
-        container.style.display = 'block';
-        const ready = container.clientWidth > 50 && container.clientHeight > 50;
-        if (!ready && attempt < 20){
-          // Wait a bit for layout to settle (fonts, CSS, flex/grid sizes)
-          return setTimeout(()=> safeRenderWordcloud(attempt+1), 120);
+        // Sortable table headers
+        if (tableHead) {
+            tableHead.addEventListener('click', (e) => {
+                const th = e.target.closest('th[data-key]');
+                if (!th) return;
+                const key = th.getAttribute('data-key');
+                if (key === '#') {
+                    // Reset to default views desc
+                    sortKey = 'views';
+                    sortDir = 'desc';
+                } else if (key === sortKey) {
+                    sortDir = (sortDir === 'asc') ? 'desc' : 'asc';
+                } else {
+                    sortKey = key;
+                    // default dir by type: numeric desc, text asc, date desc
+                    sortDir = (key === 'title') ? 'asc' : 'desc';
+                }
+                renderTable(allItems, Number(topNEl.value));
+            });
         }
-        renderWordcloud(allItems);
-      }
 
-      // Heatmap (keyword_counts_combined)
-      function renderHeatmap(){
-        const tbl = document.getElementById('heatmapTable');
-        const rows = Array.isArray(keywordCountsCombined) ? keywordCountsCombined : [];
-        if (!rows.length){ tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>'; return; }
-        const periods = Object.keys(rows[0]).filter(k => k && k !== '');
-        // Compute totals to select top keywords similar to Seaborn view
-        const enriched = rows.map(r => ({ key: String(r['']||r.keyword||''), values: periods.map(p=> Number(r[p]||0)) }));
-        // Sort by total desc and keep top 25
-        const sorted = enriched.map(o=>({ key:o.key, values:o.values, total:o.values.reduce((a,b)=>a+b,0) }))
-                               .sort((a,b)=>b.total-a.total)
-                               .slice(0, 25);
-        const minVal = 0;
-        const maxVal = Math.max(1, ...sorted.flatMap(o=>o.values));
-        const isDark = document.documentElement.classList.contains('dark');
-        // Build header
-        let thead = '<thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold"><tr><th class="text-left">Keyword</th>' + periods.map(p=>`<th class="text-center">${p}</th>`).join('') + '</tr></thead>';
-        // Build body
-        let tbody = '<tbody>' + sorted.map(o=>{
-          const cells = o.values.map(v=> heatmapCell(v, minVal, maxVal, isDark)).join('');
-          return `<tr><td class="text-left">${escapeHtml(o.key)}</td>${cells}</tr>`;
-        }).join('') + '</tbody>';
-        tbl.innerHTML = thead + tbody;
-      }
-
-      function heatmapCell(v, minV, maxV, isDark){
-        if (v == null || !Number.isFinite(v)) {
-          return `<td class="text-center">-</td>`;
-        }
-        const t = maxV === minV ? 1 : (v - minV) / (maxV - minV);
-        // Color scale (blue) with opacity depending on value and theme
-        const base = isDark ? '59,130,246' : '59,130,246'; // rgb components of #3b82f6
-        const alpha = isDark ? (0.25 + 0.65 * t) : (0.15 + 0.75 * t);
-        const textColor = t > 0.6 ? '#ffffff' : (isDark ? '#e5e7eb' : '#111827');
-        const border = isDark ? '#374151' : '#e5e7eb';
-        return `<td class="text-center" style="background: rgba(${base}, ${alpha}); color:${textColor}; border: 1px solid ${border};">${v}</td>`;
-      }
-
-      function getAxis(){ return htmlEl.classList.contains('dark') ? '#e2e8f0' : '#0f172a'; }
-      function getGrid(){ return htmlEl.classList.contains('dark') ? '#374151' : '#e5e7eb'; }
-      function getBg(){ return htmlEl.classList.contains('dark') ? '#111827' : '#ffffff'; }
-      // Theme-aware word color picker to ensure good contrast, especially in light mode
-      function pickWordColor(){
-        const isDark = document.documentElement.classList.contains('dark');
-        // Vibrant palettes for both themes; light mode uses medium/dark saturated tones for contrast on white.
-        const lightPalette = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#17becf','#bcbd22','#ff6384','#36a2eb','#4bc0c0','#f59e0b','#ef4444','#10b981','#8b5cf6'];
-        const darkPalette = ['#93c5fd','#34d399','#fbbf24','#f87171','#a78bfa','#22d3ee','#a3e635','#fb923c','#fb7185','#2dd4bf','#fde68a','#60a5fa'];
-        const pal = isDark ? darkPalette : lightPalette;
-        return pal[Math.floor(Math.random()*pal.length)];
-      }
-      function formatNumber(x){ return x.toLocaleString('de-DE'); }
-      function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-      function renderAll(n){
-        renderBarTopViews(allItems, n);
-        renderScatterLikesViews(allItems, n);
-        renderUploadsOverTime(allItems);
-        renderTable(allItems, n);
-        safeRenderWordcloud();
-      }
-
-      topNEl.addEventListener('change', () => {
-        const n = Number(topNEl.value);
-        renderAll(n);
-      });
-
-      // Sortable table headers
-      if (tableHead){
-        tableHead.addEventListener('click', (e) => {
-          const th = e.target.closest('th[data-key]');
-          if (!th) return;
-          const key = th.getAttribute('data-key');
-          if (key === '#'){
-            // Reset to default views desc
-            sortKey = 'views';
-            sortDir = 'desc';
-          } else if (key === sortKey){
-            sortDir = (sortDir === 'asc') ? 'desc' : 'asc';
-          } else {
-            sortKey = key;
-            // default dir by type: numeric desc, text asc, date desc
-            sortDir = (key === 'title') ? 'asc' : 'desc';
-          }
-          renderTable(allItems, Number(topNEl.value));
+        // Keep the wordcloud inside its box on resize
+        window.addEventListener('resize', () => {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                safeRenderWordcloud();
+            }, 200);
         });
-      }
 
-      // Keep the wordcloud inside its box on resize
-      window.addEventListener('resize', () => {
-        if (resizeTimer) clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          safeRenderWordcloud();
-        }, 200);
-      });
-
-      fetch('/fridaysForFuture.json').then(r=>r.json()).then(json => {
-        allItems = parseData(json);
-        const kw = json?.folders?.KeywordCounts || {};
-        keywordRows = kw?.keywords || [];
-        keywordCountsCombined = kw?.keyword_counts_combined || [];
-        renderAll(Number(topNEl.value));
-        renderHeatmap();
-      }).catch(err => {
-        console.error('Fehler beim Laden der Daten', err);
-      });
+        fetch('/fridaysForFuture.json').then(r => r.json()).then(json => {
+            allItems = parseData(json);
+            const kw = json?.folders?.KeywordCounts || {};
+            keywordRows = kw?.keywords || [];
+            keywordCountsCombined = kw?.keyword_counts_combined || [];
+            renderAll(Number(topNEl.value));
+            renderHeatmap();
+        }).catch(err => {
+            console.error('Fehler beim Laden der Daten', err);
+        });
     });
-  </script>
+</script>
+{% include 'partials/footer.html' %}
 </body>
 </html>

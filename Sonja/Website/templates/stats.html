@@ -1,120 +1,120 @@
 <!DOCTYPE html>
 <html lang="de" class="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partei-Stats – Aktuelle Übersicht</title>
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Partei-Stats – Aktuelle Übersicht</title>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800">
-  <!-- Dark Mode Toggle Button -->
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-  </button>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+{% include 'partials/dark_mode_toggle.html' %}
 
-  <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-    <header class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-      <h1 class="text-2xl sm:text-3xl font-bold text-indigo-700">Aktuelle Partei-Statistiken (YouTube)</h1>
-      <div class="flex flex-wrap gap-2">
-        <a href="/" class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200">Home</a>
+{% set page_title = 'Aktuelle Partei-Statistiken (YouTube)' %}
+{% include 'partials/page_header.html' %}
+
+<div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="mb-6 flex flex-wrap gap-2">
         <a href="/post-per-party" class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200">Zurück</a>
-        <a href="/export-current-stats.json" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700">JSON exportieren</a>
-      </div>
-    </header>
+        <a href="/export-current-stats.json" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700">JSON
+            exportieren</a>
+    </div>
 
     <!-- Loading state -->
     <section id="loadingSection" class="bg-white rounded-2xl shadow p-6 flex items-center justify-center">
-      <div class="flex items-center gap-4">
-        <div class="h-6 w-6 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin"></div>
-        <p class="text-gray-700">Lade aktuelle Daten von der YouTube API …</p>
-      </div>
+        <div class="flex items-center gap-4">
+            <div class="h-6 w-6 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin"></div>
+            <p class="text-gray-700">Lade aktuelle Daten von der YouTube API …</p>
+        </div>
     </section>
 
     <!-- Content is hidden until fully rendered -->
     <div id="content" class="hidden">
-      <section class="bg-white rounded-2xl shadow p-4 sm:p-6 mb-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-semibold">Übersicht</h2>
-          <button id="reloadBtn" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Neu laden</button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead>
-              <tr class="bg-gray-50 text-left">
-                <th class="px-3 py-2 font-semibold">Partei</th>
-                <th class="px-3 py-2 font-semibold">Abonnenten</th>
-                <th class="px-3 py-2 font-semibold">Aufrufe</th>
-                <th class="px-3 py-2 font-semibold">Videos gesamt</th>
-                <th class="px-3 py-2 font-semibold">Status</th>
-                <th class="px-3 py-2 font-semibold">Zeitpunkt</th>
-              </tr>
-            </thead>
-            <tbody id="statsBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="bg-white rounded-2xl shadow p-4 sm:p-6">
-        <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
-          <h2 class="text-xl font-semibold">Diagramm: Abonnenten, Aufrufe, Videos gesamt</h2>
-          <div class="relative">
-            <button id="partySelectBtn" class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 min-w-[180px] text-left">
-              Parteien auswählen
-            </button>
-            <div id="partySelectMenu" class="absolute right-0 mt-2 bg-white border rounded shadow p-2 hidden max-h-60 overflow-y-auto min-w-[220px] z-10">
-              <label class="flex items-center gap-2 px-2 py-1 border-b">
-                <input type="checkbox" id="selectAllParties" class="accent-indigo-600">
-                <span>Alle auswählen</span>
-              </label>
-              <div id="partyOptions" class="mt-2 space-y-1"></div>
+        <section class="bg-white rounded-2xl shadow p-4 sm:p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold">Übersicht</h2>
+                <button id="reloadBtn" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Neu laden
+                </button>
             </div>
-          </div>
-        </div>
-        <canvas id="subsChart" height="120"></canvas>
-      </section>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead>
+                    <tr class="bg-gray-50 text-left">
+                        <th class="px-3 py-2 font-semibold">Partei</th>
+                        <th class="px-3 py-2 font-semibold">Abonnenten</th>
+                        <th class="px-3 py-2 font-semibold">Aufrufe</th>
+                        <th class="px-3 py-2 font-semibold">Videos gesamt</th>
+                        <th class="px-3 py-2 font-semibold">Status</th>
+                        <th class="px-3 py-2 font-semibold">Zeitpunkt</th>
+                    </tr>
+                    </thead>
+                    <tbody id="statsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow p-4 sm:p-6">
+            <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
+                <h2 class="text-xl font-semibold">Diagramm: Abonnenten, Aufrufe, Videos gesamt</h2>
+                <div class="relative">
+                    <button id="partySelectBtn"
+                            class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 min-w-[180px] text-left">
+                        Parteien auswählen
+                    </button>
+                    <div id="partySelectMenu"
+                         class="absolute right-0 mt-2 bg-white border rounded shadow p-2 hidden max-h-60 overflow-y-auto min-w-[220px] z-10">
+                        <label class="flex items-center gap-2 px-2 py-1 border-b">
+                            <input type="checkbox" id="selectAllParties" class="accent-indigo-600">
+                            <span>Alle auswählen</span>
+                        </label>
+                        <div id="partyOptions" class="mt-2 space-y-1"></div>
+                    </div>
+                </div>
+            </div>
+            <canvas id="subsChart" height="120"></canvas>
+        </section>
     </div>
-  </div>
- 
-  <script>
+</div>
+
+<script>
     let chart;
     let allData = [];
     let selectedParties = new Set();
 
     async function fetchStats() {
-      const res = await fetch('/load_yt_current_data_of_parties');
-      if (!res.ok) throw new Error('Fehler beim Laden');
-      return await res.json();
+        const res = await fetch('/load_yt_current_data_of_parties');
+        if (!res.ok) throw new Error('Fehler beim Laden');
+        return await res.json();
     }
 
-    function fmt(n){
-      if (n === null || n === undefined) return '-';
-      return Number(n).toLocaleString('de-DE');
+    function fmt(n) {
+        if (n === null || n === undefined) return '-';
+        return Number(n).toLocaleString('de-DE');
     }
 
-    function getFilteredData(){
-      if (!selectedParties || selectedParties.size === 0) return allData.slice();
-      return allData.filter(d => selectedParties.has(d.party));
+    function getFilteredData() {
+        if (!selectedParties || selectedParties.size === 0) return allData.slice();
+        return allData.filter(d => selectedParties.has(d.party));
     }
 
-    function displayPartyName(name){
-      if (!name) return '-';
-      const n = String(name);
-      // Map 'gruene'/'Gruene' to 'Güne' per requirement
-      if (n.toLowerCase() === 'gruene') return 'Güne';
-      return n;
+    function displayPartyName(name) {
+        if (!name) return '-';
+        const n = String(name);
+        // Map 'gruene'/'Gruene' to 'Güne' per requirement
+        if (n.toLowerCase() === 'gruene') return 'Güne';
+        return n;
     }
 
-    function renderTable(data){
-      const tbody = document.getElementById('statsBody');
-      tbody.innerHTML = '';
-      data.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.className = 'border-b last:border-0';
-        const hasError = !!row.error;
-        tr.innerHTML = `
+    function renderTable(data) {
+        const tbody = document.getElementById('statsBody');
+        tbody.innerHTML = '';
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b last:border-0';
+            const hasError = !!row.error;
+            tr.innerHTML = `
           <td class="px-3 py-2 font-medium">${displayPartyName(row.party)}</td>
           <td class="px-3 py-2">${hasError ? '-' : fmt(row.subscribers)}</td>
           <td class="px-3 py-2">${hasError ? '-' : fmt(row.views)}</td>
@@ -122,262 +122,266 @@
           <td class="px-3 py-2">${hasError ? `<span class='text-red-600'>${row.error}</span>` : '<span class="text-green-700">OK</span>'}</td>
           <td class="px-3 py-2">${row.timestamp ? row.timestamp : '-'}</td>
         `;
-        tbody.appendChild(tr);
-      });
+            tbody.appendChild(tr);
+        });
     }
 
-    function renderChart(data){
-      const labels = data.map(d => displayPartyName(d.party));
-      const subs    = data.map(d => d.error ? 0 : (d.subscribers || 0));
-      const views   = data.map(d => d.error ? 0 : (d.views || 0));
-      const videos  = data.map(d => d.error ? 0 : (d.videos_total || 0));
-      const ctx = document.getElementById('subsChart').getContext('2d');
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Abonnenten',
-              data: subs,
-              backgroundColor: 'rgba(79, 70, 229, 0.6)',
-              borderColor: 'rgba(79, 70, 229, 1)',
-              borderWidth: 1,
-              yAxisID: 'ySubs'
+    function renderChart(data) {
+        const labels = data.map(d => displayPartyName(d.party));
+        const subs = data.map(d => d.error ? 0 : (d.subscribers || 0));
+        const views = data.map(d => d.error ? 0 : (d.views || 0));
+        const videos = data.map(d => d.error ? 0 : (d.videos_total || 0));
+        const ctx = document.getElementById('subsChart').getContext('2d');
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'Abonnenten',
+                        data: subs,
+                        backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'ySubs'
+                    },
+                    {
+                        label: 'Aufrufe',
+                        data: views,
+                        backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'yViews'
+                    },
+                    {
+                        label: 'Videos gesamt',
+                        data: videos,
+                        backgroundColor: 'rgba(245, 158, 11, 0.6)',
+                        borderColor: 'rgba(245, 158, 11, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'yVideos'
+                    }
+                ]
             },
-            {
-              label: 'Aufrufe',
-              data: views,
-              backgroundColor: 'rgba(16, 185, 129, 0.6)',
-              borderColor: 'rgba(16, 185, 129, 1)',
-              borderWidth: 1,
-              yAxisID: 'yViews'
-            },
-            {
-              label: 'Videos gesamt',
-              data: videos,
-              backgroundColor: 'rgba(245, 158, 11, 0.6)',
-              borderColor: 'rgba(245, 158, 11, 1)',
-              borderWidth: 1,
-              yAxisID: 'yVideos'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            ySubs: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              beginAtZero: true,
-              min: 0,
-              grid: { color: 'rgba(79, 70, 229, 0.15)' },
-              ticks: { color: '#4F46E5' },
-              title: { display: true, text: 'Abonnenten', color: '#4F46E5', font: { weight: 'bold' } }
-            },
-            yViews: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              beginAtZero: true,
-              min: 0,
-              grid: { drawOnChartArea: false },
-              ticks: { color: '#10B981' },
-              title: { display: true, text: 'Aufrufe', color: '#10B981', font: { weight: 'bold' } }
-            },
-            yVideos: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              beginAtZero: true,
-              min: 0,
-              grid: { drawOnChartArea: false },
-              ticks: { color: '#F59E0B' },
-              title: { display: true, text: 'Videos gesamt', color: '#F59E0B', font: { weight: 'bold' } }
-            }
-          },
-          plugins: {
-            legend: {
-              onClick: (e, legendItem, legend) => {
-                // Toggle dataset visibility using default behavior
-                const defaultHandler = Chart.defaults.plugins.legend.onClick;
-                if (defaultHandler) defaultHandler.call(this, e, legendItem, legend);
+            options: {
+                responsive: true,
+                scales: {
+                    ySubs: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        min: 0,
+                        grid: {color: 'rgba(79, 70, 229, 0.15)'},
+                        ticks: {color: '#4F46E5'},
+                        title: {display: true, text: 'Abonnenten', color: '#4F46E5', font: {weight: 'bold'}}
+                    },
+                    yViews: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        min: 0,
+                        grid: {drawOnChartArea: false},
+                        ticks: {color: '#10B981'},
+                        title: {display: true, text: 'Aufrufe', color: '#10B981', font: {weight: 'bold'}}
+                    },
+                    yVideos: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        min: 0,
+                        grid: {drawOnChartArea: false},
+                        ticks: {color: '#F59E0B'},
+                        title: {display: true, text: 'Videos gesamt', color: '#F59E0B', font: {weight: 'bold'}}
+                    }
+                },
+                plugins: {
+                    legend: {
+                        onClick: (e, legendItem, legend) => {
+                            // Toggle dataset visibility using default behavior
+                            const defaultHandler = Chart.defaults.plugins.legend.onClick;
+                            if (defaultHandler) defaultHandler.call(this, e, legendItem, legend);
 
-                const ci = legend.chart;
-                const dsIndex = legendItem.datasetIndex;
-                const axisId = ci.data.datasets[dsIndex].yAxisID;
+                            const ci = legend.chart;
+                            const dsIndex = legendItem.datasetIndex;
+                            const axisId = ci.data.datasets[dsIndex].yAxisID;
 
-                // Determine if any visible dataset is still mapped to this axis
-                const anyVisibleOnAxis = ci.data.datasets.some((ds, i) => {
-                  return ds.yAxisID === axisId && ci.isDatasetVisible(i);
-                });
+                            // Determine if any visible dataset is still mapped to this axis
+                            const anyVisibleOnAxis = ci.data.datasets.some((ds, i) => {
+                                return ds.yAxisID === axisId && ci.isDatasetVisible(i);
+                            });
 
-                // Show/hide the axis accordingly
-                if (ci.options.scales && ci.options.scales[axisId]) {
-                  ci.options.scales[axisId].display = anyVisibleOnAxis;
+                            // Show/hide the axis accordingly
+                            if (ci.options.scales && ci.options.scales[axisId]) {
+                                ci.options.scales[axisId].display = anyVisibleOnAxis;
+                            }
+
+                            ci.update();
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const v = ctx.raw || 0;
+                                return `${ctx.dataset.label}: ${Number(v).toLocaleString('de-DE')}`;
+                            }
+                        }
+                    }
                 }
-
-                ci.update();
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: function(ctx){
-                  const v = ctx.raw || 0;
-                  return `${ctx.dataset.label}: ${Number(v).toLocaleString('de-DE')}`;
-                }
-              }
             }
-          }
-        }
-      });
+        });
     }
 
-    function updatePartySelectButton(){
-      const btn = document.getElementById('partySelectBtn');
-      const count = selectedParties.size;
-      btn.textContent = count > 0 ? `Parteien (${count})` : 'Parteien auswählen';
+    function updatePartySelectButton() {
+        const btn = document.getElementById('partySelectBtn');
+        const count = selectedParties.size;
+        btn.textContent = count > 0 ? `Parteien (${count})` : 'Parteien auswählen';
     }
 
-    function populatePartySelect(parties){
-      const container = document.getElementById('partyOptions');
-      container.innerHTML = '';
-      parties.forEach(p => {
-        const id = 'party-' + p.replace(/\s+/g,'-');
-        const wrapper = document.createElement('label');
-        wrapper.className = 'flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer';
-        wrapper.innerHTML = `
+    function populatePartySelect(parties) {
+        const container = document.getElementById('partyOptions');
+        container.innerHTML = '';
+        parties.forEach(p => {
+            const id = 'party-' + p.replace(/\s+/g, '-');
+            const wrapper = document.createElement('label');
+            wrapper.className = 'flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer';
+            wrapper.innerHTML = `
           <input type="checkbox" class="party-check accent-indigo-600" id="${id}" value="${p}">
           <span>${displayPartyName(p)}</span>
         `;
-        container.appendChild(wrapper);
-      });
-
-      // default: select all
-      selectedParties = new Set(parties);
-      document.getElementById('selectAllParties').checked = true;
-      updatePartySelectButton();
-
-      // events
-      container.querySelectorAll('input.party-check').forEach(inp => {
-        inp.addEventListener('change', () => {
-          if (inp.checked) selectedParties.add(inp.value); else selectedParties.delete(inp.value);
-          const all = document.getElementById('selectAllParties');
-          const total = container.querySelectorAll('input.party-check').length;
-          const checked = container.querySelectorAll('input.party-check:checked').length;
-          all.checked = (checked === total);
-          updatePartySelectButton();
-          const filtered = getFilteredData();
-          renderTable(filtered);
-          renderChart(filtered);
+            container.appendChild(wrapper);
         });
-      });
 
-      document.getElementById('selectAllParties').addEventListener('change', (e) => {
-        const checks = container.querySelectorAll('input.party-check');
-        selectedParties = new Set();
-        checks.forEach(ch => { ch.checked = e.target.checked; if (e.target.checked) selectedParties.add(ch.value); });
+        // default: select all
+        selectedParties = new Set(parties);
+        document.getElementById('selectAllParties').checked = true;
         updatePartySelectButton();
-        const filtered = getFilteredData();
-        renderTable(filtered);
-        renderChart(filtered);
-      });
+
+        // events
+        container.querySelectorAll('input.party-check').forEach(inp => {
+            inp.addEventListener('change', () => {
+                if (inp.checked) selectedParties.add(inp.value); else selectedParties.delete(inp.value);
+                const all = document.getElementById('selectAllParties');
+                const total = container.querySelectorAll('input.party-check').length;
+                const checked = container.querySelectorAll('input.party-check:checked').length;
+                all.checked = (checked === total);
+                updatePartySelectButton();
+                const filtered = getFilteredData();
+                renderTable(filtered);
+                renderChart(filtered);
+            });
+        });
+
+        document.getElementById('selectAllParties').addEventListener('change', (e) => {
+            const checks = container.querySelectorAll('input.party-check');
+            selectedParties = new Set();
+            checks.forEach(ch => {
+                ch.checked = e.target.checked;
+                if (e.target.checked) selectedParties.add(ch.value);
+            });
+            updatePartySelectButton();
+            const filtered = getFilteredData();
+            renderTable(filtered);
+            renderChart(filtered);
+        });
     }
 
-    function toggleMenu(){
-      document.getElementById('partySelectMenu').classList.toggle('hidden');
+    function toggleMenu() {
+        document.getElementById('partySelectMenu').classList.toggle('hidden');
     }
 
-    function setLoading(isLoading, errorMsg){
-      const loading = document.getElementById('loadingSection');
-      const content = document.getElementById('content');
-      const reloadBtn = document.getElementById('reloadBtn');
-      const partyBtn = document.getElementById('partySelectBtn');
-      if (isLoading){
-        loading.classList.remove('hidden');
-        content.classList.add('hidden');
-        if (reloadBtn) reloadBtn.disabled = true;
-        if (partyBtn) partyBtn.disabled = true;
-        const p = loading.querySelector('p');
-        if (p) p.textContent = errorMsg || 'Lade aktuelle Daten von der YouTube API …';
-      } else {
-        loading.classList.add('hidden');
-        content.classList.remove('hidden');
-        if (reloadBtn) reloadBtn.disabled = false;
-        if (partyBtn) partyBtn.disabled = false;
-      }
+    function setLoading(isLoading, errorMsg) {
+        const loading = document.getElementById('loadingSection');
+        const content = document.getElementById('content');
+        const reloadBtn = document.getElementById('reloadBtn');
+        const partyBtn = document.getElementById('partySelectBtn');
+        if (isLoading) {
+            loading.classList.remove('hidden');
+            content.classList.add('hidden');
+            if (reloadBtn) reloadBtn.disabled = true;
+            if (partyBtn) partyBtn.disabled = true;
+            const p = loading.querySelector('p');
+            if (p) p.textContent = errorMsg || 'Lade aktuelle Daten von der YouTube API …';
+        } else {
+            loading.classList.add('hidden');
+            content.classList.remove('hidden');
+            if (reloadBtn) reloadBtn.disabled = false;
+            if (partyBtn) partyBtn.disabled = false;
+        }
     }
 
-    async function load(){
-      setLoading(true);
-      try{
-        const data = await fetchStats();
-        allData = data;
-        const parties = data.map(d => d.party).filter(Boolean);
-        populatePartySelect(parties);
-        const filtered = getFilteredData();
-        renderTable(filtered);
-        renderChart(filtered);
-        setLoading(false);
-      }catch(e){
-        console.error(e);
-        setLoading(true, 'Fehler beim Laden. Bitte erneut versuchen.');
-      }
+    async function load() {
+        setLoading(true);
+        try {
+            const data = await fetchStats();
+            allData = data;
+            const parties = data.map(d => d.party).filter(Boolean);
+            populatePartySelect(parties);
+            const filtered = getFilteredData();
+            renderTable(filtered);
+            renderChart(filtered);
+            setLoading(false);
+        } catch (e) {
+            console.error(e);
+            setLoading(true, 'Fehler beim Laden. Bitte erneut versuchen.');
+        }
     }
 
     // events
     document.getElementById('partySelectBtn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMenu();
+        e.stopPropagation();
+        toggleMenu();
     });
     document.addEventListener('click', (e) => {
-      const menu = document.getElementById('partySelectMenu');
-      const btn = document.getElementById('partySelectBtn');
-      if (!menu.contains(e.target) && !btn.contains(e.target)){
-        menu.classList.add('hidden');
-      }
+        const menu = document.getElementById('partySelectMenu');
+        const btn = document.getElementById('partySelectBtn');
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
     });
 
     document.getElementById('reloadBtn').addEventListener('click', async () => {
-      await load();
+        await load();
     });
 
     document.addEventListener('DOMContentLoaded', load);
-  </script>
+</script>
 
-  <!-- Dark Mode JavaScript -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      const htmlElement = document.documentElement;
-      const moonIcon = '<i class="fas fa-moon"></i>';
-      const sunIcon = '<i class="fas fa-sun"></i>';
+<!-- Dark Mode JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const htmlElement = document.documentElement;
+        const moonIcon = '<i class="fas fa-moon"></i>';
+        const sunIcon = '<i class="fas fa-sun"></i>';
 
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        htmlElement.classList.add('dark');
-        darkModeToggle.innerHTML = sunIcon;
-      } else {
-        htmlElement.classList.remove('dark');
-        darkModeToggle.innerHTML = moonIcon;
-      }
-
-      darkModeToggle.addEventListener('click', function() {
-        if (htmlElement.classList.contains('dark')) {
-          htmlElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-          darkModeToggle.innerHTML = moonIcon;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            htmlElement.classList.add('dark');
+            darkModeToggle.innerHTML = sunIcon;
         } else {
-          htmlElement.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-          darkModeToggle.innerHTML = sunIcon;
+            htmlElement.classList.remove('dark');
+            darkModeToggle.innerHTML = moonIcon;
         }
-      });
+
+        darkModeToggle.addEventListener('click', function () {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                darkModeToggle.innerHTML = moonIcon;
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                darkModeToggle.innerHTML = sunIcon;
+            }
+        });
     });
-  </script>
+</script>
+{% include 'partials/footer.html' %}
 </body>
 </html>
