@@ -51,19 +51,15 @@
       <canvas id="scatterCombined" height="160"></canvas>
     </div>
     <div class="chart-box">
-      <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (täglich, relativ)</h2>
-      <canvas id="lineDaily" height="280"></canvas>
-    </div>
-  </section>
-
-  <section class="grid gap-6 md:grid-cols-2 mb-8">
-    <div class="chart-box">
       <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (wöchentlich, absolut)</h2>
       <canvas id="lineWeekly" height="260"></canvas>
     </div>
+  </section>
+
+  <section class="mb-8">
     <div class="chart-box">
-      <h2 class="text-lg font-semibold mb-2 text-center">Wikipedia (täglich, absolut)</h2>
-      <canvas id="lineWikiDaily" height="260"></canvas>
+      <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (täglich, relativ)</h2>
+      <canvas id="lineDaily" height="280"></canvas>
     </div>
   </section>
 
@@ -111,9 +107,8 @@
     const scatterCtx = document.getElementById('scatterCombined').getContext('2d');
     const lineCtx = document.getElementById('lineDaily').getContext('2d');
     const weeklyCtx = document.getElementById('lineWeekly').getContext('2d');
-    const wikiDailyCtx = document.getElementById('lineWikiDaily').getContext('2d');
 
-    let scatterChart, lineChart, weeklyChart, wikiDailyChart;
+    let scatterChart, lineChart, weeklyChart;
     let combined = [];
     let daily = [];
     let wikiWeekly = [];
@@ -255,24 +250,11 @@
       });
     }
 
-    function renderWikiDaily(){
-      const range = getRangeDates();
-      const subset = range ? wikiDaily.filter(d => d._date >= range[0] && d._date <= range[1]) : wikiDaily;
-      const labels = subset.map(d=> d._dateStr);
-      const values = subset.map(d=> d._value);
-      if (wikiDailyChart) wikiDailyChart.destroy();
-      wikiDailyChart = new Chart(wikiDailyCtx, {
-        type: 'line',
-        data: { labels, datasets: [ { label: 'Wikipedia: Seitenaufrufe (täglich)', data: values, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.2, fill: true } ] },
-        options: { scales: { x: { ticks: { color: getAxis() }, grid: { color: getGrid() } }, y: { ticks: { color: getAxis() }, grid: { color: getGrid() } } } }
-      });
-    }
 
     function renderAll(){
       renderScatter();
       renderLine();
       renderWeekly();
-      renderWikiDaily();
     }
 
     function fmtDate(d){
@@ -308,7 +290,6 @@
           updateLabels(s,e);
           renderLine();
           renderWeekly();
-          renderWikiDaily();
         });
       }
 
@@ -334,14 +315,12 @@
             currentRange = [minIndex, maxIndex];
             renderLine();
             renderWeekly();
-            renderWikiDaily();
           } else {
             const [s,e] = yearRanges[val];
             currentRange = [s,e];
             if (slider?.noUiSlider){ slider.noUiSlider.set([s,e]); }
             renderLine();
             renderWeekly();
-            renderWikiDaily();
           }
         });
       }
