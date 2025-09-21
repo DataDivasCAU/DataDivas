@@ -9,10 +9,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center justify-between p-6">
-  <!-- Dark Mode Toggle Button -->
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-  </button>
+{% include 'partials/dark_mode_toggle.html' %}
 
   <!-- Header Section -->
   <header class="w-full max-w-5xl mb-10 text-center">

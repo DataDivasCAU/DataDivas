@@ -9,69 +9,60 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body class="bg-gray-50 p-6">
-  <!-- Dark Mode Toggle Button -->
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-  </button>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+{% include 'partials/dark_mode_toggle.html' %}
 
-  <div class="max-w-6xl mx-auto">
-    <header class="flex flex-col items-center mb-6 gap-4 text-center">
-      <div class="min-w-0">
-        <h1 class="text-2xl font-bold">Tradwife Trend Analysis</h1>
-        <div id="subtitle" class="text-sm text-gray-500 mt-1">Analyzing the Tradwife movement on social media</div>
-      </div>
+  {% set page_title = 'Tradwife Trend Analysis' %}
+  {% include 'partials/page_header.html' %}
 
-      <div class="flex items-center gap-3 flex-wrap justify-center">
-        <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
+      <label class="font-medium">Jahr:</label>
+      <select id="year-selector" class="border rounded p-2 bg-white">
+        <option value="all">Alle Jahre</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="detailed">Detailliert</option>
+      </select>
 
-        <label class="font-medium">Jahr:</label>
-        <select id="year-selector" class="border rounded p-2 bg-white">
-          <option value="all">Alle Jahre</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="detailed">Detailliert</option>
-        </select>
-
-        <label for="metricsDropdown" class="font-medium">Metrics:</label>
-        <div class="relative inline-block">
-          <button id="metricsDropdown" type="button" class="border rounded p-2 bg-white flex items-center justify-between min-w-[150px] metrics-dropdown-button">
-            <span>Alle Metrics</span>
-            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div id="metricsDropdownContent" class="absolute z-10 hidden bg-white border mt-1 metrics-dropdown-content max-h-60 overflow-y-auto min-w-[200px]">
-            <div class="p-2 border-b">
-              <label class="flex items-center cursor-pointer">
-                <input type="checkbox" id="selectAllMetrics" class="mr-2 custom-checkbox" checked>
-                <span>Alle auswählen</span>
+      <label for="metricsDropdown" class="font-medium">Metrics:</label>
+      <div class="relative inline-block">
+        <button id="metricsDropdown" type="button" class="border rounded p-2 bg-white flex items-center justify-between min-w-[150px] metrics-dropdown-button">
+          <span>Alle Metrics</span>
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="metricsDropdownContent" class="absolute z-10 hidden bg-white border mt-1 metrics-dropdown-content max-h-60 overflow-y-auto min-w-[200px]">
+          <div class="p-2 border-b">
+            <label class="flex items-center cursor-pointer">
+              <input type="checkbox" id="selectAllMetrics" class="mr-2 custom-checkbox" checked>
+              <span>Alle auswählen</span>
+            </label>
+          </div>
+          <div id="metricsCheckboxes" class="p-2">
+            <div class="metrics-checkbox-container">
+              <label class="flex items-center cursor-pointer w-full">
+                <input type="checkbox" value="videos" class="mr-2 metric-checkbox custom-checkbox" checked>
+                <span>Videos</span>
               </label>
             </div>
-            <div id="metricsCheckboxes" class="p-2">
-              <div class="metrics-checkbox-container">
-                <label class="flex items-center cursor-pointer w-full">
-                  <input type="checkbox" value="videos" class="mr-2 metric-checkbox custom-checkbox" checked>
-                  <span>Videos</span>
-                </label>
-              </div>
-              <div class="metrics-checkbox-container">
-                <label class="flex items-center cursor-pointer w-full">
-                  <input type="checkbox" value="views" class="mr-2 metric-checkbox custom-checkbox" checked>
-                  <span>Views</span>
-                </label>
-              </div>
-              <div class="metrics-checkbox-container">
-                <label class="flex items-center cursor-pointer w-full">
-                  <input type="checkbox" value="likes" class="mr-2 metric-checkbox custom-checkbox" checked>
-                  <span>Likes</span>
-                </label>
-              </div>
+            <div class="metrics-checkbox-container">
+              <label class="flex items-center cursor-pointer w-full">
+                <input type="checkbox" value="views" class="mr-2 metric-checkbox custom-checkbox" checked>
+                <span>Views</span>
+              </label>
+            </div>
+            <div class="metrics-checkbox-container">
+              <label class="flex items-center cursor-pointer w-full">
+                <input type="checkbox" value="likes" class="mr-2 metric-checkbox custom-checkbox" checked>
+                <span>Likes</span>
+              </label>
             </div>
           </div>
         </div>
       </div>
-    </header>
+    </div>
 
     <!-- Tabelle -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
@@ -885,7 +876,6 @@
     });
   </script>
 
-  {% set footer_max_w = 'max-w-6xl' %}
   {% include 'partials/footer.html' %}
 </body>
 </html>

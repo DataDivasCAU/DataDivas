@@ -27,19 +27,14 @@
     #wordcloud canvas { width: 100% !important; height: 100% !important; display: block; }
   </style>
 </head>
-<body class="bg-gray-50 p-6">
-  <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-    <i class="fas fa-moon"></i>
-  </button>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+{% include 'partials/dark_mode_toggle.html' %}
 
-  <p class="max-w-6xl mx-auto">
-    <header class="flex flex-col items-center mb-6 gap-2 text-center">
-      <h1 class="text-2xl font-bold">Sahra Wagenknecht – Kommentare Analyse</h1>
-        <p class="mt-3 max-w-3xl mx-auto text-gray-700">Häufigste Wörter in YouTube‑Kommentaren – Vorher/Nachher</p>
-      <div class="flex items-center gap-3 flex-wrap justify-center mt-2">
-        <a href="/" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Home</a>
-      </div>
-    </header>
+  {% set page_title = 'Sahra Wagenknecht – Kommentare Analyse' %}
+  {% include 'partials/page_header.html' %}
+
+  <p class="max-w-5xl mx-auto">
+    <p class="mt-3 max-w-3xl mx-auto text-gray-700 text-center">Häufigste Wörter in YouTube‑Kommentaren – Vorher/Nachher</p>
 
     <!-- Kombinierte Wordcloud (analog zu FridaysForFuture) -->
     <section class="card shadow rounded-2xl bg-white p-4 mb-6">
