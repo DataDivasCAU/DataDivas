@@ -15,6 +15,31 @@
 {% set page_title = 'Posts per Party' %}
 {% include 'partials/page_header.html' %}
 
+<!-- Introduction -->
+<section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
+    <h2 class="text-xl font-semibold">Einführung</h2>
+    <p class="text-gray-700">Diese Seite vergleicht die Social‑Media‑Posting‑Aktivität der Parteien (Anzahl der Posts) mit ihren Wahlergebnissen. Wir betrachten zwei Wahlperioden (2021 und 2025) und untersuchen sowohl die Verteilung innerhalb eines Jahres als auch Veränderungen zwischen den Jahren.</p>
+    <p class="text-gray-700">Über die Steuerelemente oben können Sie die betrachtete Wahlperiode wählen, einzelne Parteien gezielt ein‑ oder ausblenden und die Ansicht als PDF exportieren. Die Diagramme und die Tabelle aktualisieren sich entsprechend Ihrer Auswahl.</p>
+</section>
+
+<!-- Verwendete Analysemethoden -->
+<section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
+    <h2 class="text-xl font-semibold">Verwendete Analysemethoden</h2>
+    <ul class="list-disc pl-6 text-gray-700 space-y-2">
+        <li><span class="font-medium">Datenquellen:</span> Die Anzahl der Posts pro Partei und Jahr stammt aus <code>data.json</code> (Schlüssel: <code>electionPosts2021</code> und <code>electionPosts2025</code>). Die Wahlergebnisse (in Prozentpunkten) stammen aus <code>election.json</code> (<code>election2021</code>, <code>election2025</code> sowie <code>diffElection</code>).</li>
+        <li><span class="font-medium">Aggregation:</span> Für jedes Jahr summieren wir die Posts pro Partei. Wahlergebnisse werden als prozentuale Stimmenanteile pro Partei übernommen.</li>
+        <li><span class="font-medium">Visualisierung:</span> 
+            <ul class="list-disc pl-6 space-y-1">
+                <li>Kreis-/Balkendiagramme für die Verteilung der Posts bzw. Wahlergebnisse pro Jahr.</li>
+                <li>Kombiniertes Diagramm, das die Posts (skaliert auf 0–100) den Wahlergebnissen (%) gegenüberstellt, um Muster auf einen Blick zu erkennen.</li>
+                <li>Streudiagramm (nur bei „Beide Wahlen“): ΔPosts (2025–2021) gegen ΔWahlergebnis (pp), um Veränderungen zwischen den Jahren zu vergleichen.</li>
+            </ul>
+        </li>
+        <li><span class="font-medium">Interaktive Filter:</span> Auswahl einzelner Parteien; alle Tabellen und Diagramme reagieren dynamisch auf die Auswahl.</li>
+        <li><span class="font-medium">Hinweise zur Interpretation:</span> Die Anzahl an Posts misst Sichtbarkeit/Aktivität, ist jedoch kein direkter Indikator für Stimmenanteile. Externe Faktoren (Kampagnen, Medienereignisse, Themenagenda) können beide Größen beeinflussen.</li>
+    </ul>
+</section>
+
 <div class="max-w-5xl mx-auto">
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
         <label for="dataset" class="font-medium">Wahlperiode:</label>
@@ -1288,6 +1313,12 @@
         refresh();
     });
 </script>
+
+<!-- Fazit / Conclusion -->
+<section class="max-w-5xl mx-auto mt-6 bg-white rounded-2xl shadow p-6 space-y-3">
+    <h2 class="text-xl font-semibold">Fazit</h2>
+    <p class="text-gray-700">Die Auswertungen zeigen: Hohe Posting‑Aktivität einzelner Parteien geht nicht automatisch mit besseren Wahlergebnissen einher. Sichtbarkeit und Mobilisierung können zusammenhängen, werden jedoch von vielen weiteren Faktoren geprägt (z. B. Kampagnenphase, mediale Ereignisse, Themenkonjunktur). Der Vergleich zwischen 2021 und 2025 sowie das Streudiagramm der Veränderungen helfen, Muster zu erkennen – sie ersetzen jedoch keine tiefergehende inhaltliche Analyse.</p>
+</section>
 
 {% include 'partials/footer.html' %}
 
