@@ -73,7 +73,7 @@
 {% set page_title = 'Sahra Wagenknecht – Kommentare Analyse' %}
 {% include 'partials/page_header.html' %}
 
-<p class="max-w-5xl mx-auto">
+<div class="max-w-5xl mx-auto">
 <p class="mt-3 max-w-3xl mx-auto text-gray-700 text-center">Häufigste Wörter in YouTube‑Kommentaren – Vorher/Nachher</p>
 
 <!-- Kombinierte Wordcloud (analog zu FridaysForFuture) -->
@@ -208,7 +208,12 @@
                 WordCloud(wcCombinedEl, {
                     list: combinedList,
                     gridSize: 10,
-                    weightFactor: (count) => 6 + Math.sqrt(count) * 12,
+                    weightFactor: (count) => {
+                        const w = wcCombinedEl.clientWidth || 800;
+                        const base = Math.sqrt(count);
+                        // Scale with container size; keep large words reasonable
+                        return Math.max(20, base * (w / 120));
+                    },
                     color: pickWordColor,
                     backgroundColor: getBg(),
                     rotateRatio: 0,

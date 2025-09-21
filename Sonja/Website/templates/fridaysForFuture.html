@@ -377,7 +377,12 @@
                 // Slightly denser grid for large canvas
                 gridSize: 10,
                 // Make words significantly larger, scale by sqrt to avoid extreme dominance
-                weightFactor: (count) => 6 + Math.sqrt(count) * 12,
+                weightFactor: (count) => {
+                    const w = container.clientWidth || 800;
+                    const base = Math.sqrt(count);
+                    // Scale with container size; keep large words reasonable
+                    return Math.max(30, base * (w / 120));
+                },
                 // Use theme-aware color palette to ensure visibility in light mode
                 color: pickWordColor,
                 backgroundColor: getBg(),
@@ -409,7 +414,6 @@
         function renderHeatmap() {
             const tbl = document.getElementById('heatmapTable');
             const rows = Array.isArray(keywordCountsCombined) ? keywordCountsCombined : [];
-            console.log(rows)
             if (!rows.length) {
                 tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>';
                 return;
