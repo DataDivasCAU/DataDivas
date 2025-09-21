@@ -30,6 +30,16 @@
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-5xl mx-auto p-6">
+    <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-3">Introduction</h2>
+        <p class="mb-3">During election periods, political parties often experience shifts in public attention across multiple online platforms. These shifts can be measured through both user-driven activity, such as Wikipedia pageviews, and content production, such as uploads on YouTube. Examining the relationship between these forms of online engagement provides insight into how online political visibility is influenced by different factors.</p>
+        <h3 class="text-xl font-semibold mt-4 mb-2">What Data did we collect?</h3>
+        <p class="mb-3">We collected a sample size of ~1000 Videos uploaded on YouTube and the Number of WikiPedia Pageviews on the ‘Alternative für Deutschland’ Wikipedia Page in the Time period between November 2024 and February 2025, just before the most recent German federal Elections.</p>
+        <h3 class="text-xl font-semibold mt-4 mb-2">Bar-Chart:</h3>
+        <p class="mb-3">We grouped the YouTube video uploads by day and  collected daily Wikipedia Pagevies to then convert them into percentages relative to the total uploads/views in the observed period. Both relative values are mapped in this bar chart.</p>
+        <h3 class="text-xl font-semibold mt-4 mb-2">Scatter Plots:</h3>
+        <p>We mapped both relative values - YouTube Video uploads and Wikipedia Page Views- in this chart. This chart show the correlation between both relative values.</p>
+    </section>
     <div class="flex items-center gap-3 flex-wrap justify-center w-full mb-6">
         <div class="flex items-center gap-3 grow w-full md:w-auto">
             <span class="font-medium pe-2">Zeitraum:</span>
@@ -66,6 +76,14 @@
             <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (täglich, relativ)</h2>
             <canvas id="lineDaily" height="280"></canvas>
         </div>
+    </section>
+
+    <section class="mt-8 mb-4">
+        <h2 class="text-2xl font-semibold mb-3">Conclusion</h2>
+        <p class="mb-3">During the most recent German federal elections, the data shows that Wikipedia pageviews about the AfD spiked at certain points. These spikes moderately aligned with increases in YouTube video uploads about the party. This is also reflected by a Pearson correlation of 0.49. </p>
+        <p class="mb-3">Suggesting that while public interest in information and content production on YouTube are connected, the relationship is not strong enough to imply direct causation.</p>
+        <p class="mb-3">Instead, the results suggest that both are likely influenced by the same factors, such as growing public attention and media coverage during important campaign moments.</p>
+        <p>Overall, the results highlight that online attention toward the AfD comes from many different sides, with different platforms reflecting related but distinct patterns of engagement during electoral periods.</p>
     </section>
 
 </main>
