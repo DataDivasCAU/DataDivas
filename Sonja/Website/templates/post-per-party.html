@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamische Tabelle + Pie + Scatter</title>
+  <title>Posts per Party</title>
   <script src="https://cdn.tailwindcss.com" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -19,7 +19,7 @@
     <header class="flex flex-col items-center mb-6 gap-4 text-center">
       <div class="min-w-0">
         <h1 class="text-2xl font-bold">Posts per Party</h1>
-        <div id="subtitle" class="text-sm text-gray-500 mt-1">Ansicht: 2025</div>
+          <p class="mt-3 max-w-3xl mx-auto text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pretium, urna at luctus sodales, sem purus varius neque, ac fermentum nibh risus ut enim. Ut vitae ex venenatis neque sodales laoreet. In eget dapibus sem. Ut pellentesque euismod sollicitudin. Sed convallis elit sed dignissim varius. Praesent ullamcorper consequat libero, at eleifend ipsum posuere nec. Pellentesque id ornare mi, nec sagittis turpis.</p>
       </div>
 
       <div class="flex items-center gap-3 flex-wrap justify-center">
@@ -60,6 +60,8 @@
         </a>
       </div>
     </header>
+
+      <div id="subtitle" class="text-sm text-gray-500 mt-1 text-center mb-5">Ansicht: 2025</div>
 
     <!-- Tabelle -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
@@ -613,7 +615,7 @@
       if (!rows || rows.length === 0) return;
 
       // Filter rows based on selected parties
-      const filteredRows = selectedParties.length > 0 
+      const filteredRows = selectedParties.length > 0
         ? rows.filter(r => selectedParties.includes(r.party))
         : rows;
 
@@ -1037,8 +1039,8 @@
           scales: {
             x: {
               title: { display: true, text: "Diff Posts (2025–2021)" },
-              min: xmin, max: xmax, 
-              grid: { 
+              min: xmin, max: xmax,
+              grid: {
                 lineWidth: (context) => context.tick.value === 0 ? 2 : 1,
                 color: (context) => context.tick.value === 0 ? '#666' : '#e5e7eb'
               },
@@ -1051,8 +1053,8 @@
             },
             y: {
               title: { display: true, text: "Diff Election (pp)" },
-              min: ymin, max: ymax, 
-              grid: { 
+              min: ymin, max: ymax,
+              grid: {
                 lineWidth: (context) => context.tick.value === 0 ? 2 : 1,
                 color: (context) => context.tick.value === 0 ? '#666' : '#e5e7eb'
               },
