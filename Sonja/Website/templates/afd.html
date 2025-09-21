@@ -154,12 +154,20 @@
         }
 
         function renderScatter() {
-            const points = combined.map(d => ({
-                x: Number(d['Number of Videos'] || 0),
-                y: Number(d['Wikipedia Pageviews'] || 0)
+            // Use currently filtered daily subset and compute relative percentages per selected range
+            const subset = getFilteredDaily();
+            const vids = subset.map(d => Number(d['Number of Videos'] || 0));
+            const wikis = subset.map(d => Number(d['Wikipedia Pageviews'] || 0));
+            const sumV = vids.reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
+            const sumW = wikis.reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
+
+            const safeDiv = (num, den) => den > 0 ? (num / den) * 100 : 0;
+            const points = subset.map((_, i) => ({
+                x: safeDiv(vids[i], sumV),
+                y: safeDiv(wikis[i], sumW)
             })).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
 
-            // Compute linear regression (least squares)
+            // Compute linear regression (least squares) on relative points
             let trendData = [];
             if (points.length >= 2) {
                 const n = points.length;
@@ -208,12 +216,12 @@
                 options: {
                     scales: {
                         x: {
-                            title: {display: true, text: 'Anzahl Videos (relativ)'},
+                            title: {display: true, text: 'Anzahl Videos (relativ, %)'},
                             ticks: {color: getAxis()},
                             grid: {color: getGrid()}
                         },
                         y: {
-                            title: {display: true, text: 'Wikipedia‑Seitenaufrufe (relativ)'},
+                            title: {display: true, text: 'Wikipedia‑Seitenaufrufe (relativ, %)'},
                             ticks: {color: getAxis()},
                             grid: {color: getGrid()}
                         }
@@ -382,6 +390,7 @@
                     updateLabels(s, e);
                     renderLine();
                     renderWeekly();
+                    renderScatter();
                 });
             }
 
@@ -409,6 +418,7 @@
                         currentRange = [minIndex, maxIndex];
                         renderLine();
                         renderWeekly();
+                        renderScatter();
                     } else {
                         const [s, e] = yearRanges[val];
                         currentRange = [s, e];
@@ -417,6 +427,7 @@
                         }
                         renderLine();
                         renderWeekly();
+                        renderScatter();
                     }
                 });
             }
@@ -431,6 +442,7 @@
                     }
                     renderLine();
                     renderWeekly();
+                    renderScatter();
                 });
             }
         }
@@ -464,16 +476,6 @@
                 };
             }).filter(r => r._dateStr);
 
-            // Build combined weekly points by aligning dates
-            const ytWkMap = new Map(ytWeekly.map(d => [d._dateStr, d['Number of Videos']]));
-            const wkWkMap = new Map(wikiWeekly.map(d => [d._dateStr, d._value]));
-            // Use union of weeks and fill missing values with 0 so we don't drop points
-            const wkAllKeys = [...new Set([...ytWkMap.keys(), ...wkWkMap.keys()])].sort();
-            combined = wkAllKeys.map(k => ({
-                'Number of Videos': ytWkMap.get(k) ?? 0,
-                'Wikipedia Pageviews': wkWkMap.get(k) ?? 0
-            }));
-
             // Parse wiki daily
             wikiDaily = (Array.isArray(wikiDailyJson) ? wikiDailyJson : []).map(r => {
                 const dateStr = (r[""] || r.date || '').toString();
@@ -495,6 +497,16 @@
                     _value: Number(r['Number of Videos'] || 0)
                 };
             }).filter(x => x._dateStr);
+
+            // Build combined weekly points by aligning dates
+            const ytWkMap = new Map(ytDaily.map(d => [d._dateStr, d['Number of Videos']]));
+            const wkWkMap = new Map(wikiDaily.map(d => [d._dateStr, d._value]));
+            // Use union of weeks and fill missing values with 0 so we don't drop points
+            const wkAllKeys = [...new Set([...ytWkMap.keys(), ...wkWkMap.keys()])].sort();
+            combined = wkAllKeys.map(k => ({
+                'Number of Videos': ytWkMap.get(k) ?? 0,
+                'Wikipedia Pageviews': wkWkMap.get(k) ?? 0
+            }));
 
             // Build daily combined array expected by charts
             const ytDailyMap = new Map(ytDaily.map(d => [d._dateStr, d._value]));
