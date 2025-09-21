@@ -6,6 +6,7 @@
     <title>Fridays For Future – YouTube Analyse</title>
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -84,7 +85,7 @@
         <canvas id="barTopViews" height="120"></canvas>
     </section>
 
-    <section class="grid gap-6 md:grid-cols-2 mb-8">
+    <section class="grid gap-6 mb-8">
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Likes vs. Views (Top‑N)</h2>
             <canvas id="scatterLikesViews" height="140"></canvas>
@@ -184,6 +185,7 @@
         let barChart, scatterChart, lineChart;
         let allItems = [];
         let videosPerDay = [];
+        let strikeDates = new Set();
         let keywordRows = [];
         let keywordCountsCombined = [];
         let resizeTimer = null;
@@ -273,25 +275,52 @@
             // Build time series from VideosPerDay.combined_numbers in the JSON
             const parsed = (Array.isArray(videosPerDay) ? videosPerDay : [])
                 .map(d => ({date: String(d.year_month_day || ''), count: Number(d.video_count || 0)}))
-                .filter(x => x.date && Number.isFinite(x.count))
-                .sort((a, b) => a.date.localeCompare(b.date));
-            const labels = parsed.map(x => x.date);
-            const data = parsed.map(x => x.count);
+                .filter(x => x.date && Number.isFinite(x.count));
+
+            // Map for quick lookup of counts by date
+            const countByDate = new Map(parsed.map(o => [o.date, o.count]));
+
+            // Merge strike dates into the label set so lines/annotations can be placed even if no uploads exist that day
+            const mergedLabels = Array.from(new Set([
+                ...parsed.map(x => x.date),
+                ...Array.from(strikeDates).map(String)
+            ])).sort();
+
+            const data = mergedLabels.map(d => countByDate.has(d) ? countByDate.get(d) : null);
+
+            // Build dotted vertical line annotations for every strike date
+            const annotations = {};
+            Array.from(strikeDates).forEach((d, i) => {
+                const key = `strike_${i}`;
+                annotations[key] = {
+                    type: 'line',
+                    xMin: String(d),
+                    xMax: String(d),
+                    borderColor: '#ef4444',
+                    borderDash: [6, 6],
+                    borderWidth: 1.5
+                };
+            });
+
             if (lineChart) lineChart.destroy();
             lineChart = new Chart(lineCtx, {
                 type: 'line',
                 data: {
-                    labels,
+                    labels: mergedLabels,
                     datasets: [{
                         label: 'Uploads pro Tag',
                         data,
                         borderColor: '#3b82f6',
                         backgroundColor: 'rgba(59,130,246,0.2)',
                         fill: true,
-                        tension: 0.2
+                        tension: 0.2,
+                        spanGaps: true
                     }]
                 },
                 options: {
+                    plugins: {
+                        annotation: { annotations }
+                    },
                     scales: {
                         x: {ticks: {color: getAxis()}},
                         y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
@@ -538,17 +567,24 @@
             }, 200);
         });
 
-        fetch('/fridaysForFuture.json').then(r => r.json()).then(json => {
+        Promise.all([
+            fetch('/fridaysForFuture.json').then(r => r.json()),
+            fetch('/fff_strikes.json').then(r => r.json()).catch(() => [])
+        ]).then(([json, strikes]) => {
             allItems = parseData(json);
-            // New: use VideosPerDay.combined_numbers for the uploads-over-time chart
+            // Use VideosPerDay.combined_numbers for the uploads-over-time chart
             videosPerDay = json?.folders?.VideosPerDay?.combined_numbers || [];
+            // Build a Set of strike date strings (YYYY-MM-DD)
+            if (Array.isArray(strikes)) {
+                strikeDates = new Set(strikes.map(String));
+            }
             const kw = json?.folders?.KeywordCounts || {};
             keywordRows = kw?.keywords || [];
             keywordCountsCombined = kw?.keyword_counts_combined || [];
             renderAll(Number(topNEl.value));
             renderHeatmap();
         }).catch(err => {
-            console.error('Fehler beim Laden der Daten', err);
+            console.error('Fehler beim Laden der Daten/Strikes', err);
         });
     });
 </script>

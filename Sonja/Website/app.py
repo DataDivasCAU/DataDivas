@@ -20,6 +20,7 @@ ELECTION_PATH   = "data/postPerParty/election.json"
 DATA_CSV_PATH   = BASE / "data" / "postPerParty" / "data.csv"
 ELECTION_CSV_PATH = BASE / "data" / "postPerParty" / "election.csv"
 FRIDAYS_JSON_PATH = BASE / "data" / "fridaysForFuture" / "fridaysForFuture.json"
+FFF_STRIKES_CSV_PATH = BASE / "data" / "fridaysForFuture" / "fff_germany_strikes.csv"
 AFD_COMBINED_JSON_PATH = BASE / "data" / "afd" / "AfD_combined_relative.json"
 AFD_DAILY_JSON_PATH = BASE / "data" / "afd" / "AfD_combined_daily_relative.json"
 
@@ -68,6 +69,23 @@ def fridaysForFuture():
 @app.route("/fridaysForFuture.json")
 def fridaysForFuture_json():
     return jsonify(load_json(str(FRIDAYS_JSON_PATH)))
+
+@app.route("/fff_strikes.json")
+def fff_strikes_json():
+    """Liest die CSV mit Streik-Daten und gibt eine Liste von Datum-Strings (YYYY-MM-DD) zurück."""
+    try:
+        if not FFF_STRIKES_CSV_PATH.exists():
+            abort(404, description=f"CSV nicht gefunden: {FFF_STRIKES_CSV_PATH}")
+        lines = FFF_STRIKES_CSV_PATH.read_text(encoding="utf-8").splitlines()
+        # Skip header and empties, trim spaces
+        dates = [ln.strip() for ln in lines[1:] if ln and ln.strip()]
+        # Basic validation: keep only yyyy-mm-dd pattern
+        import re
+        pat = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+        dates = [d for d in dates if pat.match(d)]
+        return jsonify(dates)
+    except Exception as e:
+        abort(500, description=f"Fehler beim Lesen der Streik-CSV: {type(e).__name__}: {e}")
 
 @app.route("/afd_combined.json")
 def afd_combined_json():
