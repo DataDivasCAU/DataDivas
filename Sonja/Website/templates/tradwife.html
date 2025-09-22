@@ -35,19 +35,19 @@
 
 <div class="max-w-5xl mx-auto">
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
-        <label class="font-medium">Jahr:</label>
+        <label class="font-medium">Year:</label>
         <select id="year-selector" class="border rounded p-2 bg-white">
-            <option value="all">Alle Jahre</option>
+            <option value="all">Every year</option>
             <option value="2024">2024</option>
             <option value="2025">2025</option>
-            <option value="detailed">Detailliert</option>
+            <option value="detailed">Detailed</option>
         </select>
 
         <label for="metricsDropdown" class="font-medium">Metrics:</label>
         <div class="relative inline-block">
             <button id="metricsDropdown" type="button"
                     class="border rounded p-2 bg-white flex items-center justify-between min-w-[150px] metrics-dropdown-button">
-                <span>Alle Metrics</span>
+                <span>All Metrics</span>
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -58,7 +58,7 @@
                 <div class="p-2 border-b">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" id="selectAllMetrics" class="mr-2 custom-checkbox" checked>
-                        <span>Alle auswählen</span>
+                        <span>Select all</span>
                     </label>
                 </div>
                 <div id="metricsCheckboxes" class="p-2">
@@ -629,7 +629,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Tradwife Trend Entwicklung',
+                        text: 'Tradwife Trend Development',
                         font: {
                             size: 18
                         }
@@ -780,7 +780,7 @@
         const subtitle = document.getElementById("subtitle");
 
         if (currentView === "all") {
-            subtitle.textContent = "Alle Jahre - Tradwife Content Analysis";
+            subtitle.textContent = "Every year - Tradwife Content Analysis";
         } else if (currentView === "detailed") {
             subtitle.textContent = "Detailed Tradwife Content Analysis";
         } else {
