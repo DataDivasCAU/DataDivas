@@ -447,13 +447,17 @@
                 tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>';
                 return;
             }
-            let periods = Object.keys(rows[0]).filter(k => k && k !== '');
-            // Swap the middle and the right column to make chronological sense
-            if (periods.length === 3) {
-                const tmp = periods[1];
-                periods[1] = periods[2];
-                periods[2] = tmp;
-            }
+            let periods = Object.keys(rows[0])
+            .filter(k => k && k !== '')
+            .sort((a, b) => {
+            const parseStart = (s) => {
+             const start = s.split('–')[0].trim();   // z.B. "01.01.2019"
+             const [d, m, y] = start.split('.');
+             return new Date(`${y}-${m}-${d}`);
+            };
+            return parseStart(a) - parseStart(b);
+            });
+
             // Compute totals to select top keywords similar to Seaborn view
             const enriched = rows.map(r => ({
                 key: String(r[''] || r.keyword || ''),
