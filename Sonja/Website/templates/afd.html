@@ -198,11 +198,11 @@
 
             if (scatterChart) scatterChart.destroy();
             const datasets = [
-                {label: 'Punkte', data: points, backgroundColor: '#10b981', pointRadius: 4}
+                {label: 'Points', data: points, backgroundColor: '#10b981', pointRadius: 4}
             ];
             if (trendData.length === 2) {
                 datasets.push({
-                    label: 'Trendlinie',
+                    label: 'Trendline',
                     type: 'line',
                     data: trendData,
                     borderColor: '#0ea5e9',
@@ -218,12 +218,12 @@
                 options: {
                     scales: {
                         x: {
-                            title: {display: true, text: 'Anzahl Videos (relativ, %)'},
+                            title: {display: true, text: 'Video count (relative, %)'},
                             ticks: {color: getAxis()},
                             grid: {color: getGrid()}
                         },
                         y: {
-                            title: {display: true, text: 'Wikipedia‑Seitenaufrufe (relativ, %)'},
+                            title: {display: true, text: 'Wikipedia-Pageviews (relative, %)'},
                             ticks: {color: getAxis()},
                             grid: {color: getGrid()}
                         }
@@ -319,7 +319,7 @@
                     labels,
                     datasets: [
                         {
-                            label: 'YouTube: Videos (wöchentlich)',
+                            label: 'YouTube: Videos (weekly)',
                             data: ytSeries,
                             borderColor: '#6366f1',
                             backgroundColor: 'rgba(99,102,241,0.2)',
@@ -327,7 +327,7 @@
                             fill: true
                         },
                         {
-                            label: 'Wikipedia: Seitenaufrufe (wöchentlich)',
+                            label: 'Wikipedia: Pageviews (weekly)',
                             data: wkSeries,
                             borderColor: '#22c55e',
                             backgroundColor: 'rgba(34,197,94,0.2)',
