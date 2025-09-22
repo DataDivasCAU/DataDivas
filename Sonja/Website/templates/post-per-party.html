@@ -18,8 +18,10 @@
 <!-- Introduction -->
 <section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
     <h2 class="text-xl font-semibold">Introduction</h2>
-    <p class="text-gray-700">This page compares parties’ social media posting activity (number of posts) with their election results. We look at two election periods (2021 and 2025) and examine both the distribution within a year and the changes between years.</p>
-    <p class="text-gray-700">Using the controls above, you can choose the election period and include or exclude specific parties. The charts and the table update based on your selection.</p>
+    <p class="text-gray-700">During election campaigns, political parties increasingly use social media to spread their messages and reach voters. An important indicator of this activity is the number of posts published within a given period. In this analysis, we compare the social media activity of different parties on YouTube with their election results.</p>
+    <p class="text-gray-700">This raises the question of to what extent social media – in this case YouTube – influences election outcomes, or whether other factors such as content, issues, and public sentiment play a greater role.</p>
+    <h2 class="text-xl font-semibold mt-4">Methodology</h2>
+    <p class="text-gray-700">We collected the number of YouTube posts published by parties during the election years 2021 and 2025 and compared these figures to the official election results. In addition, changes between the two years were calculated and visualized in tables and charts. This allows us to identify patterns and examine potential relationships between posting activity and electoral success.</p>
 </section>
 <div class="max-w-5xl mx-auto mt-6">
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
@@ -95,9 +97,6 @@
                 <div id="scatterTitle" class="font-semibold hidden">
                     ΔPosts 2025–2021 vs. ΔElection (pp)
                 </div>
-                <button id="saveScatterBtn" class="text-sm px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 hidden" title="Save scatter as image">
-                    Save image
-                </button>
             </div>
             <canvas id="scatterChart"></canvas>
         </div>
@@ -1300,35 +1299,6 @@
         refresh();
     });
 
-    // Save scatter image handler
-    const saveBtnEl = document.getElementById("saveScatterBtn");
-    if (saveBtnEl) {
-        saveBtnEl.addEventListener("click", saveScatterImage);
-    }
-
-    async function saveScatterImage() {
-        try {
-            const canvasEl = document.getElementById("scatterChart");
-            if (!canvasEl || !scatterChart) {
-                alert("Scatter plot is not available. Switch to 'Both elections' view first.");
-                return;
-            }
-            const dataUrl = canvasEl.toDataURL("image/png");
-            const resp = await fetch("/post-per-party/save-scatter", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({imageDataUrl: dataUrl})
-            });
-            const json = await resp.json();
-            if (!resp.ok || json.status !== "ok") {
-                throw new Error(json && json.message ? json.message : `HTTP ${resp.status}`);
-            }
-            alert("Scatter image saved to: " + json.saved);
-        } catch (err) {
-            console.error(err);
-            alert("Failed to save image: " + err.message);
-        }
-    }
 </script>
 
 <!-- Patterns in the scatterplot -->

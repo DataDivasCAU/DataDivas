@@ -6,6 +6,12 @@ html.dark body {
   color: #e2e8f0;
 }
 
+/* Ensure all "fields" (cards/sections like .chart-box) use the same dark background */
+html.dark .chart-box {
+  background-color: #1e293b !important; /* slate-800 to match other cards */
+  color: #e2e8f0;
+}
+
 /* Common dark replacements for Tailwind utility classes used across pages */
 html.dark .bg-white,
 html.dark .bg-white\/70 {
@@ -40,6 +46,32 @@ html.dark .border-b { border-color: #334155; }
 html.dark .shadow,
 html.dark .shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure form fields have consistent colors in dialogs and dark mode */
+/* Scope: any modal/dialog container (id ending with 'Modal') and general dark mode */
+[id$="Modal"] input,
+[id$="Modal"] select,
+[id$="Modal"] textarea {
+  background-color: #ffffff;
+  color: #111827; /* gray-900 */
+  border: 1px solid #d1d5db; /* gray-300 */
+}
+html.dark [id$="Modal"] input,
+html.dark [id$="Modal"] select,
+html.dark [id$="Modal"] textarea {
+  background-color: #1f2937; /* gray-800 */
+  color: #e5e7eb; /* gray-200 */
+  border-color: #374151; /* gray-700 */
+}
+
+/* Also normalize generic form fields in dark containers */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #1f2937; /* gray-800 */
+  color: #e5e7eb;
+  border-color: #374151;
 }
 
 /* Dark mode toggle button (used on all pages) */
@@ -92,6 +124,9 @@ html.dark .dark-mode-toggle { background-color: #6366f1; }
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+/* Ensure consistent checkbox color in dark mode (inside dialogs and elsewhere) */
+html.dark .custom-checkbox { background-color: #334155; border-color: #475569; }
+html.dark .custom-checkbox:checked { background-color: #6366f1; border-color: #6366f1; }
 
 .party-dropdown-button { transition: all 0.2s; }
 .party-dropdown-button:hover { background-color: #f3f4f6; }
@@ -101,3 +136,43 @@ html.dark .dark-mode-toggle { background-color: #6366f1; }
   max-height: 300px;
 }
 .party-checkbox-container:hover { background-color: #f3f4f6; }
+
+/* Form field focus and placeholder consistency */
+/* Light mode focus */
+[id$="Modal"] input:focus,
+[id$="Modal"] select:focus,
+[id$="Modal"] textarea:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #4f46e5; /* indigo-600 */
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Dark mode focus */
+html.dark [id$="Modal"] input:focus,
+html.dark [id$="Modal"] select:focus,
+html.dark [id$="Modal"] textarea:focus,
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus {
+  outline: none;
+  border-color: #818cf8; /* indigo-400 */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
+}
+
+/* Placeholder colors */
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+html.dark select::placeholder { color: #94a3b8; }
+
+/* Disabled state alignment */
+html.dark input:disabled,
+html.dark select:disabled,
+html.dark textarea:disabled {
+  background-color: #1f2937;
+  color: #64748b;
+  border-color: #374151;
+  opacity: 0.7;
+}
