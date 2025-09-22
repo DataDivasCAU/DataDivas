@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Fridays For Future – YouTube Analyse</title>
+    <title>Fridays For Future – YouTube Analysis</title>
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3" defer></script>
@@ -48,14 +48,14 @@
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
 {% include 'partials/dark_mode_toggle.html' %}
 
-{% set page_title = 'Fridays For Future – YouTube Analyse' %}
+{% set page_title = 'Fridays For Future – YouTube Analysis' %}
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-5xl mx-auto p-6">
 
     <!-- Context dialog: inserted per issue description -->
     <section class="chart-box mb-8" id="fff-dialog">
-        <h2 class="text-xl font-bold mb-3">Fridays for Future – Kontext</h2>
+        <h2 class="text-xl font-bold mb-3">Fridays for Future – Context</h2>
         <div class="prose max-w-none text-sm leading-relaxed">
             <h3 class="font-semibold mb-1">What is Fridays for Future?</h3>
             <p>Fridays for Future is a global political movement focused on climate-related issues. Also known as the
@@ -80,7 +80,7 @@
     </div>
 
     <section class="chart-box mb-8">
-        <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos nach Views</h2>
+        <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos by Views</h2>
         <canvas id="barTopViews" height="120"></canvas>
     </section>
 
@@ -90,21 +90,21 @@
             <canvas id="scatterLikesViews" height="140"></canvas>
         </div>
         <div class="chart-box">
-            <h2 class="text-lg font-semibold mb-2 text-center">Uploads über die Zeit</h2>
+            <h2 class="text-lg font-semibold mb-2 text-center">Uploads over Time</h2>
             <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">We used a graph to showcase the amount of videos uploaded in 2019 and 2020. It also includes the protest days in Germany, which explain many of the spikes in video activity.</p>
             <canvas id="lineUploadsOverTime" height="140"></canvas>
         </div>
     </section>
 
     <section class="chart-box mb-8">
-        <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
+        <h2 class="text-xl font-bold mb-3 text-center">Wordcloud by keyword occurrence</h2>
         <p class="text-sm dark:text-gray-200 text-center max-w-3xl mx-auto mb-2">We generated a WordCloud using keybert
             based on keywords extracted from the video titles, descriptions and comments.</p>
         <div id="wordcloud" style="height: 820px;"></div>
     </section>
 
     <section class="chart-box mb-8">
-        <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords je Zeitraum</h2>
+        <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords per time period</h2>
         <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">We tracked how often these keywords appeared in the 15 most-viewed videos during three different periods:<br>01.01.2019–01.06.2019: When the movement first gained attention<br>01.07.2019–01.12.2019: During its peak momentum<br>01.01.2020–01.12.2020: After the initial hype subsided</p>
         <div id="heatmap" class="overflow-x-auto">
             <table id="heatmapTable" class="min-w-full table"></table>
@@ -112,7 +112,7 @@
     </section>
 
     <section class="chart-box mb-8 overflow-x-auto">
-        <h2 class="text-xl font-bold mb-3 text-center">Tabelle (Top‑N nach Views)</h2>
+        <h2 class="text-xl font-bold mb-3 text-center">Table (Top‑N nach Views)</h2>
         <table id="topTable" class="min-w-full table">
             <thead id="topTableHead"
                    class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold">
@@ -136,7 +136,7 @@
         </table>
     </section>
     <section class="chart-box mb-8">
-        <h2 class="text-lg font-semibold mb-2">Fazit</h2>
+        <h2 class="text-lg font-semibold mb-2">Conclusion</h2>
         <p class="text-sm leading-relaxed">The results highlight YouTube’s role in supporting the growth of Fridays for Future. Uploads tend to increase around protest days, often leading to higher engagement with the movement. Strategic use of keywords in video titles further amplifies visibility, as shown by the fact that the most-viewed videos across different periods consistently feature overlapping keyword usage.</p>
     </section>
 </main>
