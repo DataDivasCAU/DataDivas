@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sahra Wagenknecht – Kommentare Analyse</title>
+    <title>Sahra Wagenknecht – Comment Analysis</title>
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -70,7 +70,7 @@
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
 {% include 'partials/dark_mode_toggle.html' %}
 
-{% set page_title = 'Sahra Wagenknecht – Kommentare Analyse' %}
+{% set page_title = 'Sahra Wagenknecht – Comment Analysis' %}
 {% include 'partials/page_header.html' %}
 
 <div class="max-w-5xl mx-auto">
@@ -86,12 +86,12 @@ In total we collected ~2000 comments from each period from which we selected the
         <p class="mb-3">We generated a WordCloud using keybert based on keywords extracted from the comments.</p>
     </section>
 
-<p class="mt-3 max-w-3xl mx-auto text-gray-700 text-center">Häufigste Wörter in YouTube‑Kommentaren – Vorher/Nachher</p>
+<p class="mt-3 max-w-3xl mx-auto text-gray-700 text-center">Most common words in YouTube comments – Before/After</p>
 
 <!-- Kombinierte Wordcloud (analog zu FridaysForFuture) -->
 <section class="card shadow rounded-2xl bg-white p-4 mb-6">
-    <h2 class="text-xl font-bold mb-3 text-center">Wordcloud nach Keyword‑Vorkommen</h2>
-    <p class="mt-3 max-w-3xl mx-auto text-gray-700 mb-2 text-center">Kombiniert aus Vorher/Nachher‑Kommentaren zu Sahra
+    <h2 class="text-xl font-bold mb-3 text-center">Wordcloud by keyword occurrence</h2>
+    <p class="mt-3 max-w-3xl mx-auto text-gray-700 mb-2 text-center">Combined from before/after comments on Sahra
         Wagenknecht.</p>
     <div id="wordcloud" style="height: 820px;"></div>
 </section>
@@ -100,13 +100,13 @@ In total we collected ~2000 comments from each period from which we selected the
 <!-- Bar Charts -->
 <section class="grid gap-6 lg:grid-cols-2 mt-6">
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
-        <div class="mb-2 font-semibold">Top Wörter – Vorher</div>
+        <div class="mb-2 font-semibold">Top words – Before</div>
         <div class="chart-container">
             <canvas id="chartBefore"></canvas>
         </div>
     </div>
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
-        <div class="mb-2 font-semibold">Top Wörter – Nachher</div>
+        <div class="mb-2 font-semibold">Top words – After</div>
         <div class="chart-container">
             <canvas id="chartAfter"></canvas>
         </div>
@@ -117,7 +117,7 @@ In total we collected ~2000 comments from each period from which we selected the
 <!-- Combined Bar Chart with Words on X-Axis -->
 <section class="mt-8">
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
-        <div class="mb-2 font-semibold">Vergleich nach Wörtern (X‑Achse: Wörter)</div>
+        <div class="mb-2 font-semibold">Comparison by words (X-axis: words)</div>
         <div class="chart-container">
             <canvas id="wordAxisCompare"></canvas>
         </div>
@@ -129,11 +129,11 @@ In total we collected ~2000 comments from each period from which we selected the
     <table class="min-w-full border-collapse" id="compareTable">
         <thead>
         <tr class="bg-gray-100 text-left">
-            <th class="p-3">Rang</th>
-            <th class="p-3">Wort (Vorher)</th>
-            <th class="p-3">Anzahl (Vorher)</th>
-            <th class="p-3">Wort (Nachher)</th>
-            <th class="p-3">Anzahl (Nachher)</th>
+            <th class="p-3">Rank</th>
+            <th class="p-3">Word (Before)</th>
+            <th class="p-3">Count (Before)</th>
+            <th class="p-3">Word (After)</th>
+            <th class="p-3">Count (After)</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -266,7 +266,7 @@ In total we collected ~2000 comments from each period from which we selected the
                 type: 'bar',
                 data: {
                     labels: labelsBefore,
-                    datasets: [{label: 'Häufigkeit', data: valuesBefore, backgroundColor: '#60A5FA'}]
+                    datasets: [{label: 'Amount', data: valuesBefore, backgroundColor: '#60A5FA'}]
                 },
                 options: commonOpts
             });
@@ -275,7 +275,7 @@ In total we collected ~2000 comments from each period from which we selected the
                 type: 'bar',
                 data: {
                     labels: labelsAfter,
-                    datasets: [{label: 'Häufigkeit', data: valuesAfter, backgroundColor: '#34D399'}]
+                    datasets: [{label: 'Amount', data: valuesAfter, backgroundColor: '#34D399'}]
                 },
                 options: commonOpts
             });
@@ -295,8 +295,8 @@ In total we collected ~2000 comments from each period from which we selected the
                 data: {
                     labels: combinedWords,
                     datasets: [
-                        {label: 'Vorher', data: beforeByWord, backgroundColor: 'rgba(59,130,246,0.7)'},
-                        {label: 'Nachher', data: afterByWord, backgroundColor: 'rgba(16,185,129,0.7)'}
+                        {label: 'Before', data: beforeByWord, backgroundColor: 'rgba(59,130,246,0.7)'},
+                        {label: 'After', data: afterByWord, backgroundColor: 'rgba(16,185,129,0.7)'}
                     ]
                 },
                 options: {
@@ -306,9 +306,9 @@ In total we collected ~2000 comments from each period from which we selected the
                     scales: {
                         x: {
                             ticks: {autoSkip: false, maxRotation: 60, minRotation: 0},
-                            title: {display: true, text: 'Wörter'}
+                            title: {display: true, text: 'Words'}
                         },
-                        y: {beginAtZero: true, title: {display: true, text: 'Häufigkeit'}}
+                        y: {beginAtZero: true, title: {display: true, text: 'Count'}}
                     }
                 }
             });
