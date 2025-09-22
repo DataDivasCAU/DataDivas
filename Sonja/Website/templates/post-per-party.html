@@ -19,7 +19,7 @@
 <section class="max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
     <h2 class="text-xl font-semibold">Introduction</h2>
     <p class="text-gray-700">This page compares parties’ social media posting activity (number of posts) with their election results. We look at two election periods (2021 and 2025) and examine both the distribution within a year and the changes between years.</p>
-    <p class="text-gray-700">Using the controls above, you can choose the election period, include or exclude specific parties, and export the view as a PDF. The charts and the table update based on your selection.</p>
+    <p class="text-gray-700">Using the controls above, you can choose the election period and include or exclude specific parties. The charts and the table update based on your selection.</p>
 </section>
 <div class="max-w-5xl mx-auto mt-6">
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
@@ -54,11 +54,6 @@
             </div>
         </div>
 
-        <a id="btnExport"
-           href="/export-pdf"
-           class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 whitespace-nowrap">
-            Export as PDF
-        </a>
     </div>
 
     <div id="subtitle" class="text-sm text-gray-500 mt-1 text-center mb-5">View: 2025</div>
@@ -88,16 +83,21 @@
             <canvas id="electionPieChart"></canvas>
         </div>
 
-        <!-- Combined Chart Card -->
-        <div class="max-w-xl bg-white rounded-2xl shadow p-4">
+        <!-- Combined Chart Card (made large) -->
+        <div id="combinedCard" class="bg-white rounded-2xl shadow p-4 w-full lg:col-span-2">
             <div id="combinedChartTitle" class="mb-2 font-semibold">Posts and election results 2025</div>
             <canvas id="combinedChart"></canvas>
         </div>
 
-        <!-- Scatter nur bei "both" -->
-        <div class="max-w-xl bg-white rounded-2xl shadow p-4">
-            <div id="scatterTitle" class="mb-2 font-semibold hidden">
-                ΔPosts 2025–2021 vs. ΔElection (pp)
+        <!-- Scatter nur bei "both" (made large) -->
+        <div id="scatterCard" class="bg-white rounded-2xl shadow p-4 w-full lg:col-span-2 hidden">
+            <div class="flex items-center justify-between mb-2">
+                <div id="scatterTitle" class="font-semibold hidden">
+                    ΔPosts 2025–2021 vs. ΔElection (pp)
+                </div>
+                <button id="saveScatterBtn" class="text-sm px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 hidden" title="Save scatter as image">
+                    Save image
+                </button>
             </div>
             <canvas id="scatterChart"></canvas>
         </div>
@@ -210,14 +210,6 @@
 </div>
 
 <script defer>
-    // Keyboard shortcut for PDF export (Strg+P)
-    document.addEventListener('keydown', function (event) {
-        // Check if Ctrl+P is pressed (keyCode 80 is 'p')
-        if (event.ctrlKey && event.key === 'p') {
-            event.preventDefault(); // Prevent default browser print dialog
-            window.location.href = '/export-pdf'; // Redirect to PDF export
-        }
-    });
 
     // JSON Viewer functions
     function viewJsonData(url) {
@@ -1014,6 +1006,8 @@
     function renderScatter(rowsBoth) {
         const canvas = document.getElementById("scatterChart").getContext("2d");
         const titleEl = document.getElementById("scatterTitle");
+        const scatterCard = document.getElementById("scatterCard");
+        const saveBtn = document.getElementById("saveScatterBtn");
         if (scatterChart) scatterChart.destroy();
 
         // Filter rows based on selected parties
@@ -1033,9 +1027,13 @@
 
         if (points.length === 0) {
             titleEl.classList.add("hidden");
+            scatterCard.classList.add("hidden");
+            if (saveBtn) saveBtn.classList.add("hidden");
             return;
         }
         titleEl.classList.remove("hidden");
+        scatterCard.classList.remove("hidden");
+        if (saveBtn) saveBtn.classList.remove("hidden");
 
         // Achsgrenzen mit Puffer
         const xs = points.map(p => p.x), ys = points.map(p => p.y);
@@ -1247,17 +1245,22 @@
     function refresh() {
         const subtitle = document.getElementById("subtitle");
         const scatterTitle = document.getElementById("scatterTitle");
+        const scatterCard = document.getElementById("scatterCard");
+        const combinedCard = document.getElementById("combinedCard");
 
         if (currentPeriod === "both") {
             subtitle.textContent = "View: 2025 vs. 2021";
             renderTableBoth();
 
-            // Hide combined chart
+            // Hide combined chart card to avoid empty white space
             if (combinedChart) {
                 combinedChart.destroy();
                 combinedChart = null;
             }
+            combinedCard.classList.add("hidden");
             document.getElementById("combinedChartTitle").textContent = "—";
+            // Show scatter card
+            scatterCard.classList.remove("hidden");
 
             // Render posts and election charts for both years
             renderPostsChartBoth();
@@ -1274,6 +1277,11 @@
             scatterChart = null;
         }
         scatterTitle.classList.add("hidden");
+        const saveBtn = document.getElementById("saveScatterBtn");
+        if (saveBtn) saveBtn.classList.add("hidden");
+        // Hide scatter card and show combined card in single-year view
+        scatterCard.classList.add("hidden");
+        combinedCard.classList.remove("hidden");
 
         const year = currentPeriod === "first" ? 2025 : 2021;
         const rows = currentPeriod === "first" ? dataStore.posts2025 : dataStore.posts2021;
@@ -1291,6 +1299,36 @@
         currentPeriod = (v === "both") ? "both" : (v === "second" ? "second" : "first");
         refresh();
     });
+
+    // Save scatter image handler
+    const saveBtnEl = document.getElementById("saveScatterBtn");
+    if (saveBtnEl) {
+        saveBtnEl.addEventListener("click", saveScatterImage);
+    }
+
+    async function saveScatterImage() {
+        try {
+            const canvasEl = document.getElementById("scatterChart");
+            if (!canvasEl || !scatterChart) {
+                alert("Scatter plot is not available. Switch to 'Both elections' view first.");
+                return;
+            }
+            const dataUrl = canvasEl.toDataURL("image/png");
+            const resp = await fetch("/post-per-party/save-scatter", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({imageDataUrl: dataUrl})
+            });
+            const json = await resp.json();
+            if (!resp.ok || json.status !== "ok") {
+                throw new Error(json && json.message ? json.message : `HTTP ${resp.status}`);
+            }
+            alert("Scatter image saved to: " + json.saved);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to save image: " + err.message);
+        }
+    }
 </script>
 
 <!-- Patterns in the scatterplot -->

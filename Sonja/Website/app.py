@@ -1,5 +1,5 @@
 from __future__ import annotations
-from flask import Flask, render_template, jsonify, send_file, abort
+from flask import Flask, render_template, jsonify, send_file, abort, request
 from pathlib import Path
 from io import BytesIO
 import json  
@@ -313,6 +313,55 @@ def download_election_csv():
         abort(404, description=f"CSV nicht gefunden: {ELECTION_CSV_PATH}")
     except Exception as e:
         abort(500, description=f"CSV-Download-Fehler (Election): {type(e).__name__}: {e}")
+
+# -------- Save scatter image from Post-per-Party page --------
+@app.route("/post-per-party/save-scatter", methods=["POST"])
+def save_scatter_image():
+    """Accepts a JSON payload with a data URL of the scatter chart and saves it as PNG under data/postPerParty.
+    Expected JSON: { "imageDataUrl": "data:image/png;base64,....", "filename": "optional.png" }
+    Returns JSON with status and saved path.
+    """
+    try:
+        payload = request.get_json(silent=True, force=True) or {}
+        data_url = payload.get("imageDataUrl")
+        filename = payload.get("filename") or "scatter.png"
+        if not isinstance(filename, str) or not filename.lower().endswith(".png"):
+            filename = "scatter.png"
+        if not data_url or not isinstance(data_url, str) or not data_url.startswith("data:image/"):
+            abort(400, description="imageDataUrl (data URL) fehlt oder ist ungültig")
+        # Extract base64 part
+        import re, base64
+        m = re.match(r"^data:image/[^;]+;base64,(.+)$", data_url)
+        if not m:
+            abort(400, description="Ungültiges Data-URL-Format")
+        b64 = m.group(1)
+        try:
+            img_bytes = base64.b64decode(b64, validate=True)
+        except Exception:
+            abort(400, description="Base64-Dekodierung fehlgeschlagen")
+        # Basic size guard (<= 10 MB)
+        if len(img_bytes) > 10 * 1024 * 1024:
+            abort(413, description="Bild zu groß")
+        # Save under data/postPerParty
+        out_dir = BASE / "data" / "postPerParty"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_path = out_dir / filename
+        with open(out_path, "wb") as f:
+            f.write(img_bytes)
+        # Also save a timestamped copy for history
+        from datetime import datetime
+        ts_name = f"scatter_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        with open(out_dir / ts_name, "wb") as f:
+            f.write(img_bytes)
+        return jsonify({
+            "status": "ok",
+            "saved": str(out_path),
+            "timestamped": str(out_dir / ts_name)
+        })
+    except Exception as e:
+        code = getattr(e, "code", 500)
+        msg = getattr(e, "description", str(e))
+        return jsonify({"status": "error", "message": msg}), code
 
 # ----------------- ERROR HANDLER -----------------
 
