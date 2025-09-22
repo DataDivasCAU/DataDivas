@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>AfD – Social Media Analyse</title>
+    <title>AfD – Social Media Analysis</title>
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -26,7 +26,7 @@
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
 {% include 'partials/dark_mode_toggle.html' %}
 
-{% set page_title = 'AfD – Social Media Analyse' %}
+{% set page_title = 'AfD – Social Media Analysis' %}
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-5xl mx-auto p-6">
@@ -43,38 +43,38 @@
     </section>
     <div class="flex items-center gap-3 flex-wrap justify-center w-full mb-6">
         <div class="flex items-center gap-3 grow w-full md:w-auto">
-            <span class="font-medium pe-2">Zeitraum:</span>
+            <span class="font-medium pe-2">Time period:</span>
             <div id="date-range-slider" class="w-64 md:w-96"></div>
             <div class="text-sm text-gray-600 ps-2">
                 <span id="range-start" class="font-medium"></span>
-                <span class="mx-1">bis</span>
+                <span class="mx-1">until</span>
                 <span id="range-end" class="font-medium"></span>
             </div>
-            <label for="year-select" class="ml-2 text-sm text-gray-600">Jahr:</label>
+            <label for="year-select" class="ml-2 text-sm text-gray-600">Year:</label>
             <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
-                <option value="">Alle Jahre</option>
+                <option value="">Every year</option>
             </select>
             <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
-                Zurücksetzen
+                Reset
             </button>
         </div>
     </div>
 
     <section class="grid gap-6 md:grid-cols-2 mb-8">
         <div class="chart-box">
-            <h2 class="text-lg font-semibold mb-2 text-center">Zusammenhang: Videos vs. Wikipedia‑Seitenaufrufe
-                (relativ)</h2>
+            <h2 class="text-lg font-semibold mb-2 text-center">Correlation: Videos vs. Wikipedia‑Pageviews
+                (relative)</h2>
             <canvas id="scatterCombined" height="160"></canvas>
         </div>
         <div class="chart-box">
-            <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (wöchentlich, absolut)</h2>
+            <h2 class="text-lg font-semibold mb-2 text-center">Time series (weekly, absolute)</h2>
             <canvas id="lineWeekly" height="260"></canvas>
         </div>
     </section>
 
     <section class="mb-8">
         <div class="chart-box">
-            <h2 class="text-lg font-semibold mb-2 text-center">Zeitverlauf (täglich, relativ)</h2>
+            <h2 class="text-lg font-semibold mb-2 text-center">Time series (daily, relative)</h2>
             <canvas id="lineDaily" height="280"></canvas>
         </div>
     </section>
