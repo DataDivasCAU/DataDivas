@@ -2,7 +2,7 @@
 <html lang="de" class="light">
 <head>
     <meta charset="UTF-8">
-    <title>Anti‑Impf‑Bewegung (Antivax) – Keywords und Entwicklung</title>
+    <title>Anti-Vaccination Movement (Antivax) – Keywords and Development</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -11,7 +11,7 @@
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
 {% include 'partials/dark_mode_toggle.html' %}
 
-{% set page_title = 'Anti‑Impf‑Bewegung (Antivax)' %}
+{% set page_title = 'Anti-Vaccination Movement (Antivax)' %}
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-5xl mx-auto p-6">
@@ -24,23 +24,22 @@
         In 2024 „autism“ occured in the top keywords. In this year the conspiracy theory that vaccine lead to autism was spread.</p>
     </section>
 
-    <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Top Keywords nach Jahr und kombiniert</h2>
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Top Keywords per Year and Combined</h2>
     <div class="flex items-center justify-center gap-3 mb-6">
-        <label for="yearSelect" class="text-gray-700">Jahr wählen:</label>
+        <label for="yearSelect" class="text-gray-700">Select year:</label>
         <select id="yearSelect" class="px-3 py-2 rounded bg-white shadow border border-gray-200"></select>
     </div>
     <div id="chartContainer" class="bg-white rounded-2xl shadow p-4">
         <canvas id="keywordsChart" height="140"></canvas>
     </div>
 
-    <h2 class="text-2xl font-bold text-indigo-800 mt-10 mb-4 text-center">Entwicklung ausgewählter Wörter über die
-        Zeit</h2>
+    <h2 class="text-2xl font-bold text-indigo-800 mt-10 mb-4 text-center">Development of selected words over time</h2>
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-4">
         <!-- Multi-select dropdown -->
         <div class="relative" id="wordMultiSelect">
             <button type="button" id="wordSelectToggle"
                     class="px-3 py-2 rounded bg-white shadow border border-gray-200 flex items-center gap-2">
-                <span id="wordSelectLabel">Wörter wählen</span>
+                <span id="wordSelectLabel">Select words</span>
                 <i class="fas fa-chevron-down text-gray-500"></i>
             </button>
             <div id="wordOptions"
@@ -49,8 +48,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button id="clearSelection" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Auswahl
-                löschen
+            <button id="clearSelection" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">Reset selection
             </button>
         </div>
     </div>
@@ -103,7 +101,7 @@
                 years.forEach(y => {
                     const opt = document.createElement('option');
                     opt.value = y;
-                    opt.textContent = (y === 'all') ? 'Alle Jahre' : y;
+                    opt.textContent = (y === 'all') ? 'All years' : y;
                     yearSelect.appendChild(opt);
                 });
                 yearSelect.value = 'all';
@@ -197,7 +195,7 @@
 
         function updateSelectLabel() {
             if (selected.length === 0) {
-                wordSelectLabel.textContent = 'Wörter wählen';
+                wordSelectLabel.textContent = 'Select words';
             } else if (selected.length <= 3) {
                 wordSelectLabel.textContent = selected.join(', ');
             } else {
