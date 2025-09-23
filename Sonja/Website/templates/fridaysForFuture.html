@@ -112,10 +112,10 @@
     </section>
 
     <section class="chart-box mb-8 overflow-x-auto">
-        <h2 class="text-xl font-bold mb-3 text-center">Table (Top‑N nach Views)</h2>
+        <h2 class="text-xl font-bold mb-3 text-center">Table (Top‑N by Views)</h2>
         <table id="topTable" class="min-w-full table">
             <thead id="topTableHead"
-                   class="bg-gray-100 font-semibold">
+                   class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold">
             <tr>
                 <th class="text-left cursor-pointer select-none" data-key="#" scope="col" aria-sort="none">#</th>
                 <th class="text-left cursor-pointer select-none" data-key="title" scope="col" aria-sort="none">Titel
@@ -126,7 +126,7 @@
                 <th class="text-right cursor-pointer select-none" data-key="likes" scope="col" aria-sort="none">Likes
                 </th>
                 <th class="text-right cursor-pointer select-none" data-key="comments" scope="col" aria-sort="none">
-                    Kommentare
+                    Comments
                 </th>
                 <th class="text-left cursor-pointer select-none" data-key="upload" scope="col" aria-sort="none">Upload
                 </th>
@@ -215,7 +215,7 @@
             const top = [...items].sort((a, b) => b.views - a.views).slice(0, n);
             const labels = top.map(d => d.title.length > 40 ? d.title.slice(0, 37) + '…' : d.title);
             const data = top.map(d => d.views);
-            const colors = top.map(() => '#10b981');
+            const colors = top.map((_, i) => ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#e11d48', '#14b8a6'][i % 10]);
             if (barChart) barChart.destroy();
             barChart = new Chart(barCtx, {
                 type: 'bar',
@@ -310,8 +310,8 @@
                     datasets: [{
                         label: 'Uploads per day',
                         data,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16,185,129,0.2)',
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59,130,246,0.2)',
                         fill: true,
                         tension: 0.2,
                         spanGaps: true
@@ -367,7 +367,7 @@
             const sorted = applySort(items);
             const top = sorted.slice(0, n);
             tableBody.innerHTML = top.map((d, i) => `
-          <tr class="hover:bg-gray-50>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
             <td class="text-right">${i + 1}</td>
             <td class="max-w-[420px]">${escapeHtml(d.title)}</td>
             <td class="text-right">${formatNumber(d.views)}</td>
@@ -447,13 +447,16 @@
                 tbl.innerHTML = '<tbody><tr><td>Keine Heatmap-Daten gefunden</td></tr></tbody>';
                 return;
             }
-            let periods = Object.keys(rows[0]).filter(k => k && k !== '');
-            // Swap the middle and the right column to make chronological sense
-            if (periods.length === 3) {
-                const tmp = periods[1];
-                periods[1] = periods[2];
-                periods[2] = tmp;
-            }
+            let periods = Object.keys(rows[0])
+            .filter(k => k && k !== '')
+            .sort((a, b) => {
+            const parseStart = (s) => {
+                const start = s.split('–')[0].trim();   // z.B. "01.01.2019"
+                const [d, m, y] = start.split('.');
+                return new Date(`${y}-${m}-${d}`);
+            };
+            return parseStart(a) - parseStart(b);
+            });
             // Compute totals to select top keywords similar to Seaborn view
             const enriched = rows.map(r => ({
                 key: String(r[''] || r.keyword || ''),
@@ -502,7 +505,7 @@
         }
 
         function getBg() {
-            return htmlEl.classList.contains('dark') ? '#1e293b' : '#ffffff';
+            return htmlEl.classList.contains('dark') ? '#111827' : '#ffffff';
         }
 
         // Theme-aware word color picker to ensure good contrast, especially in light mode
