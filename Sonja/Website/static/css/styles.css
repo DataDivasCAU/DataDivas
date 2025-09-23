@@ -176,12 +176,3 @@ html.dark textarea:disabled {
   border-color: #374151;
   opacity: 0.7;
 }
-
-/* Global fixed font size for consistent typography across all pages */
-/* Set base font size and enforce it across common elements. This overrides Tailwind text-* utilities. */
-html, body { font-size: 22px; }
-/* Apply to all descendants while skipping Font Awesome icons to keep their layout intact */
-body *:not(.fa):not(.fas):not(.far):not(.fab) {
-  font-size: 22px !important;
-  line-height: 1.6;
-}
