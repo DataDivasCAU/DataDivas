@@ -363,6 +363,17 @@ def save_scatter_image():
         msg = getattr(e, "description", str(e))
         return jsonify({"status": "error", "message": msg}), code
 
+# -------- FAVICON ROUTES --------
+@app.route("/favicon.png")
+@app.route("/favicon.ico")
+def favicon():
+    """Serve the favicon from the templates folder as PNG."""
+    try:
+        icon_path = "Sonja/Website/templates/favicon.png"
+        return send_file(icon_path, mimetype="image/png")
+    except FileNotFoundError:
+        abort(404, description="favicon not found")
+
 # ----------------- ERROR HANDLER -----------------
 
 @app.errorhandler(404)
