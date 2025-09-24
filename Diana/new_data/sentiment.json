@@ -1,7 +1,0 @@
-{
-  "sentimentBeforeHype": {"positive": 542, "neutral": 428, "negative": 559},
-  "sentimentEarlyHype": {"positive": 377, "neutral": 243, "negative": 269},
-  "sentimentPeakHype": {"positive": 502, "neutral": 385, "negative": 620},
-  "sentimentSustainedHype": {"positive": 353, "neutral": 411, "negative": 352},
-  "sentimentDeclineHype": {"positive": 550, "neutral": 521, "negative": 531}
-}
