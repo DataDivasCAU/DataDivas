@@ -191,9 +191,9 @@
             const corrEl = document.getElementById('correlationValue');
             if (corrEl) {
                 if (rValue === null || !Number.isFinite(rValue)) {
-                    corrEl.textContent = 'Pearson r: N/A';
+                    corrEl.textContent = 'Pearson correlation: N/A';
                 } else {
-                    corrEl.textContent = `Pearson r: ${rValue.toFixed(2)}`;
+                    corrEl.textContent = `Pearson correlation: ${rValue.toFixed(2)}`;
                 }
             }
 
