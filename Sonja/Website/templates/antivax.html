@@ -60,11 +60,17 @@
         <canvas id="timeSeriesChart" height="160"></canvas>
     </div>
 
-    <!-- Last diagram from the notebook: Polar/Nightingale equivalent for latest year -->
+    <!-- Last diagram from the notebook: Polar/Nightingale equivalent with selectable year -->
     <section class="bg-white rounded-2xl shadow p-4 mt-10">
-        <h2 id="polarTitle" class="text-xl font-bold mb-2">Top Keywords (latest year)</h2>
+        <div class="flex items-center justify-between mb-2">
+            <h2 id="polarTitle" class="text-xl font-bold">Top Keywords</h2>
+            <div class="flex items-center gap-2">
+                <label for="polarYearSelect" class="text-gray-700">Select year:</label>
+                <select id="polarYearSelect" class="px-3 py-2 rounded bg-white shadow border border-gray-200"></select>
+            </div>
+        </div>
         <canvas id="polarChart" height="200"></canvas>
-        <p class="text-sm text-gray-600 mt-2">This polar area chart mirrors the final Nightingale chart from the notebook, showing the top keywords for the most recent year in the dataset.</p>
+        <p class="text-sm text-gray-600 mt-2">This polar area chart mirrors the final Nightingale chart from the notebook, showing the top keywords for the selected year.</p>
     </section>
 
     <!-- Conclusion moved to bottom -->
@@ -202,6 +208,7 @@
         const clearSelectionBtn = document.getElementById('clearSelection');
         const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
         const ctxPolar = document.getElementById('polarChart').getContext('2d');
+        const polarYearSelect = document.getElementById('polarYearSelect');
         let timeChart;
         let polarChart;
 
@@ -267,14 +274,10 @@
             });
         }
 
-        // Polar/Nightingale chart for latest year
-        function renderPolarLatest() {
-            if (!rawData) return;
-            // determine latest numeric year
-            const years = Object.keys(rawData).map(y => parseInt(y, 10)).filter(n => !isNaN(n));
-            if (years.length === 0 || !ctxPolar) return;
-            const latestYear = String(Math.max(...years));
-            const top = (rawData[latestYear] || []).slice().sort((a,b)=>b[1]-a[1]).slice(0, 12);
+        // Polar/Nightingale chart for a selected year
+        function renderPolarForYear(year) {
+            if (!rawData || !year || !ctxPolar) return;
+            const top = (rawData[year] || []).slice().sort((a,b)=>b[1]-a[1]).slice(0, 12);
             const labels = top.map(d => d[0]);
             const dataVals = top.map(d => d[1]);
             const colors = getColors();
@@ -292,7 +295,7 @@
                 }
             });
             const title = document.getElementById('polarTitle');
-            if (title) title.textContent = `Top Keywords in ${latestYear}`;
+            if (title) title.textContent = `Top Keywords in ${year}`;
         }
 
         // Initialize after data load
@@ -313,10 +316,23 @@
             updateSelectLabel();
             populateOptions();
             renderTimeSeries();
-            renderPolarLatest();
 
-            // Hook year selector now that data exists
+            // Populate polar year selector
+            const numericYears = yearLabels.filter(y => !isNaN(parseInt(y, 10)));
+            const latestYear = String(Math.max(...numericYears.map(y => parseInt(y, 10))));
+            polarYearSelect.innerHTML = '';
+            numericYears.forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                polarYearSelect.appendChild(opt);
+            });
+            polarYearSelect.value = latestYear;
+            renderPolarForYear(latestYear);
+
+            // Hook selectors now that data exists
             yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
+            polarYearSelect.addEventListener('change', () => renderPolarForYear(polarYearSelect.value));
         }
 
         // Dropdown toggle and outside click
@@ -361,7 +377,8 @@
             if (rawData) {
                 renderChart(yearSelect.value || 'all');
                 renderTimeSeries();
-                renderPolarLatest();
+                const currentPolarYear = polarYearSelect && polarYearSelect.value ? polarYearSelect.value : (yearLabels && yearLabels.length ? yearLabels[yearLabels.length - 1] : null);
+                if (currentPolarYear) renderPolarForYear(currentPolarYear);
             }
         });
 
