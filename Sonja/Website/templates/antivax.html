@@ -59,6 +59,14 @@
     <div class="bg-white rounded-2xl shadow p-4">
         <canvas id="timeSeriesChart" height="160"></canvas>
     </div>
+
+    <!-- Last diagram from the notebook: Polar/Nightingale equivalent for latest year -->
+    <section class="bg-white rounded-2xl shadow p-4 mt-10">
+        <h2 id="polarTitle" class="text-xl font-bold mb-2">Top Keywords (latest year)</h2>
+        <canvas id="polarChart" height="200"></canvas>
+        <p class="text-sm text-gray-600 mt-2">This polar area chart mirrors the final Nightingale chart from the notebook, showing the top keywords for the most recent year in the dataset.</p>
+    </section>
+
     <!-- Conclusion moved to bottom -->
     <section class="bg-white rounded-2xl shadow p-4 mt-10">
         <h2 class="text-xl font-bold mb-2">Conclusion</h2>
@@ -193,7 +201,9 @@
         const wordSelectLabel = document.getElementById('wordSelectLabel');
         const clearSelectionBtn = document.getElementById('clearSelection');
         const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
+        const ctxPolar = document.getElementById('polarChart').getContext('2d');
         let timeChart;
+        let polarChart;
 
         // Build years sorted (initialized after data load)
         let yearLabels = [];
@@ -257,6 +267,34 @@
             });
         }
 
+        // Polar/Nightingale chart for latest year
+        function renderPolarLatest() {
+            if (!rawData) return;
+            // determine latest numeric year
+            const years = Object.keys(rawData).map(y => parseInt(y, 10)).filter(n => !isNaN(n));
+            if (years.length === 0 || !ctxPolar) return;
+            const latestYear = String(Math.max(...years));
+            const top = (rawData[latestYear] || []).slice().sort((a,b)=>b[1]-a[1]).slice(0, 12);
+            const labels = top.map(d => d[0]);
+            const dataVals = top.map(d => d[1]);
+            const colors = getColors();
+            const bg = labels.map((_, i) => colors.lines[i % colors.lines.length]);
+            if (polarChart) polarChart.destroy();
+            polarChart = new Chart(ctxPolar, {
+                type: 'polarArea',
+                data: {
+                    labels,
+                    datasets: [{ data: dataVals, backgroundColor: bg, borderWidth: 1 }]
+                },
+                options: {
+                    plugins: { legend: { labels: { color: colors.axis } } },
+                    scales: { r: { ticks: { color: colors.axis }, grid: { color: colors.grid } } }
+                }
+            });
+            const title = document.getElementById('polarTitle');
+            if (title) title.textContent = `Top Keywords in ${latestYear}`;
+        }
+
         // Initialize after data load
         function afterDataLoaded() {
             // Build years sorted from loaded rawData
@@ -275,6 +313,7 @@
             updateSelectLabel();
             populateOptions();
             renderTimeSeries();
+            renderPolarLatest();
 
             // Hook year selector now that data exists
             yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
@@ -322,6 +361,7 @@
             if (rawData) {
                 renderChart(yearSelect.value || 'all');
                 renderTimeSeries();
+                renderPolarLatest();
             }
         });
 
