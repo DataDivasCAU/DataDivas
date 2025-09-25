@@ -146,6 +146,7 @@
         function getColors() {
             const isDark = htmlElement.classList.contains('dark');
             return {
+                isDark,
                 axis: isDark ? '#e2e8f0' : '#0f172a',
                 grid: isDark ? '#475569' : '#e5e7eb',
                 bar: '#10b981',
@@ -290,7 +291,16 @@
                 },
                 options: {
                     plugins: { legend: { labels: { color: colors.axis } } },
-                    scales: { r: { ticks: { color: colors.axis }, grid: { color: colors.grid } } }
+                    scales: {
+                        r: {
+                            ticks: {
+                                color: colors.axis,
+                                backdropColor: colors.isDark ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)'
+                            },
+                            grid: { color: colors.grid },
+                            angleLines: { color: colors.grid }
+                        }
+                    }
                 }
             });
             const title = document.getElementById('polarTitle');
