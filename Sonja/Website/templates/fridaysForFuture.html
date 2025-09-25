@@ -213,28 +213,83 @@
         }
 
         function renderBarTopViews(items, n) {
+            // Replace bar chart with a lollipop chart (stems + circles)
             const top = [...items].sort((a, b) => b.views - a.views).slice(0, n);
             const labels = top.map(d => d.title.length > 40 ? d.title.slice(0, 37) + '…' : d.title);
             const data = top.map(d => d.views);
-            const colors = top.map((_, i) => ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#e11d48', '#14b8a6'][i % 10]);
+            const palette = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#e11d48', '#14b8a6'];
+            const colors = top.map((_, i) => palette[i % palette.length]);
+
+            // Lightweight inline plugin to draw stems and lollipop heads
+            const lollipopPlugin = {
+                id: 'lollipopPlugin',
+                afterDatasetsDraw(chart, args, pluginOpts) {
+                    const {ctx, scales} = chart;
+                    const xScale = scales.x;
+                    const yScale = scales.y;
+                    const meta = chart.getDatasetMeta(0);
+                    if (!meta || !meta.data) return;
+                    const baseY = yScale.getPixelForValue(0);
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const halo = isDark ? '#111827' : '#ffffff';
+
+                    ctx.save();
+                    meta.data.forEach((elem, i) => {
+                        // For category scale on X, the element carries the correct x for the index
+                        const x = elem.x ?? xScale.getPixelForValue(i);
+                        const y = elem.y ?? yScale.getPixelForValue(data[i]);
+                        const col = colors[i];
+                        // stem
+                        ctx.beginPath();
+                        ctx.strokeStyle = col;
+                        ctx.lineWidth = 3;
+                        ctx.moveTo(x, baseY);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        // lollipop head with halo for contrast
+                        ctx.beginPath();
+                        ctx.arc(x, y, 6, 0, Math.PI * 2);
+                        ctx.fillStyle = col;
+                        ctx.fill();
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = halo;
+                        ctx.stroke();
+                    });
+                    ctx.restore();
+                }
+            };
+
             if (barChart) barChart.destroy();
             barChart = new Chart(barCtx, {
                 type: 'bar',
-                data: {labels, datasets: [{label: 'Views', data, backgroundColor: colors}]},
+                data: {
+                    labels,
+                    // We keep a bar dataset but make bars invisible; plugin draws lollipops
+                    datasets: [{
+                        label: 'Views',
+                        data,
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        borderWidth: 0
+                    }]
+                },
                 options: {
                     responsive: true,
                     scales: {
                         x: {
                             title: { display: true, text: 'Video title' },
-                            ticks: {color: getAxis()}
+                            ticks: {color: getAxis()},
+                            grid: {color: getGrid()}
                         },
                         y: {
                             title: { display: true, text: 'Views' },
-                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                            beginAtZero: true,
+                            ticks: {color: getAxis()},
+                            grid: {color: getGrid()}
                         }
                     },
                     plugins: {legend: {display: false}}
-                }
+                },
+                plugins: [lollipopPlugin]
             });
         }
 
