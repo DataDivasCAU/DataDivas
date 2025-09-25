@@ -118,7 +118,7 @@ In total we collected ~2000 comments from each period from which we selected the
 <!-- Combined Bar Chart with Words on X-Axis -->
 <section class="mt-8">
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
-        <div class="mb-2 font-semibold">Comparison by words (X-axis: words)</div>
+        <div class="mb-2 font-semibold">Comparison by words</div>
         <div class="chart-container">
             <canvas id="wordAxisCompare"></canvas>
         </div>
@@ -301,24 +301,52 @@ In total we collected ~2000 comments from each period from which we selected the
             const afterByWord = combinedWords.map(w => (afterData.find(d => d.words === w)?.numbers) || 0);
             const ctxWordAxis = document.getElementById('wordAxisCompare').getContext('2d');
             new Chart(ctxWordAxis, {
-                type: 'bar',
+                type: 'scatter',
                 data: {
-                    labels: combinedWords,
+                    // Using category x-scale with string x values per point
                     datasets: [
-                        {label: 'Before', data: beforeByWord, backgroundColor: 'rgba(59,130,246,0.7)'},
-                        {label: 'After', data: afterByWord, backgroundColor: 'rgba(16,185,129,0.7)'}
+                        {
+                            label: 'Before',
+                            data: combinedWords.map((w, i) => ({ x: w, y: beforeByWord[i] })),
+                            backgroundColor: 'rgba(59,130,246,0.8)',
+                            borderColor: 'rgba(59,130,246,1)',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            showLine: false
+                        },
+                        {
+                            label: 'After',
+                            data: combinedWords.map((w, i) => ({ x: w, y: afterByWord[i] })),
+                            backgroundColor: 'rgba(16,185,129,0.8)',
+                            borderColor: 'rgba(16,185,129,1)',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            showLine: false
+                        }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {legend: {display: true}},
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => items[0]?.raw?.x ?? '',
+                                label: (item) => `${item.dataset.label}: ${item.raw?.y ?? ''}`
+                            }
+                        }
+                    },
                     scales: {
                         x: {
-                            ticks: {autoSkip: false, maxRotation: 60, minRotation: 0},
-                            title: {display: true, text: 'Words'}
+                            type: 'category',
+                            ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 },
+                            title: { display: true, text: 'Words' }
                         },
-                        y: {beginAtZero: true, title: {display: true, text: 'Count'}}
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Count' }
+                        }
                     }
                 }
             });
