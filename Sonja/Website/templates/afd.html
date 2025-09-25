@@ -282,11 +282,19 @@
                 },
                 options: {
                     scales: {
-                        x: {ticks: {color: getAxis()}, grid: {color: getGrid()}},
-                        y: {type: 'linear', position: 'left', ticks: {color: getAxis()}, grid: {color: getGrid()}},
+                        x: { 
+                            title: { display: true, text: 'Date' },
+                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                        },
+                        y: { 
+                            type: 'linear', position: 'left',
+                            title: { display: true, text: 'Wikipedia (relative, %)' },
+                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                        },
                         y1: {
                             type: 'linear',
                             position: 'right',
+                            title: { display: true, text: 'Videos (relative, %)' },
                             ticks: {color: getAxis()},
                             grid: {drawOnChartArea: false}
                         }
@@ -339,8 +347,14 @@
                 },
                 options: {
                     scales: {
-                        x: {ticks: {color: getAxis()}, grid: {color: getGrid()}},
-                        y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                        x: {
+                            title: { display: true, text: 'Date' },
+                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                        },
+                        y: {
+                            title: { display: true, text: 'Weekly value' },
+                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                        }
                     }
                 }
             });

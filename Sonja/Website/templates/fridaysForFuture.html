@@ -224,8 +224,14 @@
                 options: {
                     responsive: true,
                     scales: {
-                        x: {ticks: {color: getAxis()}},
-                        y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                        x: {
+                            title: { display: true, text: 'Video title' },
+                            ticks: {color: getAxis()}
+                        },
+                        y: {
+                            title: { display: true, text: 'Views' },
+                            ticks: {color: getAxis()}, grid: {color: getGrid()}
+                        }
                     },
                     plugins: {legend: {display: false}}
                 }
@@ -323,8 +329,8 @@
                         annotation: { annotations }
                     },
                     scales: {
-                        x: {ticks: {color: getAxis()}},
-                        y: {ticks: {color: getAxis()}, grid: {color: getGrid()}}
+                        x: { title: { display: true, text: 'Date' }, ticks: {color: getAxis()}},
+                        y: { title: { display: true, text: 'Uploads per day' }, ticks: {color: getAxis()}, grid: {color: getGrid()}}
                     }
                 }
             });

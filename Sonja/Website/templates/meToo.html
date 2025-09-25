@@ -193,8 +193,8 @@
                         tooltip: {mode: 'index', intersect: false}
                     },
                     scales: {
-                        x: {ticks: {autoSkip: true, maxTicksLimit: 10}},
-                        y: {beginAtZero: true}
+                        x: { title: { display: true, text: 'Date' }, ticks: {autoSkip: true, maxTicksLimit: 10}},
+                        y: { beginAtZero: true, title: { display: true, text: 'Views' } }
                     }
                 }
             });
@@ -387,11 +387,15 @@
                         }
                     },
                     scales: {
-                        x: {stacked: true},
+                        x: {
+                            stacked: true,
+                            title: { display: true, text: 'Phase' }
+                        },
                         y: {
                             stacked: true,
                             beginAtZero: true,
                             max: 100,
+                            title: { display: true, text: 'Percent (%)' },
                             ticks: {
                                 callback: (value) => `${value}%`
                             }

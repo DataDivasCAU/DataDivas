@@ -260,7 +260,16 @@ In total we collected ~2000 comments from each period from which we selected the
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {legend: {display: false}},
-                scales: {x: {ticks: {autoSkip: false, maxRotation: 60, minRotation: 0}}, y: {beginAtZero: true}}
+                scales: {
+                    x: {
+                        ticks: {autoSkip: false, maxRotation: 60, minRotation: 0},
+                        title: { display: true, text: 'Words' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Count' }
+                    }
+                }
             };
 
             new Chart(ctxB, {

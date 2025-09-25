@@ -178,8 +178,8 @@
                     indexAxis: 'y', responsive: true,
                     plugins: {legend: {display: false}},
                     scales: {
-                        x: {beginAtZero: true, ticks: {color: colors.axis}, grid: {color: colors.grid}},
-                        y: {ticks: {color: colors.axis}, grid: {color: colors.grid}}
+                        x: {beginAtZero: true, title: { display: true, text: 'Count' }, ticks: {color: colors.axis}, grid: {color: colors.grid}},
+                        y: {title: { display: true, text: 'Keyword' }, ticks: {color: colors.axis}, grid: {color: colors.grid}}
                     }
                 }
             });
@@ -250,8 +250,8 @@
                     responsive: true,
                     plugins: {legend: {display: true, labels: {color: colors.axis}}},
                     scales: {
-                        x: {ticks: {color: colors.axis}, grid: {color: colors.grid}},
-                        y: {beginAtZero: true, ticks: {color: colors.axis}, grid: {color: colors.grid}}
+                        x: { title: { display: true, text: 'Year' }, ticks: {color: colors.axis}, grid: {color: colors.grid}},
+                        y: { beginAtZero: true, title: { display: true, text: 'Count' }, ticks: {color: colors.axis}, grid: {color: colors.grid}}
                     }
                 }
             });
