@@ -66,6 +66,7 @@
             <h2 class="text-lg font-semibold mb-2 text-center">Correlation: Videos vs. Wikipedia‑Pageviews
                 (relative)</h2>
             <canvas id="scatterCombined" height="160"></canvas>
+            <div id="correlationValue" class="text-center text-sm text-gray-600 mt-2"></div>
         </div>
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Time series (weekly, absolute)</h2>
@@ -169,6 +170,32 @@
                 x: safeDiv(vids[i], sumV),
                 y: safeDiv(wikis[i], sumW)
             })).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+
+            // Compute Pearson correlation coefficient on relative points
+            let rValue = null;
+            if (points.length >= 2) {
+                const n = points.length;
+                let sumXr = 0, sumYr = 0, sumXYr = 0, sumXXr = 0, sumYYr = 0;
+                points.forEach(p => {
+                    const x = p.x, y = p.y;
+                    sumXr += x; sumYr += y;
+                    sumXYr += x * y;
+                    sumXXr += x * x;
+                    sumYYr += y * y;
+                });
+                const denom = Math.sqrt((n * sumXXr - sumXr * sumXr) * (n * sumYYr - sumYr * sumYr));
+                if (denom > 0) {
+                    rValue = (n * sumXYr - sumXr * sumYr) / denom;
+                }
+            }
+            const corrEl = document.getElementById('correlationValue');
+            if (corrEl) {
+                if (rValue === null || !Number.isFinite(rValue)) {
+                    corrEl.textContent = 'Pearson r: N/A';
+                } else {
+                    corrEl.textContent = `Pearson r: ${rValue.toFixed(2)}`;
+                }
+            }
 
             // Compute linear regression (least squares) on relative points
             let trendData = [];
