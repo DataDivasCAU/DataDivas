@@ -19,13 +19,21 @@ Additionally, we used LLMs to help rewrite and translate text for our website/po
 
 ### How to get the API keys
 **How to get the YouTube API key:** <br> 
-To get an API key for YouTube, you first need a Google Account. <br> 
+To get an API key for YouTube, you first need a Google account. <br> 
 Then you have to visit https://console.developers.google.com/, where you have to create a project. <br> 
-After this, navigate to the credentials section. ![credentials section](image.png) <br> 
-Finally, click on create credentials and create an API key.
+After this, navigate to the credentials section. <br> 
+![credentials section](image.png) <br> 
+Finally, click on create credentials and create an API key. <br> 
 ![create API key](image-1.png)
 
 **How to get the Reddit API key:** <br>
+To get an API key for Reddit, you first need a Reddit account. <br>
+You then navigate to https://www.reddit.com/prefs/apps/ and create an app.<br>
+Select script in the app choices, and choose a name as well as a redirect uri (you can use http://localhost:8080 as a place holder). <br>
+![Create app](image-2.png) <br>
+Finally, you will find your client_id in the app underneath "personal use script" (purple in picture) <br>
+and your client_secret (red in picture), which you both need to access the API. <br>
+![Finding credentials](image-3.png) 
 
 
 ### How to install Docker
