@@ -53,7 +53,7 @@ The WikiMedia API does not require an API key. Instead, a header is required tha
 2. Choose the version fitting for your Operating System.<br>
 3. Install the program and start it to check if any errors occur. <br>
 4. Optional: open a terminal and run 
-```docker --version```
+```docker --version```.
 This should print the Docker version you have installed.
 
 ### How to Start the Website
