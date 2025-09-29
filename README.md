@@ -12,6 +12,7 @@ The seven research questions we worked on are:
 6. To what extent does the number of social media posts (on YouTube) by political parties influence election results?
 7. How has public opinions about the ‘tradwife’ movement evolved since its beginning in 2020?
 
+The answer/code for each question can be found within the according folder (i.e. the answer for the first question is found in 📂 [quest1 folder](./Question1) )
 We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). <br> 
 Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English. <br>
 Furthermore, LLMs were used to help with setting up APIs. 
@@ -29,6 +30,7 @@ After this, navigate to the credentials section. <br>
 Finally, click on create credentials and create an API key. <br> 
 ![create API key](image-1.png)
 
+
 **How to get the Reddit API key:** <br>
 To get an API key for Reddit, you first need a Reddit account. <br>
 You then navigate to https://www.reddit.com/prefs/apps/ and create an app.<br>
@@ -38,6 +40,7 @@ Select script in the app choices, and choose a name as well as a redirect uri (y
 Finally, you will find your client_id in the app underneath "personal use script" (purple in picture) <br>
 and your client_secret (red in picture), which you both need to access the API. <br>
 ![Finding credentials](image-3.png) <br>
+
 
 **WikiMedia/WikiPedia API:**<br>
 The WikiMedia API does not require an API key. Instead, a header is required that identifies the script (which is given in our code).
