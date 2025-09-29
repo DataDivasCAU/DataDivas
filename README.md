@@ -33,16 +33,6 @@ Finally, click on create credentials and create an API key. <br>
 ![create API key](image-1.png)
 
 
-**How to get the Reddit API key:** <br>
-To get an API key for Reddit, you first need a Reddit account. <br>
-You then navigate to https://www.reddit.com/prefs/apps/ and create an app.<br>
-Select script in the app choices, and choose a name as well as a redirect uri (you can use http://localhost:8080 as a place holder). <br>
-![Create app](image-2.png) <br>
-
-Finally, you will find your client_id in the app underneath "personal use script" (purple in picture) <br>
-and your client_secret (red in picture), which you both need to access the API. <br>
-![Finding credentials](image-3.png) <br>
-
 
 **WikiMedia/WikiPedia API:**<br>
 The WikiMedia API does not require an API key. Instead, a header is required that identifies the script (which is given in our code).
