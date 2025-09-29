@@ -12,8 +12,10 @@ The seven research questions we worked on are:
 6. To what extent does the number of social media posts (on YouTube) by political parties influence election results?
 7. How has public opinions about the ‘tradwife’ movement evolved since its beginning in 2020?
 
-The answer/code for each question can be found within the according folder (i.e. the answer for the first question is found in 📂 [quest1 folder](./Question1) )
-We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). <br> 
+The answer/code for each question can be found within the according folder. <br>
+For example, the answer for the first question is found in the 📂 [Question1 folder](./Question1). The contents include (at least) one JupyterNotebook that contains the code, as well as CSV containing data. Furthermore, some folders contain images of created graphics. <br>
+
+We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). In the code, we clearly indicate (through comments) where each LLM or library is applied.<br> 
 Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English. <br>
 Furthermore, LLMs were used to help with setting up APIs. 
 
@@ -47,6 +49,12 @@ The WikiMedia API does not require an API key. Instead, a header is required tha
 
 
 ### How to install Docker
+1. Visit https://www.docker.com/products/docker-desktop/ and click on "Download Docker Desktop". <br>
+2. Choose the version fitting for your Operating System.<br>
+3. Install the program and start it to check if any errors occur. <br>
+4. Optional: open a terminal and run 
+```docker --version```
+This should print the Docker version you have installed.
 
 ### How to Start the Website
 
