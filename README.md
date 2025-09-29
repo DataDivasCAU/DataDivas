@@ -12,20 +12,21 @@ The seven research questions we worked on are:
 6. To what extent does the number of social media posts (on YouTube) by political parties influence election results?
 7. How has public opinions about the ‘tradwife’ movement evolved since its beginning in 2020?
 
-We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). 
+We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). <br> 
 Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English.
 
 ## Getting started
 
-### How to get API keys
-**How to get the YouTube API key:**
-To get an API key for YouTube, you first need a Google Account. 
-Then you have to visit https://console.developers.google.com/, where you have to create a project. 
-After this, you navigate to the "credentials" section (see 1), where you click on "create credentials" and finally "API key". 
-1. 
-![Credentials](image.png)
-2. 
-![Create API key](image-1.png)
+### How to get the API keys
+**How to get the YouTube API key:** <br> 
+To get an API key for YouTube, you first need a Google Account. <br> 
+Then you have to visit https://console.developers.google.com/, where you have to create a project. <br> 
+After this, navigate to the [credentials section](image.png) <br> 
+2. <br> 
+![Create API key](image-1.png 'Create an API key')
+
+**How to get the Reddit API key:** <br>
+
 
 ### How to install Docker
 
