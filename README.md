@@ -21,9 +21,9 @@ Additionally, we used LLMs to help rewrite and translate text for our website/po
 **How to get the YouTube API key:** <br> 
 To get an API key for YouTube, you first need a Google Account. <br> 
 Then you have to visit https://console.developers.google.com/, where you have to create a project. <br> 
-After this, navigate to the [credentials section](image.png) <br> 
-2. <br> 
-![Create API key](image-1.png 'Create an API key')
+After this, navigate to the credentials section. ![credentials section](image.png) <br> 
+Finally, click on create credentials and create an API key.
+![create API key](image-1.png)
 
 **How to get the Reddit API key:** <br>
 
