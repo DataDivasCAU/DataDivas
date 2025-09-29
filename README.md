@@ -72,6 +72,15 @@ for initial build run: [Windows](/initialStart.bat) or [Linux/Mac](/initialStart
 or run this script instead: [Windows](/start.bat) or [Linux/Mac](/start.sh)
 
 ## Authors
+**DataDivas**
+Name: Sonja Waldenspuhl
+E-Mail: stu235521@mail.uni-kiel.de
+Name: Maja Kahl
+E-Mail: stu240340@mail.uni-kiel.de
+Name: Diana Kuznecov
+E-Mail: stu240382@mail.uni-kiel.de
+Name: Carolin Delfs
+E-Mail: stu241068@mail.uni-kiel.de
 
 ## Sources
 1. Youtube API - https://developers.google.com/youtube/v3/docs
