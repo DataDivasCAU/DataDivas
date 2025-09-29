@@ -1,6 +1,6 @@
-# DataDivas
+# What political impact does social media have?
 
-## About the project
+## Description
 Our project "What political impact does social media have?"  
 
 The seven research questions we worked on are:
@@ -15,17 +15,21 @@ The seven research questions we worked on are:
 We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). 
 Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English.
 
-## How to install the Python environment/get API keys
+## Getting started
+
+### How to get API keys
 **How to get the YouTube API key:**
 To get an API key for YouTube, you first need a Google Account. 
 Then you have to visit https://console.developers.google.com/, where you have to create a project. 
-After this, you navigate to the "credentials" section, where you click on "create credentials" and finally "API key". 
-1. ![Credentials](image.png)
-2. ![Create API key](image-1.png)
+After this, you navigate to the "credentials" section (see 1), where you click on "create credentials" and finally "API key". 
+1. 
+![Credentials](image.png)
+2. 
+![Create API key](image-1.png)
 
-## How to install Docker
+### How to install Docker
 
-## How to Start the Website
+### How to Start the Website
 
 1. **Start [Docker Desktop](https://www.docker.com/products/docker-desktop/)**  
 2. In the terminal, navigate to the project directory:  
@@ -39,6 +43,8 @@ After this, you navigate to the "credentials" section, where you click on "creat
     ```
 for initial build run: [Windows](/initialStart.bat) or [Linux/Mac](/initialStart.sh)
 or run this script instead: [Windows](/start.bat) or [Linux/Mac](/start.sh)
+
+## Authors
 
 ## Sources
 1. Youtube API - https://developers.google.com/youtube/v3/docs
