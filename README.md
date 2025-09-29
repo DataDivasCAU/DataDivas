@@ -1,7 +1,7 @@
 # What political impact does social media have?
 
 ## Description
-Our project "What political impact does social media have?"  
+Our project "What political impact does social media have?" **fehlt noch :P**
 
 The seven research questions we worked on are:
 1. How has the public perception of anti-vaccine conspiracy via YouTube changed during the last five years? 
@@ -13,7 +13,9 @@ The seven research questions we worked on are:
 7. How has public opinions about the ‘tradwife’ movement evolved since its beginning in 2020?
 
 We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). <br> 
-Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English.
+Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English. <br>
+Furthermore, LLMs were used to help with setting up APIs. 
+
 
 ## Getting started
 
@@ -23,6 +25,7 @@ To get an API key for YouTube, you first need a Google account. <br>
 Then you have to visit https://console.developers.google.com/, where you have to create a project. <br> 
 After this, navigate to the credentials section. <br> 
 ![credentials section](image.png) <br> 
+
 Finally, click on create credentials and create an API key. <br> 
 ![create API key](image-1.png)
 
@@ -31,9 +34,13 @@ To get an API key for Reddit, you first need a Reddit account. <br>
 You then navigate to https://www.reddit.com/prefs/apps/ and create an app.<br>
 Select script in the app choices, and choose a name as well as a redirect uri (you can use http://localhost:8080 as a place holder). <br>
 ![Create app](image-2.png) <br>
+
 Finally, you will find your client_id in the app underneath "personal use script" (purple in picture) <br>
 and your client_secret (red in picture), which you both need to access the API. <br>
-![Finding credentials](image-3.png) 
+![Finding credentials](image-3.png) <br>
+
+**WikiMedia/WikiPedia API:**<br>
+The WikiMedia API does not require an API key. Instead, a header is required that identifies the script (which is given in our code).
 
 
 ### How to install Docker
