@@ -12,9 +12,11 @@ The seven research questions we worked on are:
 6. To what extent does the number of social media posts (on YouTube) by political parties influence election results?
 7. How has public opinions about the ‘tradwife’ movement evolved since its beginning in 2020?
 
+### Project structure
 The answer/code for each question can be found within the according folder. <br>
 For example, the answer for the first question is found in the 📂 [Question1 folder](./Question1). The contents include (at least) one JupyterNotebook that contains the code, as well as CSV containing data. Furthermore, some folders contain images of created graphics. <br>
 
+### LLM usage
 We used LLMs to gather keywords (KeyBERT), filter out stopwords (spaCy) and calculate sentiment (VADER). In the code, we clearly indicate (through comments) where each LLM or library is applied.<br> 
 Additionally, we used LLMs to help rewrite and translate text for our website/poster from German to English. <br>
 Furthermore, LLMs were used to help with setting up APIs. 
