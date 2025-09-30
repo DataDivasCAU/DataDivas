@@ -43,7 +43,7 @@ The WikiMedia API does not require an API key. Instead, a header is required tha
 ### How to install our Python environment
 1. Open terminal in the project directory.
 2. Run pipenv shell.
-3. Install pandas, numpy, spacy and google-api-python-client.
+3. Install pandas, numpy, spacy, matplotlib, requests, vaderSentiment, seaborn, wordcloud, keybert and google-api-python-client.
 4. Install the requirements from requirements.txt.
 
 ### How to install Docker
