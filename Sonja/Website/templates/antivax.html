@@ -1,33 +1,55 @@
 <!DOCTYPE html>
+<!-- 
+    Anti-Vaccination Movement Analysis Page
+    This page visualizes keyword trends and frequencies in anti-vaccination content
+    across different years, showing the evolution of the movement's rhetoric
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and page information -->
     <meta charset="UTF-8">
     <title>Anti-Vaccination Movement (Antivax) – Keywords and Development</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- Custom styles and favicon -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'Anti-Vaccination Movement (Antivax)' %}
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-7xl mx-auto p-6">
-    <!-- Introduction -->
+    <!-- 
+        Introduction Section
+        Provides context about the anti-vaccination movement during the Covid-19 pandemic
+    -->
     <section class="bg-white rounded-2xl shadow p-4 mb-6">
         <h2 class="text-xl font-bold mb-2">Introduction</h2>
         <p class="text-sm text-gray-800">During the Covid-19-pandemic anti-vaccine conspiracy experiencend a strong growth. Especially on social media creators spread the rejection of covid-19-vaccine.</p>
     </section>
 
-    <!-- Methodic in its own card -->
+    <!-- 
+        Methodology Section
+        Explains the data collection and analysis approach used for this visualization
+    -->
     <section class="bg-white rounded-2xl shadow p-4 mb-6">
         <h2 class="text-xl font-bold mb-2">Methodic</h2>
         <p class="text-sm text-gray-800">This analysis took a look at the 10 most liked top-level-comments from all videos that deal with „anti-vaccine“ of each year. Out of these comments the top 15 keywords were found and visualized in a bar chart.</p>
     </section>
 
+    <!-- 
+        Keywords Bar Chart Section
+        Displays top keywords frequency by year with year selection dropdown
+    -->
     <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center">Top Keywords per Year and Combined</h2>
     <div class="flex items-center justify-center gap-3 mb-6">
         <label for="yearSelect" class="text-gray-700">Select year:</label>
@@ -37,9 +59,14 @@
         <canvas id="keywordsChart" height="140"></canvas>
     </div>
 
+    <!-- 
+        Time Series Chart Section
+        Shows the frequency trends of selected keywords over time
+        Includes interactive multi-select dropdown for keyword selection
+    -->
     <h2 class="text-2xl font-bold text-indigo-800 mt-10 mb-4 text-center">Development of selected words over time</h2>
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-4">
-        <!-- Multi-select dropdown -->
+        <!-- Multi-select dropdown for choosing keywords to display -->
         <div class="relative" id="wordMultiSelect">
             <button type="button" id="wordSelectToggle"
                     class="px-3 py-2 rounded bg-white shadow border border-gray-200 flex items-center gap-2">
@@ -60,7 +87,11 @@
         <canvas id="timeSeriesChart" height="160"></canvas>
     </div>
 
-    <!-- Last diagram from the notebook: Polar/Nightingale equivalent with selectable year -->
+    <!-- 
+        Polar Chart Section
+        Visualizes top keywords for a selected year in a radial chart format
+        Includes year selection dropdown to change the displayed data
+    -->
     <section class="bg-white rounded-2xl shadow p-4 mt-10">
         <div class="flex items-center justify-between mb-2">
             <h2 id="polarTitle" class="text-xl font-bold">Top Keywords</h2>
@@ -72,7 +103,11 @@
         <canvas id="polarChart" height="200"></canvas>
     </section>
 
-    <!-- Conclusion moved to bottom -->
+    <!-- 
+        Conclusion Section
+        Summarizes key findings from the keyword analysis across different years
+        Highlights patterns in anti-vaccination rhetoric during the pandemic
+    -->
     <section class="bg-white rounded-2xl shadow p-4 mt-10">
         <h2 class="text-xl font-bold mb-2">Conclusion</h2>
         <p class="text-sm text-gray-800">In 2021 and 2022 three of the top keywords were dealing with protests and also the keyword „freedom“ occured. During these two years the protests against the lockdowns had their peak.
@@ -80,13 +115,25 @@
     </section>
 </main>
 <script>
+    /**
+     * Main JavaScript for Anti-Vaccination Movement data visualization
+     * Handles data loading, chart rendering, keyword selection, and dark mode functionality
+     * Creates three visualizations:
+     * 1. Bar chart showing keyword frequencies by year
+     * 2. Line chart showing selected keywords over time
+     * 3. Polar chart showing top keywords for a specific year
+     */
     document.addEventListener('DOMContentLoaded', function () {
+        /**
+         * Dark Mode Functionality
+         * Handles theme initialization and toggling between light and dark modes
+         */
         const htmlElement = document.documentElement;
         const darkModeToggle = document.getElementById('darkModeToggle');
-        const moonIcon = '<i class="fas fa-moon"></i>';
-        const sunIcon = '<i class="fas fa-sun"></i>';
+        const moonIcon = '<i class="fas fa-moon"></i>';  // Icon for light mode (indicates switch to dark)
+        const sunIcon = '<i class="fas fa-sun"></i>';    // Icon for dark mode (indicates switch to light)
 
-        // Apply saved theme or system preference
+        // Apply saved theme or system preference on initial load
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
@@ -97,29 +144,44 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
-        // Data: load from JSON file and transform to internal structure {year: [[word,count], ...]}
+        /**
+         * Data Loading and Transformation
+         * Fetches keyword data from JSON file and transforms it into a format suitable for visualization
+         */
         const yearSelect = document.getElementById('yearSelect');
-        let rawData = null; // will be { year: [[word,count], ...] }
+        let rawData = null; // Will store transformed data in format: { year: [[word,count], ...] }
 
+        /**
+         * Loads keyword data from the server and prepares it for visualization
+         * Handles data normalization, year selection dropdown population, and error handling
+         */
         async function loadData() {
             try {
+                // Fetch data from server
                 const res = await fetch('/answer_one.json');
                 const json = await res.json();
-                // Transform: incoming format {year: { keywords: [ {words, numbers}, ... ] }}
+
+                // Transform incoming format {year: { keywords: [ {words, numbers}, ... ] }}
+                // to a more consistent structure for visualization
                 const transformed = {};
                 Object.keys(json).forEach(year => {
-                    const kwArr = (json[year] && Array.isArray(json[year].keywords)) ? json[year].keywords : (json[year] && json[year].keywords ? Object.values(json[year].keywords) : []);
-                    // Map to [word, count]
+                    // Handle different possible data structures in the source JSON
+                    const kwArr = (json[year] && Array.isArray(json[year].keywords)) 
+                        ? json[year].keywords 
+                        : (json[year] && json[year].keywords ? Object.values(json[year].keywords) : []);
+
+                    // Map to consistent [word, count] format and filter out invalid entries
                     const arr = kwArr
                         .filter(x => x && (x.words !== undefined || x.word !== undefined) && (x.numbers !== undefined || x.count !== undefined))
                         .map(x => [String(x.words ?? x.word), Number(x.numbers ?? x.count) || 0]);
-                    // sort desc by count for stability
+
+                    // Sort by count descending for consistent display
                     arr.sort((a, b) => b[1] - a[1]);
                     transformed[year] = arr;
                 });
                 rawData = transformed;
 
-                // Populate selector
+                // Populate year selector dropdown with available years plus "all years" option
                 const years = ['all', ...Object.keys(rawData).sort((a,b)=>a.localeCompare(b))];
                 years.forEach(y => {
                     const opt = document.createElement('option');
@@ -127,11 +189,12 @@
                     opt.textContent = (y === 'all') ? 'All years' : y;
                     yearSelect.appendChild(opt);
                 });
-                yearSelect.value = 'all';
+                yearSelect.value = 'all'; // Default to showing all years
 
-                // proceed with rendering and controls init
+                // Initialize visualizations after data is loaded
                 afterDataLoaded();
             } catch (e) {
+                // Handle data loading errors
                 console.error('Failed to load antivax data', e);
                 const container = document.getElementById('chartContainer');
                 if (container) {
@@ -140,43 +203,64 @@
             }
         }
 
+        /**
+         * Chart Rendering Functions
+         * Handle the creation and updating of the various data visualizations
+         */
         const ctx = document.getElementById('keywordsChart').getContext('2d');
-        let chart;
+        let chart; // Main bar chart instance
 
+        /**
+         * Gets appropriate colors based on current theme (light/dark)
+         * @returns {Object} Color settings for charts
+         */
         function getColors() {
             const isDark = htmlElement.classList.contains('dark');
             return {
                 isDark,
-                axis: isDark ? '#e2e8f0' : '#0f172a',
-                grid: isDark ? '#475569' : '#e5e7eb',
-                bar: '#10b981',
-                lines: [
-                    '#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7', '#06b6d4', '#f97316', '#84cc16', '#f43f5e', '#10b981'
+                axis: isDark ? '#e2e8f0' : '#0f172a',      // Text color for axes
+                grid: isDark ? '#475569' : '#e5e7eb',      // Grid line color
+                bar: '#10b981',                            // Bar color for bar chart
+                lines: [                                   // Color palette for line charts
+                    '#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7', 
+                    '#06b6d4', '#f97316', '#84cc16', '#f43f5e', '#10b981'
                 ],
-                bg: isDark ? '#1f2937' : '#ffffff'
+                bg: isDark ? '#1f2937' : '#ffffff'         // Background color
             };
         }
 
+        /**
+         * Renders the keywords bar chart for a specific year or all years combined
+         * @param {string} year - Year to display data for, or 'all' for combined data
+         */
         function renderChart(year) {
             const colors = getColors();
             let labels = [];
             let data = [];
+
             if (year === 'all') {
+                // Combine data from all years
                 const combined = {};
                 for (const yr in rawData) {
                     rawData[yr].forEach(([keyword, count]) => {
                         combined[keyword] = (combined[keyword] || 0) + count;
                     });
                 }
+                // Sort by count and take top 40 keywords
                 const sorted = Object.entries(combined).sort((a, b) => b[1] - a[1]).slice(0, 40);
                 labels = sorted.map(([k]) => k);
                 data = sorted.map(([_, v]) => v);
             } else {
+                // Use data for the specific year
                 const yearData = rawData[year];
                 labels = yearData.map(item => item[0]);
                 data = yearData.map(item => item[1]);
             }
+
+            // Destroy previous chart instance if it exists
             if (chart) chart.destroy();
+
+            // Create new horizontal bar chart
             chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -189,8 +273,9 @@
                     }]
                 },
                 options: {
-                    indexAxis: 'y', responsive: true,
-                    plugins: {legend: {display: false}},
+                    indexAxis: 'y',                        // Horizontal bars
+                    responsive: true,
+                    plugins: {legend: {display: false}},   // Hide legend
                     scales: {
                         x: {beginAtZero: true, title: { display: true, text: 'Count' }, ticks: {color: colors.axis}, grid: {color: colors.grid}},
                         y: {title: { display: true, text: 'Keyword' }, ticks: {color: colors.axis}, grid: {color: colors.grid}}
@@ -201,7 +286,10 @@
 
         // defer initial render until data is loaded
 
-        // ==== Time series for selected words ====
+        /**
+         * Time Series Chart Functionality
+         * Handles the interactive selection and visualization of keywords over time
+         */
         const wordSelectToggle = document.getElementById('wordSelectToggle');
         const wordOptions = document.getElementById('wordOptions');
         const wordSelectLabel = document.getElementById('wordSelectLabel');
@@ -209,17 +297,19 @@
         const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
         const ctxPolar = document.getElementById('polarChart').getContext('2d');
         const polarYearSelect = document.getElementById('polarYearSelect');
-        let timeChart;
-        let polarChart;
+        let timeChart;  // Time series chart instance
+        let polarChart; // Polar chart instance
 
-        // Build years sorted (initialized after data load)
-        let yearLabels = [];
+        // Data structures for time series visualization
+        let yearLabels = [];      // Sorted year labels for x-axis
+        let combinedCounts = {};  // Total count of each keyword across all years
+        let allKeywords = [];     // All available keywords sorted by frequency
+        let selected = [];        // Currently selected keywords for visualization
 
-        // Build combined keywords and default selection (initialized after data load)
-        let combinedCounts = {};
-        let allKeywords = [];
-        let selected = []; // default will be set after data load
-
+        /**
+         * Updates the dropdown label to show selected keywords
+         * Shows all keywords if 3 or fewer are selected, otherwise shows first 3 with a count
+         */
         function updateSelectLabel() {
             if (selected.length === 0) {
                 wordSelectLabel.textContent = 'Select words';
@@ -230,6 +320,10 @@
             }
         }
 
+        /**
+         * Populates the keyword selection dropdown with checkboxes
+         * Shows frequency count next to each keyword and marks selected ones
+         */
         function populateOptions() {
             wordOptions.innerHTML = '';
             allKeywords.forEach((kw, idx) => {
@@ -241,25 +335,44 @@
             });
         }
 
+        /**
+         * Creates a Chart.js dataset for a specific keyword
+         * @param {string} kw - Keyword to create dataset for
+         * @param {string} color - Color to use for the line
+         * @returns {Object} Chart.js dataset object
+         */
         function getDatasetFor(kw, color) {
+            // Map keyword counts across all years (0 if not present in a year)
             const data = yearLabels.map(y => {
                 const entry = rawData[y].find(([k]) => k === kw);
                 return entry ? entry[1] : 0;
             });
+
             return {
                 label: kw,
                 data,
                 borderColor: color,
                 backgroundColor: color,
-                tension: 0.3,
-                fill: false
+                tension: 0.3,  // Slight curve for better readability
+                fill: false    // No area fill under the line
             };
         }
 
+        /**
+         * Renders the time series chart showing selected keywords over time
+         * Creates a line for each selected keyword with appropriate colors
+         */
         function renderTimeSeries() {
             const colors = getColors();
-            const datasets = selected.map((kw, i) => getDatasetFor(kw, colors.lines[i % colors.lines.length]));
+            // Create a dataset for each selected keyword
+            const datasets = selected.map((kw, i) => 
+                getDatasetFor(kw, colors.lines[i % colors.lines.length])
+            );
+
+            // Destroy previous chart instance if it exists
             if (timeChart) timeChart.destroy();
+
+            // Create new line chart
             timeChart = new Chart(ctxTime, {
                 type: 'line',
                 data: {labels: yearLabels, datasets},
@@ -274,15 +387,32 @@
             });
         }
 
-        // Polar/Nightingale chart for a selected year
+        /**
+         * Polar Chart Functionality
+         * Visualizes top keywords for a selected year in a radial chart format
+         */
+
+        /**
+         * Renders a polar area chart showing top keywords for a specific year
+         * @param {string} year - Year to display data for
+         */
         function renderPolarForYear(year) {
+            // Validate inputs
             if (!rawData || !year || !ctxPolar) return;
+
+            // Get top 12 keywords for the selected year
             const top = (rawData[year] || []).slice().sort((a,b)=>b[1]-a[1]).slice(0, 12);
             const labels = top.map(d => d[0]);
             const dataVals = top.map(d => d[1]);
+
+            // Get colors for the chart segments
             const colors = getColors();
             const bg = labels.map((_, i) => colors.lines[i % colors.lines.length]);
+
+            // Destroy previous chart instance if it exists
             if (polarChart) polarChart.destroy();
+
+            // Create new polar area chart
             polarChart = new Chart(ctxPolar, {
                 type: 'polarArea',
                 data: {
@@ -295,6 +425,7 @@
                         r: {
                             ticks: {
                                 color: colors.axis,
+                                // Make backdrop transparent to improve readability
                                 backdropColor: colors.isDark ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)'
                             },
                             grid: { color: colors.grid },
@@ -303,32 +434,45 @@
                     }
                 }
             });
+
+            // Update chart title with selected year
             const title = document.getElementById('polarTitle');
             if (title) title.textContent = `Top Keywords in ${year}`;
         }
 
-        // Initialize after data load
+        /**
+         * Initialization and Event Handlers
+         * Sets up the visualization after data is loaded and configures user interactions
+         */
+
+        /**
+         * Initializes all visualizations and UI controls after data is loaded
+         * Prepares data structures, renders initial charts, and sets up event listeners
+         */
         function afterDataLoaded() {
-            // Build years sorted from loaded rawData
+            // Extract and sort years from the loaded data
             yearLabels = Object.keys(rawData).sort((a, b) => a.localeCompare(b));
 
-            // Build combined counts
+            // Calculate total counts for each keyword across all years
             combinedCounts = {};
             for (const y in rawData) {
                 rawData[y].forEach(([k, c]) => combinedCounts[k] = (combinedCounts[k] || 0) + c);
             }
+
+            // Sort keywords by total frequency and select top 3 by default
             allKeywords = Object.keys(combinedCounts).sort((a, b) => combinedCounts[b] - combinedCounts[a]);
             selected = allKeywords.slice(0, 3);
 
-            // Initial renders
+            // Render initial visualizations
             renderChart('all');
             updateSelectLabel();
             populateOptions();
             renderTimeSeries();
 
-            // Populate polar year selector
+            // Set up polar chart year selector with numeric years only
             const numericYears = yearLabels.filter(y => !isNaN(parseInt(y, 10)));
             const latestYear = String(Math.max(...numericYears.map(y => parseInt(y, 10))));
+
             polarYearSelect.innerHTML = '';
             numericYears.forEach(y => {
                 const opt = document.createElement('option');
@@ -336,24 +480,34 @@
                 opt.textContent = y;
                 polarYearSelect.appendChild(opt);
             });
+
+            // Default to the most recent year for polar chart
             polarYearSelect.value = latestYear;
             renderPolarForYear(latestYear);
 
-            // Hook selectors now that data exists
+            // Set up event listeners for year selection dropdowns
             yearSelect.addEventListener('change', () => renderChart(yearSelect.value));
             polarYearSelect.addEventListener('change', () => renderPolarForYear(polarYearSelect.value));
         }
 
-        // Dropdown toggle and outside click
+        /**
+         * Event Handlers for User Interaction
+         * Configure interactive elements and their responses
+         */
+
+        // Toggle keyword selection dropdown visibility
         wordSelectToggle.addEventListener('click', () => {
             wordOptions.classList.toggle('hidden');
         });
+
+        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!document.getElementById('wordMultiSelect').contains(e.target)) {
                 wordOptions.classList.add('hidden');
             }
         });
 
+        // Clear all selected keywords
         clearSelectionBtn.addEventListener('click', () => {
             selected = [];
             populateOptions();
@@ -361,7 +515,7 @@
             renderTimeSeries();
         });
 
-        // Instant update when a checkbox is toggled
+        // Update selected keywords when checkboxes are toggled
         wordOptions.addEventListener('change', (e) => {
             if (e.target && e.target.classList.contains('kwCheck')) {
                 const checks = wordOptions.querySelectorAll('.kwCheck');
@@ -371,27 +525,32 @@
             }
         });
 
-        // Toggle dark mode
+        // Toggle between dark and light mode
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
+                // Switch to light mode
                 htmlElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
                 darkModeToggle.innerHTML = moonIcon;
             } else {
+                // Switch to dark mode
                 htmlElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
                 darkModeToggle.innerHTML = sunIcon;
             }
-            // Re-render if data is available
+
+            // Re-render all charts with updated theme colors
             if (rawData) {
                 renderChart(yearSelect.value || 'all');
                 renderTimeSeries();
-                const currentPolarYear = polarYearSelect && polarYearSelect.value ? polarYearSelect.value : (yearLabels && yearLabels.length ? yearLabels[yearLabels.length - 1] : null);
+                const currentPolarYear = polarYearSelect && polarYearSelect.value 
+                    ? polarYearSelect.value 
+                    : (yearLabels && yearLabels.length ? yearLabels[yearLabels.length - 1] : null);
                 if (currentPolarYear) renderPolarForYear(currentPolarYear);
             }
         });
 
-        // Start loading data
+        // Start the data loading process
         loadData();
     });
 </script>
