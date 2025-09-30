@@ -1,36 +1,58 @@
 <!DOCTYPE html>
+<!-- 
+    #MeToo Trend & Sentiment Analysis Page
+    This page visualizes data about the #MeToo movement, including Wikipedia pageviews
+    and sentiment analysis of YouTube comments over different time periods
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>#MeToo Trend & Sentiment</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- noUiSlider for date range selection -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = '#MeToo Trend & Sentiment' %}
 {% include 'partials/page_header.html' %}
+
+<!-- 
+    Filter Controls Section
+    Allows users to filter data by time period and year
+-->
 <div class="max-w-7xl mx-auto pt-6">
     <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap justify-center w-full">
         <div class="flex items-center gap-3 grow w-full md:w-auto">
             <span class="font-medium pe-2">Time period:</span>
+            <!-- noUiSlider date range slider -->
             <div id="date-range-slider" class="w-64 md:w-96"></div>
             <div class="text-sm text-gray-600 ps-2">
                 <span id="range-start" class="font-medium"></span>
                 <span class="mx-1">bis</span>
                 <span id="range-end" class="font-medium"></span>
             </div>
+            <!-- Year dropdown filter -->
             <label for="year-select" class="ml-2 text-sm text-gray-600">Year:</label>
             <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
                 <option value="">All years</option>
             </select>
+            <!-- Reset button to clear all filters -->
             <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
                 Reset
             </button>
@@ -38,13 +60,19 @@
     </div>
 </div>
 <main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
-    <!-- Intro: What is #MeToo? -->
+    <!-- 
+        Introduction Section
+        Provides context about the #MeToo movement and its significance
+    -->
     <section class="bg-white rounded-2xl shadow p-6 space-y-3">
         <h2 class="text-xl font-semibold">What is #MeToo?</h2>
         <p class="text-gray-700">#MeToo is a social and political movement that stands against sexual harassment and assault. Its primary goal is to support survivors by encouraging them to share their stories, often through social media. The widespread use of social media transformed #MeToo into a global conversation, compelling governments, political leaders, and institutions to address gender-based violence by introducing or reinforcing laws and policies aimed at prevention.</p>
     </section>
 
-    <!-- Data gathered -->
+    <!-- 
+        Data Collection Section
+        Explains the methodology and data sources used in the analysis
+    -->
     <section class="bg-white rounded-2xl shadow p-6 space-y-3">
         <h2 class="text-xl font-semibold">What data did we gather?</h2>
         <p class="text-gray-700">To study the movement’s impact and public engagement, we collected two types of data:</p>
@@ -53,12 +81,17 @@
             <li>YouTube comments, consisting of 50 selected videos with 100 comments each sorted on relevant, allowing us to capture user sentiment and engagement in greater depth</li>
         </ul>
     </section>
+    <!-- 
+        Wikipedia Pageviews Visualization Section
+        Shows time series data of #MeToo Wikipedia page views
+    -->
     <section class="space-y-3">
         <div class="flex items-end justify-between flex-wrap gap-2">
             <div>
                 <h2 class="text-lg font-semibold">Time series of Wikipedia-Pageviews</h2>
             </div>
         </div>
+        <!-- Line chart showing pageviews over time -->
         <div class="bg-white rounded-2xl shadow p-4">
             <canvas id="viewsChart" height="120"></canvas>
         </div>
@@ -67,20 +100,27 @@
         </div>
     </section>
 
+    <!-- 
+        Sentiment Analysis Visualization Section
+        Shows sentiment distribution overall and across different time periods
+    -->
     <section class="space-y-3">
         <div>
             <h2 class="text-lg font-semibold">Sentimentanalysis over different time periods</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Pie chart showing overall sentiment distribution -->
             <div class="bg-white rounded-2xl shadow p-4">
                 <h3 class="font-medium mb-2">Overall distribution</h3>
                 <canvas id="sentimentPie"></canvas>
             </div>
+            <!-- Stacked bar chart showing sentiment by time period -->
             <div class="bg-white rounded-2xl shadow p-4">
                 <h3 class="font-medium mb-2">Distribution per phase</h3>
                 <canvas id="sentimentStacked"></canvas>
             </div>
         </div>
+        <!-- Explanation of methodology and findings -->
         <div class="bg-white rounded-2xl shadow p-4 space-y-3 text-sm text-gray-700">
             <p>Stacked bar plot: We created a stacked bar plot, that showcases how the (relative) sentiment changes over five different periods:</p>
             <ul class="list-disc pl-6">
@@ -99,12 +139,20 @@
 {% include 'partials/footer.html' %}
 
 <script>
+    /**
+     * Main JavaScript for #MeToo data visualization
+     * Handles dark mode, data loading, chart rendering, and interactive filters
+     */
     document.addEventListener('DOMContentLoaded', async () => {
-        // Dark mode init (respect saved pref and system)
+        //  DARK MODE FUNCTIONALITY 
         const root = document.documentElement; // <html>
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const savedTheme = localStorage.getItem('theme');
 
+        /**
+         * Get appropriate colors based on current theme
+         * @returns {Object} Object with color values for chart elements
+         */
         function getColors() {
             const isDark = root.classList.contains('dark');
             return {
@@ -114,6 +162,10 @@
             };
         }
 
+        /**
+         * Applies theme-appropriate colors to a chart
+         * @param {Chart} chart - Chart.js instance to update
+         */
         function applyChartColors(chart) {
             const c = getColors();
             // default text color
@@ -136,6 +188,10 @@
             }
         }
 
+        /**
+         * Applies dark or light theme to the page and updates charts
+         * @param {string} theme - 'dark' or 'light'
+         */
         function applyTheme(theme) {
             if (theme === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
             // Update Chart.js default color for axes/labels
@@ -145,6 +201,7 @@
             window.__charts?.forEach(ch => { applyChartColors(ch); ch.update(); });
         }
 
+        // Initialize theme based on user preference or system setting
         applyTheme(savedTheme ? savedTheme : (prefersDark.matches ? 'dark' : 'light'));
         prefersDark.addEventListener?.('change', e => {
             if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light');
@@ -156,21 +213,28 @@
             applyTheme(isDark ? 'dark' : 'light');
         });
 
+        // Array to store chart instances for theme updates
         window.__charts = [];
 
-        // Helper: fetch JSON with error handling
+        /**
+         * Helper function to fetch JSON data with error handling
+         * @param {string} url - URL to fetch JSON from
+         * @returns {Promise<Object>} Parsed JSON data
+         */
         async function getJSON(url) {
             const res = await fetch(url);
             if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
             return res.json();
         }
 
-        // 1) Time series for views
+        //  WIKIPEDIA PAGEVIEWS CHART 
         try {
+            // Load time series data for Wikipedia pageviews
             const series = await getJSON('/meToo_timeseries.json');
             const labels = series.map(d => d.timestamp);
             const values = series.map(d => d.views);
 
+            // Create line chart for pageviews over time
             const ctx1 = document.getElementById('viewsChart').getContext('2d');
             const line = new Chart(ctx1, {
                 type: 'line',
@@ -198,16 +262,22 @@
                     }
                 }
             });
+            // Apply theme colors and add to charts array for theme updates
             applyChartColors(line);
             window.__charts.push(line);
 
-            // Date range slider (drag to select timeframe)
+            //  DATE RANGE FILTER CONTROLS 
+            // Get references to filter UI elements
             const slider = document.getElementById('date-range-slider');
             const lblStart = document.getElementById('range-start');
             const lblEnd = document.getElementById('range-end');
             const resetBtn = document.getElementById('reset-filters');
 
-            // Parse DD.MM.YYYY into Date
+            /**
+             * Parse date string in DD.MM.YYYY format into Date object
+             * @param {string} s - Date string in DD.MM.YYYY format
+             * @returns {Date} JavaScript Date object
+             */
             const parseDDMMYYYY = (s) => {
                 const [dd, mm, yyyy] = s.split('.');
                 return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
@@ -216,22 +286,30 @@
             const minIndex = 0;
             const maxIndex = dates.length - 1;
 
+            /**
+             * Format date object to DD.MM.YYYY format
+             * @param {Date} d - Date object to format
+             * @returns {string} Formatted date string
+             */
             function fmt(d) {
                 const pad = (n) => String(n).padStart(2, '0');
                 return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
             }
 
             if (slider && window.noUiSlider) {
+                // Initialize noUiSlider for date range selection
                 noUiSlider.create(slider, {
                     start: [minIndex, maxIndex],
-                    connect: true,
-                    step: 1,
+                    connect: true,  // Connect the handles with a colored bar
+                    step: 1,        // Step by 1 day
                     range: {min: minIndex, max: maxIndex}
                 });
 
-                // Populate year dropdown and wire it to the slider
+                // Initialize year dropdown filter
                 const yearSelect = document.getElementById('year-select');
                 const yearRanges = {};
+
+                // Build year ranges map (year -> [startIndex, endIndex])
                 dates.forEach((d, i) => {
                     const y = d.getFullYear();
                     if (!(y in yearRanges)) {
@@ -240,12 +318,14 @@
                         yearRanges[y][1] = i;
                     }
                 });
+
                 if (yearSelect) {
-                    // Ensure options exist (keeps 'Alle Jahre' default)
-                    // Remove any year options in case of re-init
+                    // Remove existing year options except "All years"
                     [...yearSelect.querySelectorAll('option')]
                         .filter(o => o.value !== '')
                         .forEach(o => o.remove());
+
+                    // Add option for each year in the data
                     Object.keys(yearRanges).forEach(y => {
                         const opt = document.createElement('option');
                         opt.value = String(y);
@@ -253,12 +333,15 @@
                         yearSelect.appendChild(opt);
                     });
 
+                    // Add event listener for year selection changes
                     yearSelect.addEventListener('change', () => {
                         const val = yearSelect.value;
                         if (!val) {
+                            // If "All years" is selected, show all data
                             slider.noUiSlider.set([minIndex, maxIndex]);
                             applyRange(minIndex, maxIndex);
                         } else {
+                            // If specific year is selected, filter to that year
                             const [a, b] = yearRanges[val];
                             slider.noUiSlider.set([a, b]);
                             applyRange(a, b);
@@ -266,12 +349,19 @@
                     });
                 }
 
+                /**
+                 * Apply selected date range to the chart
+                 * @param {number} iStart - Start index in the data array
+                 * @param {number} iEnd - End index in the data array
+                 */
                 function applyRange(iStart, iEnd) {
+                    // Ensure indices are within valid range
                     const s = Math.max(minIndex, Math.min(maxIndex, Math.round(iStart)));
                     const e = Math.max(minIndex, Math.min(maxIndex, Math.round(iEnd)));
                     const a = Math.min(s, e);
                     const b = Math.max(s, e);
 
+                    // Update date range labels
                     lblStart.textContent = fmt(dates[a]);
                     lblEnd.textContent = fmt(dates[b]);
 
@@ -284,13 +374,14 @@
                     line.options.scales.x.ticks.autoSkip = true;
                     line.options.scales.x.ticks.maxTicksLimit = 10;
 
+                    // Update chart data and redraw
                     line.data.labels = newLabels;
                     line.data.datasets[0].data = newValues;
                     line.update();
                 }
 
+                // Update date labels when slider handles are moved
                 slider.noUiSlider.on('update', (valuesArr) => {
-                    // Only update labels on move
                     const iStart = Number(valuesArr[0]);
                     const iEnd = Number(valuesArr[1]);
                     const s = Math.round(iStart);
@@ -299,6 +390,7 @@
                     lblEnd.textContent = fmt(dates[Math.max(s, e)]);
                 });
 
+                // Apply range filter when slider change is complete
                 slider.noUiSlider.on('change', (valuesArr) => {
                     const iStart = Number(valuesArr[0]);
                     const iEnd = Number(valuesArr[1]);
@@ -321,16 +413,17 @@
             console.error('Fehler beim Laden der Zeitreihe', e);
         }
 
-        // 2) Sentiment
+        //  SENTIMENT ANALYSIS CHARTS 
         try {
+            // Load sentiment data for different time periods
             const s = await getJSON('/meToo_sentiment.json');
             const phases = Object.keys(s);
             const categories = ['positive', 'neutral', 'negative'];
 
-            // Aggregate totals
+            // Calculate aggregate totals across all phases
             const totals = categories.map(cat => phases.reduce((acc, ph) => acc + (s[ph][cat] || 0), 0));
 
-            // Pie chart
+            //  PIE CHART FOR OVERALL SENTIMENT DISTRIBUTION 
             const ctxPie = document.getElementById('sentimentPie').getContext('2d');
             const pie = new Chart(ctxPie, {
                 type: 'doughnut',
@@ -346,10 +439,13 @@
             applyChartColors(pie);
             window.__charts.push(pie);
 
-            // Stacked bar per phase
+            //  STACKED BAR CHART FOR SENTIMENT BY PHASE 
             const ctxStack = document.getElementById('sentimentStacked').getContext('2d');
-            // Convert absolute counts to percentages per phase
+
+            // Format phase labels for display (convert camelCase to spaces)
             const phaseLabels = phases.map(p => p.replace('sentiment', '').replace(/([A-Z])/g, ' $1').trim());
+
+            // Calculate total comments per phase for percentage calculation
             const totalsPerPhase = phases.map(p => {
                 const pos = Number(s[p].positive || 0);
                 const neu = Number(s[p].neutral || 0);
@@ -357,11 +453,16 @@
                 const t = pos + neu + neg;
                 return t > 0 ? t : 0;
             });
+
+            // Helper function to convert raw counts to percentages
             const toPct = (val, total) => total ? +(val / total * 100).toFixed(2) : 0;
+
+            // Calculate percentage data for each sentiment category
             const dataPos = phases.map((p, i) => toPct(Number(s[p].positive || 0), totalsPerPhase[i]));
             const dataNeu = phases.map((p, i) => toPct(Number(s[p].neutral || 0), totalsPerPhase[i]));
             const dataNeg = phases.map((p, i) => toPct(Number(s[p].negative || 0), totalsPerPhase[i]));
 
+            // Create stacked bar chart
             const bar = new Chart(ctxStack, {
                 type: 'bar',
                 data: {
@@ -378,6 +479,7 @@
                         legend: {position: 'bottom'},
                         tooltip: {
                             callbacks: {
+                                // Format tooltip to show percentage values
                                 label: (ctx) => {
                                     const label = ctx.dataset.label || '';
                                     const v = typeof ctx.raw === 'number' ? ctx.raw : Number(ctx.raw);
@@ -403,6 +505,7 @@
                     }
                 }
             });
+            // Apply theme colors and add to charts array for theme updates
             applyChartColors(bar);
             window.__charts.push(bar);
         } catch (e) {
