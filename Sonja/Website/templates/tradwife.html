@@ -1,30 +1,48 @@
 <!DOCTYPE html>
+<!-- 
+    Tradwife Trend Analysis Page
+    This page visualizes data about the "tradwife" trend on social media platforms,
+    including video uploads, views, and engagement metrics over different time periods
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Tradwife Trend Analysis</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'Tradwife Trend Analysis' %}
 {% include 'partials/page_header.html' %}
 
-<!-- Intro: What is "Tradwife"? -->
+<!-- 
+    Introduction Section
+    Explains what the "tradwife" trend is and provides context
+-->
 <section class="max-w-7xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
     <h2 class="text-xl font-semibold">What is "Tradwife"?</h2>
     <p class="text-gray-700">In 2020, the term "tradwife" started appearing on social media and has gained notable traction in the last two years. A "tradwife" is a woman who embraces traditional gender roles and relationships, often preferring to focus on caring for the household and family rather than pursuing a career.</p>
     <p class="text-gray-700">On social media, creators who embody this lifestyle often show themselves cooking, cleaning, or caring for their families. The trend sometimes romanticizes traditional gender roles and relationships, which is why it has also faced considerable criticism.</p>
 </section>
 
-<!-- Analysis overview and findings -->
+<!-- 
+    Analysis Overview Section
+    Summarizes the methodology and key findings of the data analysis
+-->
 <section class="max-w-7xl mx-auto mt-4 bg-white rounded-2xl shadow mb-6 p-6 space-y-3">
     <h2 class="text-xl font-semibold">What did we analyze?</h2>
     <p class="text-gray-700">This analysis explores how the "tradwife" culture has developed on YouTube over time. Using the YouTube Data API, we collected the number of videos, views, and likes across specific time periods.</p>
@@ -36,6 +54,10 @@
 </section>
 
 <div class="max-w-7xl mx-auto">
+    <!-- 
+        Filter Controls Section
+        Allows users to filter data by year and select which metrics to display
+    -->
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
         <label class="font-medium">Year:</label>
         <select id="year-selector" class="border rounded p-2 bg-white">
@@ -90,7 +112,10 @@
     <!-- Subtitle under filters and above chart -->
     <div id="subtitle" class="text-sm my-5 text-center"></div>
 
-    <!-- Tabelle -->
+    <!-- 
+        Data Table Section
+        Displays detailed metrics in a sortable table format
+    -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
         <table id="tradwifeTable" class="min-w-full border-collapse">
             <thead>
@@ -101,7 +126,10 @@
         </table>
     </div>
 
-    <!-- Main Chart -->
+    <!-- 
+        Data Visualization Section - Line Chart
+        Shows trends of selected metrics over time
+    -->
     <section>
         <!-- Combined Line Chart -->
         <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
@@ -113,7 +141,10 @@
         </div>
     </section>
 
-    <!-- Bubble Chart (CanvasJS) -->
+    <!-- 
+        Data Visualization Section - Bubble Chart
+        Shows relationship between likes, time, videos count, and views
+    -->
     <section>
         <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
             <div class="mb-3 text-xl font-bold text-center pt-4">Bubble Chart: Likes über Zeit (Größe = Videos, Farbe = Views)</div>
@@ -121,7 +152,10 @@
         </div>
     </section>
 
-    <!-- Pie Charts -->
+    <!-- 
+        Data Visualization Section - Pie Charts
+        Shows distribution of metrics across time periods
+    -->
     <section class="mt-8 grid gap-8 lg:grid-cols-3">
         <!-- Videos Pie Chart (hidden by default) -->
         <div id="videosPieContainer" class="max-w-xl hidden">
@@ -142,7 +176,10 @@
         </div>
     </section>
 
-    <!-- Info Cards -->
+    <!-- 
+        Information Cards Section
+        Provides additional context about the tradwife trend and analysis
+    -->
     <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
         <div class="block rounded-2xl bg-white shadow p-6">
             <h2 class="text-xl font-bold text-pink-700 mb-2">📹 What is Tradwife?</h2>
@@ -165,6 +202,11 @@
 </div>
 
 <script defer>
+    /**
+     * Main JavaScript for Tradwife data visualization
+     * Handles data loading, chart rendering, and interactive filters
+     */
+
     // Custom plugin to add tooltips to legend items
     const legendTooltipPlugin = {
         id: 'legendTooltip',
@@ -199,6 +241,7 @@
         }
     };
 
+    // Data storage for different views (all years, detailed, and individual years)
     let dataStore = {
         all: [],
         detailed: [],
@@ -210,12 +253,17 @@
         "2025": []
     };
 
+    // State variables for the current view and charts
     let currentView = "all";
     let combinedChart, videosPieChart, viewsPieChart, likesPieChart, bubbleChart;
     let sortState = {key: null, dir: 1};
     let selectedMetrics = ["videos", "views", "likes"];
 
-    // === Time Period Colors ===
+    /**
+     * Color schemes for visualization
+     * Consistent colors help users identify time periods and metrics across charts
+     */
+    // Time Period Colors - purple to green gradient for years
     const PERIOD_COLORS = new Map([
         ["2020", "#8B5CF6"],
         ["2021", "#6366F1"],
@@ -225,13 +273,17 @@
         ["2025", "#22C55E"]
     ]);
 
-    // === Metrics Colors ===
+    // Metrics Colors - distinct colors for different metrics
     const METRICS_COLORS = {
         videos: "#FF6B6B",  // Red
         views: "#4ECDC4",   // Teal
         likes: "#FFD166"    // Yellow
     };
 
+    /**
+     * Helper functions for data formatting and display
+     */
+    // Format period strings for display (e.g., "2024_first_third" -> "2024 (Jan-Apr)")
     const prettyPeriod = (period) => {
         if (period.includes("_first_third")) return period.split("_")[0] + " (Jan-Apr)";
         if (period.includes("_second_third")) return period.split("_")[0] + " (May-Aug)";
@@ -239,19 +291,24 @@
         return period;
     };
 
+    // Get color for a time period from the color map
     const getPeriodColor = (period) => PERIOD_COLORS.get(period) || "#9CA3AF";
 
-    // Format large numbers with commas
+    // Format large numbers with commas for better readability
     const formatNumber = (num) => num.toLocaleString("de-DE");
 
-    // ---- Load Data ----
+    /**
+     * DATA LOADING AND PROCESSING
+     * Fetches data from JSON file, processes it into different views (all, detailed, yearly),
+     * and calculates derived metrics
+     */
     fetch("/answer_seven.json")
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             return response.json();
         })
         .then(data => {
-            // Process data into different views
+            // Initialize data arrays for different views
             const allData = [];
             const detailedData = [];
             const yearData = {
@@ -263,7 +320,7 @@
                 "2025": []
             };
 
-            // Temporary storage for calculating 2024 and 2025 averages
+            // Temporary storage for calculating 2024 and 2025 aggregates
             const year2024Data = {
                 periods: 0,
                 videos: 0,
@@ -278,8 +335,9 @@
                 likes: 0
             };
 
-            // Process each period in the data
+            // Process each time period in the data
             Object.entries(data).forEach(([period, stats]) => {
+                // Create data point with raw and calculated metrics
                 const dataPoint = {
                     period: period,
                     prettyPeriod: prettyPeriod(period),
@@ -294,7 +352,7 @@
                 // For detailed view, include all periods
                 detailedData.push(dataPoint);
 
-                // Collect data for 2024 and 2025 averages
+                // Aggregate data for 2024 and 2025 
                 if (period.startsWith("2024_")) {
                     year2024Data.periods++;
                     year2024Data.videos += stats.videos;
@@ -307,7 +365,7 @@
                     year2025Data.likes += stats.likes;
                 }
 
-                // For all data view, include full years (except 2024 and 2025 which will be added as averages later)
+                // For all data view, include full years (except 2024 and 2025 which will be added as aggregates later)
                 if (!period.includes("_") && period !== "2024" && period !== "2025") {
                     allData.push(dataPoint);
                 }
@@ -325,58 +383,70 @@
                 }
             });
 
-            // Add total (sum) data points for 2024 and 2025 to allData
+            // Add aggregate data points for 2024 and 2025 to allData
+            // Note: Commented code below was part of an earlier implementation
             // if (year2024Data.periods > 0) {
-               // allData.push({
-                 //   period: "2024",
-                   // prettyPeriod: "2024",
-                   // videos: year2024Data.videos,
-                   // views: year2024Data.views,
-                   // likes: year2024Data.likes,
-                   // viewsPerVideo: Math.round(year2024Data.views / year2024Data.videos),
-                   // likesPerVideo: Math.round(year2024Data.likes / year2024Data.videos),
-                   // likesPerView: ((year2024Data.likes / year2024Data.views) * 100).toFixed(2)
-              //  });
-           // }
+            //    allData.push({
+            //        period: "2024",
+            //        prettyPeriod: "2024",
+            //        videos: year2024Data.videos,
+            //        views: year2024Data.views,
+            //        likes: year2024Data.likes,
+            //        viewsPerVideo: Math.round(year2024Data.views / year2024Data.videos),
+            //        likesPerVideo: Math.round(year2024Data.likes / year2024Data.videos),
+            //        likesPerView: ((year2024Data.likes / year2024Data.views) * 100).toFixed(2)
+            //    });
+            // }
 
-        // Add sum data points for 2024 and 2025 to allData
-        if (year2024Data.periods > 0) {
-          allData.push({
-            period: "2024",
-            prettyPeriod: "2024",
-            videos: Math.round(year2024Data.videos),
-            views: Math.round(year2024Data.views),
-            likes: Math.round(year2024Data.likes),
-            viewsPerVideo: Math.round((year2024Data.views) / (year2024Data.videos)),
-            likesPerVideo: Math.round((year2024Data.likes) / (year2024Data.videos)),
-            likesPerView: (((year2024Data.likes) / (year2024Data.views)) * 100).toFixed(2)
-          });
-        }
+            // Add aggregate data points for 2024 to allData
+            if (year2024Data.periods > 0) {
+              allData.push({
+                period: "2024",
+                prettyPeriod: "2024",
+                videos: Math.round(year2024Data.videos),
+                views: Math.round(year2024Data.views),
+                likes: Math.round(year2024Data.likes),
+                viewsPerVideo: Math.round((year2024Data.views) / (year2024Data.videos)),
+                likesPerVideo: Math.round((year2024Data.likes) / (year2024Data.videos)),
+                likesPerView: (((year2024Data.likes) / (year2024Data.views)) * 100).toFixed(2)
+              });
+            }
 
-        if (year2025Data.periods > 0) {
-          allData.push({
-            period: "2025",
-            prettyPeriod: "2025",
-            videos: Math.round(year2025Data.videos),
-            views: Math.round(year2025Data.views),
-            likes: Math.round(year2025Data.likes),
-            viewsPerVideo: Math.round((year2025Data.views) / (year2025Data.videos)),
-            likesPerVideo: Math.round((year2025Data.likes) / (year2025Data.videos)),
-            likesPerView: (((year2025Data.likes) / (year2025Data.views)) * 100).toFixed(2)
-          });
-        }
+            // Add aggregate data points for 2025 to allData
+            if (year2025Data.periods > 0) {
+              allData.push({
+                period: "2025",
+                prettyPeriod: "2025",
+                videos: Math.round(year2025Data.videos),
+                views: Math.round(year2025Data.views),
+                likes: Math.round(year2025Data.likes),
+                viewsPerVideo: Math.round((year2025Data.views) / (year2025Data.videos)),
+                likesPerVideo: Math.round((year2025Data.likes) / (year2025Data.videos)),
+                likesPerView: (((year2025Data.likes) / (year2025Data.views)) * 100).toFixed(2)
+              });
+            }
 
+            // Store processed data in the dataStore object
             dataStore.all = allData;
             dataStore.detailed = detailedData;
             Object.keys(yearData).forEach(year => {
                 dataStore[year] = yearData[year];
             });
 
+            // Initialize visualization with the processed data
             refresh();
         })
         .catch(error => console.error("Error loading data:", error));
 
-    // Tabellenkopf mit Sortierung
+    /**
+     * TABLE RENDERING FUNCTIONS
+     * Creates and updates the data table with sortable columns
+     */
+
+    /**
+     * Renders the table header with sortable columns
+     * @param {Array} columns - Array of column definitions with key and label properties
+     */
     function renderHeader(columns) {
         const thead = document.getElementById("tableHead");
         thead.innerHTML = "";
@@ -384,21 +454,29 @@
             const th = document.createElement("th");
             th.className = "px-4 py-2 border-b cursor-pointer select-none";
             th.dataset.sort = col.key;
+            // Add sort indicators (▲/▼) to show current sort direction
             th.textContent = col.label + " " +
                 (sortState.key === col.key ? (sortState.dir === 1 ? "▲" : "▼") : "▲▼");
+            // Add click event for sorting
             th.addEventListener("click", () => {
-                if (sortState.key === col.key) sortState.dir *= -1;
+                if (sortState.key === col.key) sortState.dir *= -1; // Toggle direction if same column
                 else {
-                    sortState.key = col.key;
-                    sortState.dir = 1;
+                    sortState.key = col.key; // Set new sort column
+                    sortState.dir = 1;       // Default to ascending
                 }
-                refresh();
+                refresh(); // Re-render with new sort
             });
             thead.appendChild(th);
         });
     }
 
+    /**
+     * Renders the complete data table with the provided dataset
+     * Includes sortable columns, color-coded metrics, and totals row
+     * @param {Array} data - Array of data objects to display in the table
+     */
     function renderTable(data) {
+        // Define table columns with keys and display labels
         const columns = [
             {key: "prettyPeriod", label: "Time Period"},
             {key: "videos", label: "Videos"},
@@ -409,13 +487,16 @@
             {key: "likesPerView", label: "Likes/View (%)"}
         ];
 
+        // Render the table header with sortable columns
         renderHeader(columns);
 
+        // Get references to table body and footer
         const tbody = document.querySelector("#tradwifeTable tbody");
         const tfoot = document.getElementById("tableFoot");
         tbody.innerHTML = "";
         tfoot.innerHTML = "";
 
+        // Sort the data if a sort column is selected
         let tableData = data.slice();
         if (sortState.key) {
             tableData.sort((a, b) => {
@@ -424,13 +505,17 @@
             });
         }
 
+        // Track totals for summary row
         let totalVideos = 0, totalViews = 0, totalLikes = 0;
 
+        // Create a row for each data point
         tableData.forEach(row => {
+            // Accumulate totals
             totalVideos += row.videos;
             totalViews += row.views;
             totalLikes += row.likes;
 
+            // Create table row with color-coded metrics
             const tr = document.createElement("tr");
             tr.className = "hover:bg-gray-50 transition-colors";
             tr.innerHTML = `
@@ -467,10 +552,12 @@
             tbody.appendChild(tr);
         });
 
+        // Calculate averages for the summary row
         const avgViewsPerVideo = Math.round(totalViews / totalVideos);
         const avgLikesPerVideo = Math.round(totalLikes / totalVideos);
         const avgLikesPerView = ((totalLikes / totalViews) * 100).toFixed(2);
 
+        // Add summary row with totals and averages
         tfoot.innerHTML = `
         <tr class="bg-gray-50 font-semibold">
           <td class="px-4 py-2 border-t">Total/Average</td>
@@ -502,25 +589,33 @@
       `;
     }
 
+    /**
+     * CHART RENDERING FUNCTIONS
+     * Creates and updates all chart visualizations based on the selected data and metrics
+     * @param {Array} data - Array of data objects to visualize
+     */
     function renderCharts(data) {
+        // Wait for Chart.js to be loaded before rendering
         if (typeof window.Chart === 'undefined') {
             setTimeout(() => renderCharts(data), 120);
             return;
         }
-        // Prepare data for charts
+
+        // Extract data series for charts
         const labels = data.map(d => d.prettyPeriod);
         const videos = data.map(d => d.videos);
         const views = data.map(d => d.views);
         const likes = data.map(d => d.likes);
         const colors = data.map(d => getPeriodColor(d.period));
 
-        // Combined Chart - Line chart with selected metrics
+        // Get canvas context for the combined line chart
         const combinedCtx = document.getElementById("combinedChart").getContext("2d");
-        if (combinedChart) combinedChart.destroy();
+        if (combinedChart) combinedChart.destroy(); // Clean up existing chart
 
         // Create datasets based on selected metrics
         const datasets = [];
 
+        // Add videos dataset if selected
         if (selectedMetrics.includes("videos")) {
             const color = METRICS_COLORS.videos;
             datasets.push({
@@ -534,6 +629,7 @@
             });
         }
 
+        // Add views dataset if selected (scaled to thousands)
         if (selectedMetrics.includes("views")) {
             const color = METRICS_COLORS.views;
             datasets.push({
@@ -547,6 +643,7 @@
             });
         }
 
+        // Add likes dataset if selected (scaled to thousands)
         if (selectedMetrics.includes("likes")) {
             const color = METRICS_COLORS.likes;
             datasets.push({
@@ -560,6 +657,7 @@
             });
         }
 
+        // Create the combined line chart with multiple Y-axes
         combinedChart = new Chart(combinedCtx, {
             type: "line",
             data: {
@@ -576,6 +674,7 @@
                 },
                 stacked: false,
                 scales: {
+                    // Y-axis for videos (left side)
                     'y-videos': {
                         type: 'linear',
                         display: selectedMetrics.includes("videos"),
@@ -596,6 +695,7 @@
                             drawOnChartArea: false,
                         }
                     },
+                    // Y-axis for views (right side)
                     'y-views': {
                         type: 'linear',
                         display: selectedMetrics.includes("views"),
@@ -616,6 +716,7 @@
                             drawOnChartArea: false,
                         }
                     },
+                    // Y-axis for likes (right side)
                     'y-likes': {
                         type: 'linear',
                         display: selectedMetrics.includes("likes"),
@@ -638,6 +739,7 @@
                     }
                 },
                 plugins: {
+                    // Chart title
                     title: {
                         display: true,
                         text: 'Tradwife Trend Development',
@@ -645,6 +747,7 @@
                             size: 18
                         }
                     },
+                    // Legend configuration
                     legend: {
                         labels: {
                             font: {
@@ -664,11 +767,13 @@
                             }
                         }
                     },
+                    // Tooltip configuration
                     tooltip: {
                         callbacks: {
                             label: function (context) {
                                 const label = context.dataset.label || '';
                                 const value = context.parsed.y;
+                                // Format tooltip based on metric type
                                 if (label.includes('Videos')) {
                                     return `${label}: ${value}`;
                                 } else {
@@ -681,9 +786,9 @@
             }
         });
 
-        // Show/hide pie charts based on selected metrics
+        // PIE CHARTS - Show/hide based on selected metrics
 
-        // Videos Pie Chart
+        // Videos Pie Chart - Distribution of videos by time period
         if (selectedMetrics.includes("videos")) {
             const videosPieCtx = document.getElementById("videosPieChart").getContext("2d");
             if (videosPieChart) videosPieChart.destroy();
@@ -717,7 +822,7 @@
             document.getElementById("videosPieContainer").classList.add("hidden");
         }
 
-        // Views Pie Chart
+        // Views Pie Chart - Distribution of views by time period
         if (selectedMetrics.includes("views")) {
             const viewsPieCtx = document.getElementById("viewsPieChart").getContext("2d");
             if (viewsPieChart) viewsPieChart.destroy();
@@ -751,7 +856,7 @@
             document.getElementById("viewsPieContainer").classList.add("hidden");
         }
 
-        // Likes Pie Chart
+        // Likes Pie Chart - Distribution of likes by time period
         if (selectedMetrics.includes("likes")) {
             const likesPieCtx = document.getElementById("likesPieChart").getContext("2d");
             if (likesPieChart) likesPieChart.destroy();
@@ -786,7 +891,16 @@
         }
     }
 
-    // ===== CanvasJS Bubble Chart =====
+    /**
+     * BUBBLE CHART FUNCTIONS
+     * Creates a bubble chart showing relationships between time, likes, videos, and views
+     */
+
+    /**
+     * Converts a period string to a Date object for timeline visualization
+     * @param {string} period - Period identifier (e.g., '2024', '2024_first_third')
+     * @returns {Date} Date object representing the middle of the period
+     */
     function parsePeriodToDate(period) {
         // period can be 'YYYY' or 'YYYY_first_third' | 'YYYY_second_third' | 'YYYY_third_third'
         try {
@@ -805,6 +919,13 @@
         }
     }
 
+    /**
+     * Interpolates between two colors based on a parameter t
+     * @param {Array} minColor - RGB color array [r,g,b] for minimum value
+     * @param {Array} maxColor - RGB color array [r,g,b] for maximum value
+     * @param {number} t - Interpolation parameter (0-1)
+     * @returns {string} CSS RGB color string
+     */
     function interpolateColor(minColor, maxColor, t) {
         // colors as [r,g,b] 0-255; t in [0,1]
         const r = Math.round(minColor[0] + (maxColor[0] - minColor[0]) * t);
@@ -813,35 +934,52 @@
         return `rgb(${r}, ${g}, ${b})`;
     }
 
+    /**
+     * Gets a color for a views value based on its position in the range
+     * @param {number} value - Views value to get color for
+     * @param {number} min - Minimum views value in dataset
+     * @param {number} max - Maximum views value in dataset
+     * @returns {string} CSS RGB color string
+     */
     function getViewsColor(value, min, max) {
-        if (max === min) return 'rgb(30, 136, 229)';
+        if (max === min) return 'rgb(30, 136, 229)'; // Default blue if no range
         const t = Math.max(0, Math.min(1, (value - min) / (max - min)));
-        // from light blue to dark blue
+        // Color gradient from light blue to dark blue
         const light = [187, 222, 251]; // #BBDEFB
         const dark = [13, 71, 161];    // #0D47A1
         return interpolateColor(light, dark, t);
     }
 
+    /**
+     * Renders the bubble chart using CanvasJS
+     * Bubble chart shows: x = time, y = likes, z (size) = videos, color = views
+     * @param {Array} data - Array of data objects to visualize
+     */
     function renderBubbleChart(data) {
+        // Wait for CanvasJS to be loaded before rendering
         if (typeof window.CanvasJS === 'undefined') {
             setTimeout(() => renderBubbleChart(data), 120);
             return;
         }
-        // Prepare datapoints: x = time, y = likes, z = videos, color by views
+
+        // Find min/max views for color scaling
         const minViews = Math.min(...data.map(d => d.views));
         const maxViews = Math.max(...data.map(d => d.views));
 
+        // Create data points for the bubble chart
         const dataPoints = data.map(d => ({
-            x: parsePeriodToDate(d.period),
-            y: d.likes,
-            z: d.videos,
-            color: getViewsColor(d.views, minViews, maxViews),
-            label: d.prettyPeriod,
-            views: d.views
+            x: parsePeriodToDate(d.period),      // Time on x-axis
+            y: d.likes,                          // Likes on y-axis
+            z: d.videos,                         // Videos as bubble size
+            color: getViewsColor(d.views, minViews, maxViews), // Views as color
+            label: d.prettyPeriod,               // Period label for tooltip
+            views: d.views                       // Views for tooltip
         }));
 
+        // Configure chart options
         const options = {
             animationEnabled: true,
+            // Use appropriate theme based on current mode
             theme: document.documentElement.classList.contains('dark') ? 'dark2' : 'light2',
             backgroundColor: 'transparent',
             axisX: {
@@ -855,6 +993,7 @@
                 lineColor: '#94a3b8',
                 labelFontColor: '#334155'
             },
+            // Configure tooltip to show all metrics
             toolTip: {
                 shared: false,
                 content: '{label}<br/>Likes: {y}<br/>Videos: {z}<br/>Views: {views}'
@@ -866,15 +1005,22 @@
             }]
         };
 
+        // Create and render the chart
         if (!document.getElementById('bubbleChartContainer')) return;
         bubbleChart = new CanvasJS.Chart('bubbleChartContainer', options);
         bubbleChart.render();
     }
 
+    /**
+     * Main refresh function that updates all visualizations
+     * Called when data is loaded or when filters change
+     */
     function refresh() {
+        // Get data for the current view
         const data = dataStore[currentView] || [];
         const subtitle = document.getElementById("subtitle");
 
+        // Update subtitle based on current view
         if (currentView === "all") {
             subtitle.textContent = "Every year - Tradwife Content Analysis";
         } else if (currentView === "detailed") {
@@ -883,11 +1029,12 @@
             subtitle.textContent = `Tradwife Content Analysis - ${currentView}`;
         }
 
+        // Render all visualizations with the current data
         renderTable(data);
         renderCharts(data);
         renderBubbleChart(data);
 
-        // Show pie charts section if at least one metric is selected
+        // Show/hide pie charts section based on selected metrics
         const pieChartsSection = document.querySelector('.mt-8.grid.gap-8.lg\\:grid-cols-3');
         if (selectedMetrics.length === 0) {
             pieChartsSection.classList.add('hidden');
@@ -896,34 +1043,43 @@
         }
     }
 
-    // Add event listener to year selector
+    /**
+     * EVENT HANDLERS AND INITIALIZATION
+     * Sets up interactive controls and initializes the UI
+     */
+
+    // Add event listener to year selector dropdown
     document.getElementById('year-selector').addEventListener('change', (e) => {
         currentView = e.target.value;
         refresh();
     });
 
-    // Setup metrics dropdown functionality
+    /**
+     * Sets up the metrics dropdown with checkboxes and event handlers
+     * Allows users to select which metrics to display in the visualizations
+     */
     const setupMetricsDropdown = () => {
         const dropdownButton = document.getElementById("metricsDropdown");
         const dropdownContent = document.getElementById("metricsDropdownContent");
         const selectAllCheckbox = document.getElementById("selectAllMetrics");
         const metricCheckboxes = document.querySelectorAll(".metric-checkbox");
 
-        // Toggle dropdown when button is clicked
+        // Toggle dropdown visibility when button is clicked
         dropdownButton.addEventListener("click", () => {
             dropdownContent.classList.toggle("hidden");
         });
 
-        // Close dropdown when clicking outside
+        // Close dropdown when clicking outside of it
         document.addEventListener("click", (e) => {
             if (!dropdownButton.contains(e.target) && !dropdownContent.contains(e.target)) {
                 dropdownContent.classList.add("hidden");
             }
         });
 
-        // Select All checkbox functionality
+        // "Select All" checkbox functionality
         selectAllCheckbox.addEventListener("change", () => {
             const isChecked = selectAllCheckbox.checked;
+            // Update all metric checkboxes to match the "Select All" state
             metricCheckboxes.forEach(checkbox => {
                 checkbox.checked = isChecked;
             });
@@ -931,7 +1087,7 @@
             updateDropdownButtonText();
         });
 
-        // Add event listener to each metric checkbox
+        // Add event listeners to individual metric checkboxes
         metricCheckboxes.forEach(checkbox => {
             checkbox.addEventListener("change", () => {
                 updateSelectedMetrics();
@@ -939,55 +1095,71 @@
             });
         });
 
-        // Function to update selectedMetrics array based on checked checkboxes
+        /**
+         * Updates the selectedMetrics array based on checked checkboxes
+         * Then refreshes the visualizations to reflect the changes
+         */
         function updateSelectedMetrics() {
             selectedMetrics = [];
             document.querySelectorAll(".metric-checkbox:checked").forEach(checkbox => {
                 selectedMetrics.push(checkbox.value);
             });
 
-            // Update "Select All" checkbox state
+            // Update "Select All" checkbox state based on whether all metrics are selected
             const allCheckboxes = document.querySelectorAll(".metric-checkbox");
             const checkedCheckboxes = document.querySelectorAll(".metric-checkbox:checked");
             selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
 
+            // Refresh visualizations with the new metrics selection
             refresh();
         }
 
-        // Function to update dropdown button text
+        /**
+         * Updates the dropdown button text based on selected metrics
+         */
         function updateDropdownButtonText() {
             const allCheckboxes = document.querySelectorAll(".metric-checkbox");
             const checkedCheckboxes = document.querySelectorAll(".metric-checkbox:checked");
 
+            // Set appropriate text based on selection state
             if (checkedCheckboxes.length === 0) {
                 dropdownButton.querySelector("span").textContent = "Keine Metrics";
             } else if (checkedCheckboxes.length === allCheckboxes.length) {
                 dropdownButton.querySelector("span").textContent = "Alle Metrics";
             } else if (checkedCheckboxes.length === 1) {
+                // Capitalize first letter of single selected metric
                 dropdownButton.querySelector("span").textContent = checkedCheckboxes[0].value.charAt(0).toUpperCase() + checkedCheckboxes[0].value.slice(1);
             } else {
+                // Show count of selected metrics
                 dropdownButton.querySelector("span").textContent = `${checkedCheckboxes.length} Metrics`;
             }
         }
     };
 
-    // Initialize metrics dropdown
+    // Initialize the metrics dropdown when the page loads
     setupMetricsDropdown();
 </script>
 
-<!-- Dark Mode JavaScript -->
+<!-- 
+    Dark Mode JavaScript
+    Handles theme switching between light and dark modes
+-->
 <script>
+    /**
+     * Dark Mode Functionality
+     * Initializes theme based on user preference and provides toggle functionality
+     */
     document.addEventListener('DOMContentLoaded', function () {
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;
-        const moonIcon = '<i class="fas fa-moon"></i>';
-        const sunIcon = '<i class="fas fa-sun"></i>';
+        const moonIcon = '<i class="fas fa-moon"></i>';  // Icon for light mode (switch to dark)
+        const sunIcon = '<i class="fas fa-sun"></i>';    // Icon for dark mode (switch to light)
 
         // Check for saved theme preference or use system preference
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        // Apply the saved theme or system preference
+        // Apply the saved theme or system preference on initial load
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             htmlElement.classList.add('dark');
             darkModeToggle.innerHTML = sunIcon;
@@ -996,13 +1168,15 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
-        // Toggle dark mode on button click
+        // Toggle dark mode when the button is clicked
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
+                // Switch to light mode
                 htmlElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
                 darkModeToggle.innerHTML = moonIcon;
             } else {
+                // Switch to dark mode
                 htmlElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
                 darkModeToggle.innerHTML = sunIcon;
@@ -1011,7 +1185,10 @@
     });
 </script>
 
-<!-- Conclusion at the bottom -->
+<!-- 
+    Conclusion Section
+    Summarizes key findings and implications of the tradwife trend analysis
+-->
 <section class="max-w-7xl mx-auto mt-6 bg-white rounded-2xl shadow p-6 space-y-3">
     <h2 class="text-xl font-semibold">Conclusion</h2>
     <p class="text-gray-700">In conclusion, the trend began growing in 2023 and has not stopped expanding. However, the number of likes per view dropped for a period. One possible explanation is that as the trend reaches audiences beyond its core community, more people may watch without endorsing the content by liking it. Another possibility is that some viewers are reluctant to support the trend.</p>
