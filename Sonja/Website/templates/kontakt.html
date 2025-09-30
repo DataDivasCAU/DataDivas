@@ -1,23 +1,36 @@
 <!doctype html>
+<!-- 
+    Contact Page
+    This page provides contact information for the project team members
+    and displays the last update date of the website
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Contact</title>
     <meta name="description" content="Kontaktinformationen"/>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'Contact' %}
 {% include 'partials/page_header.html' %}
 
 <main class="mx-auto max-w-7xl px-4 py-8 space-y-8">
-    <!-- Kontaktinformationen -->
+    <!-- 
+        Contact Information Section
+        Displays contact details for all team members with email links
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Contact details</h2>
         <p class="mb-4">
@@ -51,7 +64,10 @@
         </p>
     </section>
 
-    <!-- Letzte Aktualisierung -->
+    <!-- 
+        Last Update Section
+        Shows when the website was last updated
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Status</h2>
         <p>Last updated: <span class="font-mono">22.09.2025</span></p>
@@ -60,15 +76,22 @@
 
 {% include 'partials/footer.html' %}
 
-<!-- Dark Mode JavaScript -->
 <script>
+    /**
+     * Dark Mode JavaScript
+     * Handles theme switching between light and dark modes
+     * Saves user preference to localStorage and respects system preference
+     */
     document.addEventListener('DOMContentLoaded', function () {
+        // Get references to DOM elements and define icon HTML
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;
         const moonIcon = '<i class="fas fa-moon"></i>';
         const sunIcon = '<i class="fas fa-sun"></i>';
 
-        // Check for saved theme preference or use system preference
+        /**
+         * Initialize theme based on saved preference or system setting
+         */
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -81,7 +104,10 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
-        // Toggle dark mode on button click
+        /**
+         * Toggle between light and dark mode when button is clicked
+         * Updates the UI and saves preference to localStorage
+         */
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
                 htmlElement.classList.remove('dark');
