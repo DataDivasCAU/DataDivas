@@ -60,7 +60,7 @@ This should print the Docker version you have installed.
 1. **Start [Docker Desktop](https://www.docker.com/products/docker-desktop/)**  
 2. In the terminal, navigate to the project directory:  
     ```bash
-    cd newDataDiva/DataDivas/Sonja/Website
+    cd newDataDiva/DataDivas/Website
     ```
    📂 [Open project folder](./Sonja/Website)  
 3. Start the Docker environment (including build):  
