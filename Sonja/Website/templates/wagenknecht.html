@@ -1,16 +1,27 @@
 <!DOCTYPE html>
+<!-- 
+    Sahra Wagenknecht Comment Analysis Page
+    This page visualizes data analysis of YouTube comments about Sahra Wagenknecht,
+    comparing the period before and after the founding of her political party (BSW)
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Sahra Wagenknecht – Comment Analysis</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- WordCloud library -->
+
+    <!-- WordCloud library for generating word clouds -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
+    <!-- Custom styles for light/dark mode and chart containers -->
     <style>
+        /* Dark mode card styling */
         .dark .card {
             background-color: #111827;
         }
@@ -75,7 +86,10 @@
 {% include 'partials/page_header.html' %}
 
 <div class="max-w-7xl mx-auto">
-
+    <!-- 
+        Introduction Section
+        Provides context about Sahra Wagenknecht, the research question, and methodology
+    -->
     <section class="card shadow rounded-2xl bg-white p-4 mb-6">
         <h2 class="text-2xl font-semibold mb-3">Introduction</h2>
         <p class="mb-3">Sahra Wagenknecht is a well-known German politician and former leading member of Die Linke (The Left). In 2023, she founded her own party, the Bündnis Sahra Wagenknecht (BSW), trying to combine left-wing social policies with more conservative positions on cultural issues and migration issues. Because of her strong media presence and controversial positions, Wagenknecht attracts significant attention on social media platforms.</p>
@@ -87,9 +101,12 @@ In total we collected ~2000 comments from each period from which we selected the
         <p class="mb-3">We generated a WordCloud using keybert based on keywords extracted from the comments.</p>
     </section>
 
+<!-- 
+    WordCloud Visualization Section
+    Displays the most common words from YouTube comments as a visual word cloud
+-->
 <p class="mt-3 max-w-3xl mx-auto text-gray-700 text-center">Most common words in YouTube comments – Before/After</p>
 
-<!-- Kombinierte Wordcloud (analog zu FridaysForFuture) -->
 <section class="card shadow rounded-2xl bg-white p-4 mb-6">
     <h2 class="text-xl font-bold mb-3 text-center">Wordcloud by keyword occurrence</h2>
     <p class="mt-3 max-w-3xl mx-auto text-gray-700 mb-2 text-center">Combined from before/after comments on Sahra
@@ -98,7 +115,10 @@ In total we collected ~2000 comments from each period from which we selected the
 </section>
 
 
-<!-- Bar Charts -->
+<!-- 
+    Bar Charts Section
+    Displays two bar charts showing the top words before and after BSW founding
+-->
 <section class="grid gap-6 lg:grid-cols-2 mt-6">
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
         <div class="mb-2 font-semibold">Top words – Before</div>
@@ -115,7 +135,10 @@ In total we collected ~2000 comments from each period from which we selected the
 </section>
 
 
-<!-- Combined Bar Chart with Words on X-Axis -->
+<!-- 
+    Combined Comparison Chart Section
+    Shows a scatter plot comparing word frequencies before and after BSW founding
+-->
 <section class="mt-8">
     <div class="card overflow-x-auto shadow rounded-2xl bg-white p-4">
         <div class="mb-2 font-semibold">Comparison by words</div>
@@ -125,7 +148,10 @@ In total we collected ~2000 comments from each period from which we selected the
     </div>
 </section>
 
-<!-- Comparison Table -->
+<!-- 
+    Comparison Table Section
+    Displays a tabular comparison of word frequencies before and after BSW founding
+-->
 <section class="overflow-x-auto shadow rounded-2xl mt-8 bg-white">
     <table class="min-w-full border-collapse" id="compareTable">
         <thead>
@@ -141,6 +167,10 @@ In total we collected ~2000 comments from each period from which we selected the
     </table>
 </section>
 
+<!-- 
+    Conclusion Section
+    Summarizes findings and implications of the comment analysis
+-->
 <section class="mt-8 mb-6 card shadow rounded-2xl bg-white p-4">
     <h2 class="text-2xl font-semibold mb-3">Conclusion</h2>
     <p class="mb-3">The comparison of comments before and after the founding of the BSW shows that the overall perception of Sahra Wagenknecht on social media has remained largely stable. In both periods, the most frequent keywords are strongly centered on her as a person with entries like “Wagenknecht” an “Frau Wagenknecht” as one of the  most mentioned key words. Words like “frieden” and “deutschland” also appear as some of the to comments both before and after the founding of the BSW.</p>
@@ -149,6 +179,10 @@ In total we collected ~2000 comments from each period from which we selected the
 </div>
 
 <script>
+    /**
+     * Main JavaScript for Wagenknecht comment analysis visualization
+     * Handles dark mode, data loading, chart rendering, and wordcloud generation
+     */
     // --- Dark mode ---
     (function initTheme() {
         const savedTheme = localStorage.getItem("theme") || "light";
@@ -171,6 +205,7 @@ In total we collected ~2000 comments from each period from which we selected the
     })();
 
     window.addEventListener('load', function () {
+        //  DATA PROCESSING UTILITIES 
         // Utility to get top N terms
         function topN(data, n = 20) {
             // data is array of {words, numbers}
@@ -190,7 +225,8 @@ In total we collected ~2000 comments from each period from which we selected the
             return pal[Math.floor(Math.random() * pal.length)];
         }
 
-        // Load both datasets
+        //  DATA LOADING AND PROCESSING 
+        // Load both datasets using Promise.all for parallel fetching
         Promise.all([
             fetch('/wagenknecht_words_a.json').then(r => r.json()),
             fetch('/wagenknecht_words_b.json').then(r => r.json())
@@ -220,7 +256,8 @@ In total we collected ~2000 comments from each period from which we selected the
 
             const wcCombinedEl = document.getElementById('wordcloud');
 
-            // Render combined big wordcloud analogous to FFF
+            //  WORDCLOUD RENDERING 
+            // Render combined big wordcloud with words from both before/after datasets
             function renderCombined() {
                 if (!wcCombinedEl) return;
                 wcCombinedEl.innerHTML = '';
@@ -252,7 +289,8 @@ In total we collected ~2000 comments from each period from which we selected the
             safeRenderCombined();
 
 
-            // Render bar charts
+            //  CHART RENDERING 
+            // Render bar charts showing top words before and after BSW founding
             const ctxB = document.getElementById('chartBefore').getContext('2d');
             const ctxA = document.getElementById('chartAfter').getContext('2d');
 
@@ -291,7 +329,8 @@ In total we collected ~2000 comments from each period from which we selected the
             });
 
 
-            // Combined bar chart with words on X-axis
+            //  COMBINED COMPARISON CHART 
+            // Create scatter plot comparing word frequencies before and after BSW founding
             const wordSet = new Map();
             topBefore.forEach(d => wordSet.set(d.words, (wordSet.get(d.words) || 0) + d.numbers));
             topAfter.forEach(d => wordSet.set(d.words, (wordSet.get(d.words) || 0) + d.numbers));
@@ -351,7 +390,8 @@ In total we collected ~2000 comments from each period from which we selected the
                 }
             });
 
-            // Render comparison table
+            //  COMPARISON TABLE RENDERING 
+            // Generate tabular comparison of top words before and after BSW founding
             const tbody = document.querySelector('#compareTable tbody');
             const maxRows = Math.max(topBefore.length, topAfter.length);
             for (let i = 0; i < maxRows; i++) {
@@ -369,7 +409,8 @@ In total we collected ~2000 comments from each period from which we selected the
                 tbody.appendChild(tr);
             }
 
-            // Re-render combined wordcloud on resize (debounced)
+            //  RESPONSIVE BEHAVIOR 
+            // Re-render combined wordcloud on window resize (with debouncing)
             let resizeTimer = null;
             window.addEventListener('resize', () => {
                 if (resizeTimer) clearTimeout(resizeTimer);
