@@ -1,18 +1,18 @@
 version: "3.9"
 
 services:
-  web:            # Definiert einen Dienst "web" (unsere Flask-App)
-    build: .      # Image wird direkt aus dem aktuellen Verzeichnis gebaut (Dockerfile nötig)
+  web:            # Defines a service"web" (our Flask-App)
+    build: .      # Image gets build directlay from our directory
     container_name: posts-per-party
 
     volumes:
       - .:/app
 
     ports:
-      - "8000:8000" # Port-Mapping: Host:Container → App läuft auf http://localhost:8000
+      - "8000:8000" # Port-Mapping: Host:Container → App runs on http://localhost:8000
 
     environment:
-      - FLASK_APP=app.py       # Definiert, welche Flask-App gestartet wird
-      - FLASK_ENV=development  # Aktiviert Debug-Mode + Auto-Reload
+      - FLASK_APP=app.py       # Defines how the flash app will be started
+      - FLASK_ENV=development
 
     command: flask run --host=0.0.0.0 --port=8000 --reload
