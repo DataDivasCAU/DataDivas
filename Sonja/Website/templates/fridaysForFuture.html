@@ -1,15 +1,25 @@
 <!DOCTYPE html>
+<!-- 
+    Fridays For Future YouTube Analysis Page
+    This page visualizes data about YouTube videos related to the Fridays For Future movement,
+    including views, likes, uploads over time, and keyword analysis
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fridays For Future – YouTube Analysis</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Custom styles with light/dark mode support -->
     <style>
         .chart-box {
             background: white;
@@ -53,8 +63,10 @@
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-7xl mx-auto p-6">
-
-    <!-- Context dialog: inserted per issue description -->
+    <!-- 
+        Introduction Section
+        Provides context about Fridays for Future movement and the data analysis methodology
+    -->
     <section class="chart-box mb-8" id="fff-dialog">
         <h2 class="text-xl font-bold mb-3">Fridays for Future – Context</h2>
         <div class="prose max-w-none text-sm leading-relaxed">
@@ -70,6 +82,10 @@
         </div>
     </section>
 
+    <!-- 
+        Filter Controls Section
+        Allows users to select how many top videos to display in charts and tables
+    -->
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
         <label for="topN" class="font-medium">Top-N:</label>
         <select id="topN" class="border rounded p-2 bg-white">
@@ -80,11 +96,19 @@
         </select>
     </div>
 
+    <!-- 
+        Data Visualization Section - Top Videos Chart
+        Bar chart showing the most viewed videos related to Fridays for Future
+    -->
     <section class="chart-box mb-8">
         <h2 class="text-xl font-bold mb-2 text-center">Top‑Videos by Views</h2>
         <canvas id="barTopViews" height="120"></canvas>
     </section>
 
+    <!-- 
+        Data Visualization Section - Correlation and Time Series
+        Two-column layout on desktop, stacked on mobile
+    -->
     <section class="grid gap-6 mb-8">
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Likes vs. Views (Top‑N)</h2>
@@ -97,6 +121,10 @@
         </div>
     </section>
 
+    <!-- 
+        Wordcloud Visualization Section
+        Visual representation of the most frequent keywords in video titles, descriptions and comments
+    -->
     <section class="chart-box mb-8">
         <h2 class="text-xl font-bold mb-3 text-center">Wordcloud by keyword occurrence</h2>
         <p class="text-sm dark:text-gray-200 text-center max-w-3xl mx-auto mb-2">We generated a WordCloud using keybert
@@ -104,6 +132,10 @@
         <div id="wordcloud" style="height: 820px;"></div>
     </section>
 
+    <!-- 
+        Heatmap Visualization Section
+        Shows keyword frequency across different time periods to track evolving themes
+    -->
     <section class="chart-box mb-8">
         <h2 class="text-xl font-bold mb-3 text-center">Heatmap: Keywords per time period</h2>
         <p class="text-sm text-black dark:text-gray-300 text-center max-w-3xl mx-auto mb-2">We tracked how often these keywords appeared in the 15 most-viewed videos during three different periods:<br>01.01.2019–01.06.2019: When the movement first gained attention<br>01.07.2019–01.12.2019: During its peak momentum<br>01.01.2020–01.12.2020: After the initial hype subsided</p>
@@ -112,6 +144,10 @@
         </div>
     </section>
 
+    <!-- 
+        Data Table Section
+        Interactive sortable table showing detailed information about top videos
+    -->
     <section class="chart-box mb-8 overflow-x-auto">
         <h2 class="text-xl font-bold mb-3 text-center">Table (Top‑N by Views)</h2>
         <table id="topTable" class="min-w-full table">
@@ -136,6 +172,10 @@
             <tbody id="tableBody"></tbody>
         </table>
     </section>
+    <!-- 
+        Conclusion Section
+        Summarizes findings and implications of the data analysis
+    -->
     <section class="chart-box mb-8">
         <h2 class="text-lg font-semibold mb-2">Conclusion</h2>
         <p class="text-sm leading-relaxed">The results highlight YouTube’s role in supporting the growth of Fridays for Future. Uploads tend to increase around protest days, often leading to higher engagement with the movement. Strategic use of keywords in video titles further amplifies visibility, as shown by the fact that the most-viewed videos across different periods consistently feature overlapping keyword usage.</p>
@@ -143,12 +183,18 @@
 </main>
 
 <script>
+    /**
+     * Main JavaScript for Fridays for Future data visualization
+     * Handles dark mode, data loading, chart rendering, and interactive filters
+     */
     document.addEventListener('DOMContentLoaded', () => {
+        //  DARK MODE FUNCTIONALITY 
         const htmlEl = document.documentElement;
         const darkModeToggle = document.getElementById('darkModeToggle');
         const moonIcon = '<i class="fas fa-moon"></i>';
         const sunIcon = '<i class="fas fa-sun"></i>';
 
+        // Initialize theme based on user preference or system setting
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
@@ -176,6 +222,8 @@
             renderHeatmap();
         });
 
+        //  CHART INITIALIZATION 
+        // Get canvas contexts for the charts
         const topNEl = document.getElementById('topN');
         const tableBody = document.getElementById('tableBody');
         const tableHead = document.getElementById('topTableHead');
@@ -183,6 +231,7 @@
         const scatterCtx = document.getElementById('scatterLikesViews').getContext('2d');
         const lineCtx = document.getElementById('lineUploadsOverTime').getContext('2d');
 
+        // Chart objects and data variables
         let barChart, scatterChart, lineChart;
         let allItems = [];
         let videosPerDay = [];
@@ -632,6 +681,11 @@
             }, 200);
         });
 
+        //  DATA LOADING AND PROCESSING 
+        /**
+         * Load all data files using Promise.all for parallel fetching
+         * Process the data and initialize the visualization
+         */
         Promise.all([
             fetch('/fridaysForFuture.json').then(r => r.json()),
             fetch('/fff_strikes.json').then(r => r.json()).catch(() => [])
