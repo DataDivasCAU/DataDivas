@@ -3,6 +3,7 @@
 ## Description
 The motivation behind our project is that social media is a big part of today's life and becomes more and more political by different political opinions that are spreaded. Therefore, our project is based on the main question "What political impact does social media have?" and the research questions explore several movements and trends that can be found on Youtube. 
 
+### Research questions
 The seven research questions we worked on are:
 1. How has the public perception of anti-vaccine conspiracy via YouTube changed during the last five years? 
 2. To what extent do spikes in Wikipedia pageviews related to the AfD align with increases in YouTube video uploads about the party during German federal elections?
