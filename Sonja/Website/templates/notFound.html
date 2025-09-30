@@ -1,20 +1,38 @@
 <!DOCTYPE html>
+<!-- 
+    404 Not Found Page
+    This page is displayed when a user tries to access a URL that doesn't exist
+    or when an error occurs during page processing
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Seite nicht gefunden</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'Seite nicht gefunden' %}
 {% include 'partials/page_header.html' %}
+
+<!-- 
+    Main Content Section
+    Displays the 404 error message and provides navigation back to the homepage
+-->
 <main class="w-full max-w-xl mx-auto px-4">
+    <!-- Error message card with icon and description -->
     <div class="rounded-3xl bg-white shadow-lg p-8 text-center">
         <div class="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
             <span class="text-2xl font-bold text-red-600">404</span>
@@ -27,6 +45,7 @@
             Die angeforderte URL wurde nicht gefunden oder es ist ein Fehler aufgetreten.
         </p>
 
+        <!-- Conditional error details section -->
         {% if message %}
         <div class="mb-6 text-sm rounded-lg bg-gray-50 border border-gray-200 p-3 text-gray-700 text-left">
             <span class="font-semibold">Details:</span><br/>
@@ -34,6 +53,7 @@
         </div>
         {% endif %}
 
+        <!-- Navigation buttons -->
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/"
                class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow transition
@@ -43,25 +63,34 @@
         </div>
     </div>
 
+    <!-- Error code display -->
     <p class="mt-6 text-center text-xs text-gray-500">
         Fehlercode: <span class="font-mono">404 / {{ (message and 500) and 500 or 404 }}</span>
     </p>
 </main>
 
+<!-- Set custom max width for the footer on this page -->
 {% set footer_max_w = 'max-w-xl' %}
 {% include 'partials/footer.html' %}
 
-<!-- Dark Mode JavaScript -->
 <script>
+    /**
+     * Dark Mode Functionality
+     * Handles theme switching between light and dark modes based on user preference
+     * and saves the selection to localStorage for persistence across page visits
+     */
     document.addEventListener('DOMContentLoaded', function () {
+        // Get references to DOM elements and define icon HTML
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;
         const moonIcon = '<i class="fas fa-moon"></i>';
         const sunIcon = '<i class="fas fa-sun"></i>';
 
+        // Check for saved theme preference or use system preference as fallback
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+        // Apply the appropriate theme on page load
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             htmlElement.classList.add('dark');
             darkModeToggle.innerHTML = sunIcon;
@@ -70,6 +99,7 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
+        // Toggle theme when the dark mode button is clicked
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
                 htmlElement.classList.remove('dark');
