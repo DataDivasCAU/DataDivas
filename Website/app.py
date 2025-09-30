@@ -248,39 +248,6 @@ def export_current_stats_json():
     resp.headers["Content-Disposition"] = "attachment; filename=current_party_stats.json"
     return resp
 
-
-@app.route("/export-excel")
-def export_excel():
-    try:
-        posts_data    = load_json(DATA_PATH)      # <- dict
-        election_data = load_json(ELECTION_PATH)  # <- dict
-        xlsx_io: BytesIO = build_workbook(posts_data, election_data)
-        xlsx_io.seek(0)
-        return send_file(
-            xlsx_io,
-            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            as_attachment=True,
-            download_name="posts-per-party_all.xlsx",
-        )
-    except Exception as e:
-        abort(500, description=f"Export-Fehler: {type(e).__name__}: {e}")
-
-@app.route("/export-pdf")
-def export_pdf():
-    try:
-        posts_data    = load_json(DATA_PATH)      # <- dict
-        election_data = load_json(ELECTION_PATH)  # <- dict
-        pdf_io: BytesIO = build_pdf(posts_data, election_data)
-        pdf_io.seek(0)
-        return send_file(
-            pdf_io,
-            mimetype="application/pdf",
-            as_attachment=True,
-            download_name="posts-per-party_all.pdf",
-        )
-    except Exception as e:
-        abort(500, description=f"PDF-Export-Fehler: {type(e).__name__}: {e}")
-
 # -------- CSV DOWNLOADS (verwenden lokale CSV-Dateien) --------
 @app.route("/download/posts-csv")
 def download_posts_csv():
