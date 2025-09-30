@@ -1,12 +1,22 @@
 <!doctype html>
+<!-- 
+    Privacy Policy Page
+    This page provides information about data protection, privacy policies,
+    and legal disclaimers for the website
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Privacy Policy</title>
     <meta name="description" content="Datenschutzerklärung"/>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
@@ -17,7 +27,10 @@
 {% include 'partials/page_header.html' %}
 
 <main class="mx-auto max-w-7xl px-4 py-8 space-y-8">
-    <!-- Verantwortlich -->
+    <!-- 
+        Responsible Persons Section
+        Lists the individuals responsible for the website content according to German law (TMG)
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Responsible according to § 5 TMG</h2>
         <ul class="space-y-3 leading-relaxed">
@@ -48,7 +61,11 @@
         </p>
     </section>
 
-    <!-- Datenschutzerklärung -->
+    <!-- 
+        Privacy Policy Section
+        Explains how user data is handled on this website, including information
+        about data collection and cookie usage
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Privacy Policy</h2>
         <p class="leading-relaxed mb-4">
@@ -65,7 +82,11 @@
         </p>
     </section>
 
-    <!-- Haftung -->
+    <!-- 
+        Disclaimer Section
+        Contains legal disclaimers regarding the accuracy of content and 
+        responsibility for external linked websites
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Disclaimer</h2>
         <p class="leading-relaxed">
@@ -76,7 +97,10 @@
         </p>
     </section>
 
-    <!-- Letzte Aktualisierung -->
+    <!-- 
+        Last Update Section
+        Shows when the privacy policy was last updated
+    -->
     <section class="rounded-2xl bg-white shadow p-6">
         <h2 class="text-lg font-bold text-indigo-700 mb-3">Status</h2>
         <p>Last updated: <span class="font-mono">22.09.2025</span></p>
@@ -85,34 +109,47 @@
 
 {% include 'partials/footer.html' %}
 
-<!-- Dark Mode JavaScript -->
+<!-- 
+    Dark Mode JavaScript
+    Handles theme switching functionality between light and dark modes
+    Saves user preferences to localStorage for persistence across visits
+-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // DOM elements and icon definitions
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;
         const moonIcon = '<i class="fas fa-moon"></i>';
         const sunIcon = '<i class="fas fa-sun"></i>';
 
-        // Check for saved theme preference or use system preference
+        /**
+         * Theme detection and initialization
+         * Checks localStorage first, then falls back to system preference
+         */
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        // Apply the saved theme or system preference
+        // Apply the initial theme based on saved preference or system setting
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             htmlElement.classList.add('dark');
-            darkModeToggle.innerHTML = sunIcon;
+            darkModeToggle.innerHTML = sunIcon;  // Show sun icon in dark mode
         } else {
             htmlElement.classList.remove('dark');
-            darkModeToggle.innerHTML = moonIcon;
+            darkModeToggle.innerHTML = moonIcon;  // Show moon icon in light mode
         }
 
-        // Toggle dark mode on button click
+        /**
+         * Theme toggle functionality
+         * Switches between light and dark themes and saves preference
+         */
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
+                // Switch to light mode
                 htmlElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
                 darkModeToggle.innerHTML = moonIcon;
             } else {
+                // Switch to dark mode
                 htmlElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
                 darkModeToggle.innerHTML = sunIcon;
