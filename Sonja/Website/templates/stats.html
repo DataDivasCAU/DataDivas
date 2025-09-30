@@ -1,9 +1,17 @@
 <!DOCTYPE html>
+<!-- 
+    Party Statistics Page
+    This page displays current YouTube statistics for German political parties,
+    including subscriber counts, view counts, and total video counts
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Partei-Stats – Aktuelle Übersicht</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -17,13 +25,20 @@
 {% include 'partials/page_header.html' %}
 
 <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- 
+        Navigation and Export Section
+        Provides navigation back to the main page and option to export data as JSON
+    -->
     <div class="mb-6 flex flex-wrap gap-2">
         <a href="/post-per-party" class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200">Zurück</a>
         <a href="/export-current-stats.json" class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700">JSON
             exportieren</a>
     </div>
 
-    <!-- Loading state -->
+    <!-- 
+        Loading State Section
+        Displays a loading spinner while data is being fetched from the YouTube API
+    -->
     <section id="loadingSection" class="bg-white rounded-2xl shadow p-6 flex items-center justify-center">
         <div class="flex items-center gap-4">
             <div class="h-6 w-6 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin"></div>
@@ -31,8 +46,15 @@
         </div>
     </section>
 
-    <!-- Content is hidden until fully rendered -->
+    <!-- 
+        Main Content Container
+        Hidden until data is loaded and rendered
+    -->
     <div id="content" class="hidden">
+        <!-- 
+            Data Table Section
+            Displays party statistics in a tabular format with reload option
+        -->
         <section class="bg-white rounded-2xl shadow p-4 sm:p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-semibold">Übersicht</h2>
@@ -56,6 +78,10 @@
             </div>
         </section>
 
+        <!-- 
+            Chart Visualization Section
+            Displays a bar chart comparing party statistics with filtering options
+        -->
         <section class="bg-white rounded-2xl shadow p-4 sm:p-6">
             <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
                 <h2 class="text-xl font-semibold">Diagramm: Abonnenten, Aufrufe, Videos gesamt</h2>
@@ -80,26 +106,50 @@
 </div>
 
 <script>
+    /**
+     * Main JavaScript for Party Statistics visualization
+     * Handles data loading, chart rendering, and interactive filtering
+     */
+
+    // Global variables for chart instance and data storage
     let chart;
     let allData = [];
     let selectedParties = new Set();
 
+    /**
+     * Fetches party statistics data from the server
+     * @returns {Promise<Array>} Array of party statistics objects
+     */
     async function fetchStats() {
         const res = await fetch('/load_yt_current_data_of_parties');
         if (!res.ok) throw new Error('Fehler beim Laden');
         return await res.json();
     }
 
+    /**
+     * Formats numbers with German locale (thousands separator)
+     * @param {number} n - Number to format
+     * @returns {string} Formatted number string or '-' for null/undefined values
+     */
     function fmt(n) {
         if (n === null || n === undefined) return '-';
         return Number(n).toLocaleString('de-DE');
     }
 
+    /**
+     * Returns filtered data based on selected parties
+     * @returns {Array} Filtered subset of party data
+     */
     function getFilteredData() {
         if (!selectedParties || selectedParties.size === 0) return allData.slice();
         return allData.filter(d => selectedParties.has(d.party));
     }
 
+    /**
+     * Formats party names for display, with special handling for 'gruene'
+     * @param {string} name - Raw party name
+     * @returns {string} Formatted party name for display
+     */
     function displayPartyName(name) {
         if (!name) return '-';
         const n = String(name);
@@ -108,6 +158,10 @@
         return n;
     }
 
+    /**
+     * Renders the data table with party statistics
+     * @param {Array} data - Array of party data objects to display
+     */
     function renderTable(data) {
         const tbody = document.getElementById('statsBody');
         tbody.innerHTML = '';
@@ -127,13 +181,23 @@
         });
     }
 
+    /**
+     * Renders the bar chart comparing party statistics
+     * Creates a multi-axis chart showing subscribers, views, and video counts
+     * @param {Array} data - Array of party data objects to visualize
+     */
     function renderChart(data) {
+        // Prepare data for the chart
         const labels = data.map(d => displayPartyName(d.party));
         const subs = data.map(d => d.error ? 0 : (d.subscribers || 0));
         const views = data.map(d => d.error ? 0 : (d.views || 0));
         const videos = data.map(d => d.error ? 0 : (d.videos_total || 0));
         const ctx = document.getElementById('subsChart').getContext('2d');
+
+        // Destroy previous chart instance if it exists
         if (chart) chart.destroy();
+
+        // Create new chart with three datasets and three Y-axes
         chart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -168,9 +232,11 @@
             options: {
                 responsive: true,
                 scales: {
+                    // X-axis configuration
                     x: {
                         title: { display: true, text: 'Party' }
                     },
+                    // Left Y-axis for subscribers
                     ySubs: {
                         type: 'linear',
                         display: true,
@@ -181,6 +247,7 @@
                         ticks: {color: '#4F46E5'},
                         title: {display: true, text: 'Abonnenten', color: '#4F46E5', font: {weight: 'bold'}}
                     },
+                    // Right Y-axis for views
                     yViews: {
                         type: 'linear',
                         display: true,
@@ -191,6 +258,7 @@
                         ticks: {color: '#10B981'},
                         title: {display: true, text: 'Aufrufe', color: '#10B981', font: {weight: 'bold'}}
                     },
+                    // Far-right Y-axis for video counts
                     yVideos: {
                         type: 'linear',
                         display: true,
@@ -203,6 +271,7 @@
                     }
                 },
                 plugins: {
+                    // Custom legend click handler to show/hide axes
                     legend: {
                         onClick: (e, legendItem, legend) => {
                             // Toggle dataset visibility using default behavior
@@ -226,6 +295,7 @@
                             ci.update();
                         }
                     },
+                    // Custom tooltip formatting with German number format
                     tooltip: {
                         callbacks: {
                             label: function (ctx) {
@@ -239,15 +309,24 @@
         });
     }
 
+    /**
+     * Updates the party selection button text based on selected parties count
+     */
     function updatePartySelectButton() {
         const btn = document.getElementById('partySelectBtn');
         const count = selectedParties.size;
         btn.textContent = count > 0 ? `Parteien (${count})` : 'Parteien auswählen';
     }
 
+    /**
+     * Populates the party selection dropdown with checkboxes
+     * @param {Array} parties - Array of party names
+     */
     function populatePartySelect(parties) {
         const container = document.getElementById('partyOptions');
         container.innerHTML = '';
+
+        // Create checkbox for each party
         parties.forEach(p => {
             const id = 'party-' + p.replace(/\s+/g, '-');
             const wrapper = document.createElement('label');
@@ -259,12 +338,12 @@
             container.appendChild(wrapper);
         });
 
-        // default: select all
+        // Default: select all parties
         selectedParties = new Set(parties);
         document.getElementById('selectAllParties').checked = true;
         updatePartySelectButton();
 
-        // events
+        // Add event listeners for party checkboxes
         container.querySelectorAll('input.party-check').forEach(inp => {
             inp.addEventListener('change', () => {
                 if (inp.checked) selectedParties.add(inp.value); else selectedParties.delete(inp.value);
@@ -279,6 +358,7 @@
             });
         });
 
+        // Add event listener for "Select All" checkbox
         document.getElementById('selectAllParties').addEventListener('change', (e) => {
             const checks = container.querySelectorAll('input.party-check');
             selectedParties = new Set();
@@ -293,10 +373,18 @@
         });
     }
 
+    /**
+     * Toggles the visibility of the party selection dropdown menu
+     */
     function toggleMenu() {
         document.getElementById('partySelectMenu').classList.toggle('hidden');
     }
 
+    /**
+     * Sets the loading state of the page
+     * @param {boolean} isLoading - Whether the page is in loading state
+     * @param {string} errorMsg - Optional error message to display
+     */
     function setLoading(isLoading, errorMsg) {
         const loading = document.getElementById('loadingSection');
         const content = document.getElementById('content');
@@ -317,6 +405,9 @@
         }
     }
 
+    /**
+     * Main function to load data and initialize the page
+     */
     async function load() {
         setLoading(true);
         try {
@@ -334,11 +425,13 @@
         }
     }
 
-    // events
+    // Event listeners for UI interactions
     document.getElementById('partySelectBtn').addEventListener('click', (e) => {
         e.stopPropagation();
         toggleMenu();
     });
+
+    // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         const menu = document.getElementById('partySelectMenu');
         const btn = document.getElementById('partySelectBtn');
@@ -347,24 +440,37 @@
         }
     });
 
+    // Reload button event listener
     document.getElementById('reloadBtn').addEventListener('click', async () => {
         await load();
     });
 
+    // Initialize the page when DOM is fully loaded
     document.addEventListener('DOMContentLoaded', load);
 </script>
 
-<!-- Dark Mode JavaScript -->
+<!-- 
+    Dark Mode JavaScript
+    Handles theme switching between light and dark modes based on user preference
+-->
 <script>
+    /**
+     * Dark mode functionality for the page
+     * Initializes theme based on saved preference or system setting
+     * Provides toggle functionality to switch between themes
+     */
     document.addEventListener('DOMContentLoaded', function () {
+        // Get references to DOM elements and define icon HTML
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;
-        const moonIcon = '<i class="fas fa-moon"></i>';
-        const sunIcon = '<i class="fas fa-sun"></i>';
+        const moonIcon = '<i class="fas fa-moon"></i>';  // Icon for light mode (switch to dark)
+        const sunIcon = '<i class="fas fa-sun"></i>';    // Icon for dark mode (switch to light)
 
+        // Check for saved theme preference or system preference
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+        // Apply initial theme based on preferences
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             htmlElement.classList.add('dark');
             darkModeToggle.innerHTML = sunIcon;
@@ -373,12 +479,15 @@
             darkModeToggle.innerHTML = moonIcon;
         }
 
+        // Toggle theme when button is clicked
         darkModeToggle.addEventListener('click', function () {
             if (htmlElement.classList.contains('dark')) {
+                // Switch to light mode
                 htmlElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
                 darkModeToggle.innerHTML = moonIcon;
             } else {
+                // Switch to dark mode
                 htmlElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
                 darkModeToggle.innerHTML = sunIcon;
