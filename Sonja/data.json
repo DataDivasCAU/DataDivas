@@ -10,23 +10,23 @@
     "BSW": 0
   },
   "electionPosts2025": {
-    "CDU": 689,
-    "CSU": 218,
-    "FDP": 602,
-    "AfD": 1311,
-    "SPD": 1133,
-    "Gruene": 472,
-    "Linke": 812,
-    "BSW": 291
+    "CDU": 710,
+    "CSU": 220,
+    "FDP": 605,
+    "AfD": 1325,
+    "SPD": 1140,
+    "Gruene": 479,
+    "Linke": 829,
+    "BSW": 298
   },
-  "diffPosts2025": {
-    "CDU": -23,
-    "CSU": -57,
-    "FDP": 125,
-    "AfD": 410,
-    "SPD": 1133,
-    "Gruene": 76,
-    "Linke": 204,
-    "BSW": 291
+  "diffPost": {
+    "Linke": 221,
+    "BSW": 298,
+    "Gruene": 83,
+    "AfD": 424,
+    "SPD": 720,
+    "FDP": 128,
+    "CDU": -2,
+    "CSU": -55
   }
 }

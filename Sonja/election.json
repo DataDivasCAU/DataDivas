@@ -24,13 +24,13 @@
     }
   ],
   "diffElection": {
-    "SPD": -9.3,
-    "CDU": 3.6,
-    "Gruene": -3.1,
     "Linke": 3.9,
     "BSW": 5.0,
+    "Gruene": -3.1,
     "AfD": 10.4,
-    "CSU": 0.8,
-    "FDP": -6.9
+    "SPD": -9.3,
+    "FDP": -7.1,
+    "CDU": 3.6,
+    "CSU": 0.8
   }
 }
