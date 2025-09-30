@@ -1,16 +1,29 @@
 <!DOCTYPE html>
+<!-- 
+    AfD Social Media Analysis Page
+    This page visualizes the correlation between YouTube video uploads and Wikipedia pageviews
+    for the German political party "Alternative für Deutschland" (AfD)
+-->
 <html lang="de" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AfD – Social Media Analysis</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+    <!-- noUiSlider for date range selection -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js" defer></script>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        /* Chart container styling with light/dark mode support */
         .chart-box {
             background: white;
             border-radius: 1rem;
@@ -25,13 +38,18 @@
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'AfD – Social Media Analysis' %}
 {% include 'partials/page_header.html' %}
 
 <main class="max-w-7xl mx-auto p-6">
-    <!-- Intro: place text inside a card like on tradwife page -->
+    <!-- 
+        Introduction Section
+        Provides context about the data analysis and methodology
+    -->
     <section class="mt-4 mb-8 bg-white rounded-2xl shadow p-6 space-y-3">
         <h2 class="text-xl font-semibold">Introduction</h2>
         <p class="text-gray-700">During election periods, political parties often experience shifts in public attention across multiple online platforms. These shifts can be measured through both user-driven activity, such as Wikipedia pageviews, and content production, such as uploads on YouTube. Examining the relationship between these forms of online engagement provides insight into how online political visibility is influenced by different factors.</p>
@@ -42,38 +60,55 @@
         <h3 class="font-medium">Scatter Plots:</h3>
         <p class="text-gray-700">We mapped both relative values – YouTube video uploads and Wikipedia page views – in this chart. This chart shows the correlation between both relative values.</p>
     </section>
+    <!-- 
+        Filter Controls Section
+        Allows users to filter data by time period and year
+    -->
     <div class="flex items-center gap-3 flex-wrap justify-center w-full mb-6">
         <div class="flex items-center gap-3 grow w-full md:w-auto">
             <span class="font-medium pe-2">Time period:</span>
+            <!-- noUiSlider date range slider -->
             <div id="date-range-slider" class="w-64 md:w-96"></div>
             <div class="text-sm text-gray-600 ps-2">
                 <span id="range-start" class="font-medium"></span>
                 <span class="mx-1">until</span>
                 <span id="range-end" class="font-medium"></span>
             </div>
+            <!-- Year dropdown filter -->
             <label for="year-select" class="ml-2 text-sm text-gray-600">Year:</label>
             <select id="year-select" class="px-2 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
                 <option value="">Every year</option>
             </select>
+            <!-- Reset button to clear all filters -->
             <button id="reset-filters" class="ml-2 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800">
                 Reset
             </button>
         </div>
     </div>
 
+    <!-- 
+        Data Visualization Section - Main Charts
+        Two-column layout on desktop, stacked on mobile
+    -->
     <section class="grid gap-6 md:grid-cols-2 mb-8">
+        <!-- Scatter plot showing correlation between YouTube videos and Wikipedia pageviews -->
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Correlation: Videos vs. Wikipedia‑Pageviews
                 (relative)</h2>
             <canvas id="scatterCombined" height="160"></canvas>
             <div id="correlationValue" class="text-center text-sm text-gray-600 mt-2"></div>
         </div>
+        <!-- Line chart showing weekly time series data -->
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Time series (weekly, absolute)</h2>
             <canvas id="lineWeekly" height="260"></canvas>
         </div>
     </section>
 
+    <!-- 
+        Daily Time Series Chart
+        Shows more granular daily data in relative percentages
+    -->
     <section class="mb-8">
         <div class="chart-box">
             <h2 class="text-lg font-semibold mb-2 text-center">Time series (daily, relative)</h2>
@@ -81,7 +116,10 @@
         </div>
     </section>
 
-    <!-- Conclusion: card styling analogous to tradwife page -->
+    <!-- 
+        Conclusion Section
+        Summarizes findings and implications of the data analysis
+    -->
     <section class="mt-8 mb-8 bg-white rounded-2xl shadow p-6 space-y-3">
         <h2 class="text-xl font-semibold">Conclusion</h2>
         <p class="text-gray-700">During the most recent German federal elections, the data shows that Wikipedia pageviews about the AfD spiked at certain points. These spikes moderately aligned with increases in YouTube video uploads about the party. This is also reflected by a Pearson correlation of 0.49.</p>
@@ -93,38 +131,54 @@
 </main>
 
 <script>
+    /**
+     * Main JavaScript for AfD data visualization
+     * Handles dark mode, data loading, chart rendering, and interactive filters
+     */
     document.addEventListener('DOMContentLoaded', () => {
+        //  DARK MODE FUNCTIONALITY 
         const htmlEl = document.documentElement;
         const darkModeToggle = document.getElementById('darkModeToggle');
         const moonIcon = '<i class="fas fa-moon"></i>';
         const sunIcon = '<i class="fas fa-sun"></i>';
 
+        // Classes for light mode gradient background
         const gradientClasses = ['bg-gradient-to-br', 'from-indigo-50', 'to-blue-100'];
 
+        /**
+         * Applies dark or light theme to the page
+         * @param {boolean} isDark - Whether to apply dark mode
+         */
         function applyTheme(isDark) {
             if (isDark) {
                 htmlEl.classList.add('dark');
-                darkModeToggle.innerHTML = sunIcon;
+                darkModeToggle.innerHTML = sunIcon; // Show sun icon in dark mode
                 document.body.classList.add('bg-gray-900', 'text-gray-100');
                 gradientClasses.forEach(c => document.body.classList.remove(c));
             } else {
                 htmlEl.classList.remove('dark');
-                darkModeToggle.innerHTML = moonIcon;
+                darkModeToggle.innerHTML = moonIcon; // Show moon icon in light mode
                 document.body.classList.remove('bg-gray-900', 'text-gray-100');
                 gradientClasses.forEach(c => document.body.classList.add(c));
             }
         }
 
+        // Initialize theme based on user preference or system setting
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const isDarkInit = (savedTheme === 'dark' || (!savedTheme && prefersDark));
         applyTheme(isDarkInit);
 
+        /**
+         * Helper function to ensure Chart.js is loaded before executing callback
+         * @param {Function} cb - Callback to execute when Chart.js is ready
+         */
         function whenChartReady(cb) {
             if (window.Chart) return cb();
             window.addEventListener('load', () => cb());
         }
 
+        // Toggle dark/light mode when button is clicked
         darkModeToggle.addEventListener('click', () => {
             const isDark = !htmlEl.classList.contains('dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -133,30 +187,47 @@
             whenChartReady(() => renderAll());
         });
 
+        //  CHART INITIALIZATION 
+        // Get canvas contexts for the three charts
         const scatterCtx = document.getElementById('scatterCombined').getContext('2d');
         const lineCtx = document.getElementById('lineDaily').getContext('2d');
         const weeklyCtx = document.getElementById('lineWeekly').getContext('2d');
 
+        // Chart objects and data variables
         let scatterChart, lineChart, weeklyChart;
-        let combined = [];
-        let daily = [];
-        let wikiWeekly = [];
-        let ytWeekly = [];
-        let wikiDaily = [];
-        let dailySorted = [];
-        let dateLabels = [];
+        let combined = [];      // Combined data points
+        let daily = [];         // Daily data
+        let wikiWeekly = [];    // Weekly Wikipedia data
+        let ytWeekly = [];      // Weekly YouTube data
+        let wikiDaily = [];     // Daily Wikipedia data
+        let dailySorted = [];   // Sorted daily data
+        let dateLabels = [];    // Date labels for charts
+
+        // Filter UI elements
         let slider, lblStart, lblEnd, yearSelect, resetBtn;
         let currentRange = null; // [startIdx, endIdx]
-        let yearRanges = {};
+        let yearRanges = {};    // Year ranges for filtering
 
+        /**
+         * Get appropriate axis color based on current theme
+         * @returns {string} Color hex code for axis
+         */
         function getAxis() {
             return htmlEl.classList.contains('dark') ? '#e2e8f0' : '#0f172a';
         }
 
+        /**
+         * Get appropriate grid color based on current theme
+         * @returns {string} Color hex code for grid lines
+         */
         function getGrid() {
             return htmlEl.classList.contains('dark') ? '#374151' : '#e5e7eb';
         }
 
+        /**
+         * Renders the scatter plot showing correlation between YouTube videos and Wikipedia pageviews
+         * Calculates Pearson correlation coefficient and linear regression trendline
+         */
         function renderScatter() {
             // Use currently filtered daily subset and compute relative percentages per selected range
             const subset = getFilteredDaily();
@@ -165,17 +236,22 @@
             const sumV = vids.reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
             const sumW = wikis.reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
 
+            // Helper function for safe division (avoid division by zero)
             const safeDiv = (num, den) => den > 0 ? (num / den) * 100 : 0;
+
+            // Create data points as percentages of total and filter out invalid points
             const points = subset.map((_, i) => ({
                 x: safeDiv(vids[i], sumV),
                 y: safeDiv(wikis[i], sumW)
             })).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
 
-            // Compute Pearson correlation coefficient on relative points
+            //  PEARSON CORRELATION CALCULATION 
             let rValue = null;
             if (points.length >= 2) {
                 const n = points.length;
                 let sumXr = 0, sumYr = 0, sumXYr = 0, sumXXr = 0, sumYYr = 0;
+
+                // Calculate sums needed for correlation formula
                 points.forEach(p => {
                     const x = p.x, y = p.y;
                     sumXr += x; sumYr += y;
@@ -183,11 +259,15 @@
                     sumXXr += x * x;
                     sumYYr += y * y;
                 });
+
+                // Apply Pearson correlation formula
                 const denom = Math.sqrt((n * sumXXr - sumXr * sumXr) * (n * sumYYr - sumYr * sumYr));
                 if (denom > 0) {
                     rValue = (n * sumXYr - sumXr * sumYr) / denom;
                 }
             }
+
+            // Display correlation value on the page
             const corrEl = document.getElementById('correlationValue');
             if (corrEl) {
                 if (rValue === null || !Number.isFinite(rValue)) {
@@ -197,12 +277,14 @@
                 }
             }
 
-            // Compute linear regression (least squares) on relative points
+            //  LINEAR REGRESSION CALCULATION 
             let trendData = [];
             if (points.length >= 2) {
                 const n = points.length;
                 let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
                 let minX = Infinity, maxX = -Infinity;
+
+                // Calculate sums needed for least squares method
                 points.forEach(p => {
                     const x = p.x, y = p.y;
                     sumX += x;
@@ -212,10 +294,14 @@
                     if (x < minX) minX = x;
                     if (x > maxX) maxX = x;
                 });
+
+                // Calculate regression line (y = a + bx)
                 const denom = (n * sumXX - sumX * sumX);
                 if (denom !== 0) {
                     const b = (n * sumXY - sumX * sumY) / denom; // slope
                     const a = (sumY - b * sumX) / n;            // intercept
+
+                    // Create two points to draw the trendline (start and end)
                     const y1 = a + b * minX;
                     const y2 = a + b * maxX;
                     if (Number.isFinite(y1) && Number.isFinite(y2)) {
@@ -224,10 +310,16 @@
                 }
             }
 
+            //  CREATE CHART.JS SCATTER PLOT 
+            // Destroy previous chart instance if it exists
             if (scatterChart) scatterChart.destroy();
+
+            // Prepare datasets (points and optional trendline)
             const datasets = [
                 {label: 'Points', data: points, backgroundColor: '#10b981', pointRadius: 4}
             ];
+
+            // Add trendline if we have valid regression data
             if (trendData.length === 2) {
                 datasets.push({
                     label: 'Trendline',
@@ -240,6 +332,8 @@
                     tension: 0
                 });
             }
+
+            // Create new scatter chart
             scatterChart = new Chart(scatterCtx, {
                 type: 'scatter',
                 data: {datasets},
@@ -261,6 +355,10 @@
             });
         }
 
+        /**
+         * Returns the filtered daily data based on current range selection
+         * @returns {Array} Filtered subset of daily data
+         */
         function getFilteredDaily() {
             const src = dailySorted;
             if (!currentRange) return src;
@@ -268,6 +366,10 @@
             return src.slice(s, e + 1);
         }
 
+        /**
+         * Gets the actual date objects for the current range selection
+         * @returns {Array|null} Array with start and end date objects, or null if no range
+         */
         function getRangeDates() {
             if (!currentRange || !dateLabels?.length) return null;
             const [s, e] = currentRange;
@@ -276,12 +378,21 @@
             return [start, end];
         }
 
+        /**
+         * Renders the daily time series line chart
+         * Shows relative percentages of YouTube videos and Wikipedia pageviews over time
+         */
         function renderLine() {
+            // Get filtered data and prepare chart data
             const subset = getFilteredDaily();
             const labels = subset.map(d => new Date(Number(d['Published At'])).toISOString().slice(0, 10));
             const videos = subset.map(d => Number(d['Number of Videos'] || 0));
             const wiki = subset.map(d => Number(d['Wikipedia Pageviews'] || 0));
+
+            // Destroy previous chart instance if it exists
             if (lineChart) lineChart.destroy();
+
+            // Create new line chart with dual Y-axes
             lineChart = new Chart(lineCtx, {
                 type: 'line',
                 data: {
@@ -294,7 +405,7 @@
                             backgroundColor: 'rgba(16,185,129,0.2)',
                             tension: 0.2,
                             fill: true,
-                            yAxisID: 'y1'
+                            yAxisID: 'y1'  // Use right Y-axis
                         },
                         {
                             label: 'Wikipedia (rel.)',
@@ -303,7 +414,7 @@
                             backgroundColor: 'rgba(239,68,68,0.2)',
                             tension: 0.2,
                             fill: true,
-                            yAxisID: 'y'
+                            yAxisID: 'y'   // Use left Y-axis
                         }
                     ]
                 },
@@ -314,41 +425,58 @@
                             ticks: {color: getAxis()}, grid: {color: getGrid()}
                         },
                         y: { 
+                            // Left Y-axis for Wikipedia data
                             type: 'linear', position: 'left',
                             title: { display: true, text: 'Wikipedia (relative, %)' },
                             ticks: {color: getAxis()}, grid: {color: getGrid()}
                         },
                         y1: {
+                            // Right Y-axis for YouTube data
                             type: 'linear',
                             position: 'right',
                             title: { display: true, text: 'Videos (relative, %)' },
                             ticks: {color: getAxis()},
-                            grid: {drawOnChartArea: false}
+                            grid: {drawOnChartArea: false}  // Don't draw grid lines for this axis
                         }
                     }
                 }
             });
         }
 
-
+        /**
+         * Renders the weekly time series line chart
+         * Shows absolute values of YouTube videos and Wikipedia pageviews by week
+         */
         function renderWeekly() {
             // Build weekly aligned labels, filtered by current date range if set
             const labels = [];
             const range = getRangeDates();
+
+            // Filter source data by date range if a range is selected
             const ytSrc = range ? ytWeekly.filter(d => d._date >= range[0] && d._date <= range[1]) : ytWeekly;
             const wkSrc = range ? wikiWeekly.filter(d => d._date >= range[0] && d._date <= range[1]) : wikiWeekly;
+
+            // Create maps for easy lookup of values by date
             const ytMap = new Map(ytSrc.map(d => [d._dateStr, Number(d['Number of Videos'])]));
             const wkMap = new Map(wkSrc.map(d => [d._dateStr, Number(d._value)]));
+
+            // Get union of all dates from both datasets
             const allKeys = new Set([...ytMap.keys(), ...wkMap.keys()]);
             const sortedKeys = [...allKeys].sort();
+
+            // Create aligned data series (filling missing values with 0)
             const ytSeries = [];
             const wkSeries = [];
             sortedKeys.forEach(k => {
                 labels.push(k);
-                ytSeries.push(ytMap.get(k) ?? 0);
-                wkSeries.push(wkMap.get(k) ?? 0);
+                ytSeries.push(ytMap.get(k) ?? 0);  // Use 0 if no value for this date
+                wkSeries.push(wkMap.get(k) ?? 0);  // Use 0 if no value for this date
             });
+
+            // Destroy previous chart instance if it exists
             if (weeklyChart) weeklyChart.destroy();
+
+            // Create new weekly line chart
             weeklyChart = new Chart(weeklyCtx, {
                 type: 'line',
                 data: {
@@ -388,74 +516,108 @@
         }
 
 
+        /**
+         * Renders all charts (scatter, daily line, weekly line)
+         * Used when initializing or when filters change
+         */
         function renderAll() {
             renderScatter();
             renderLine();
             renderWeekly();
         }
 
+        /**
+         * Formats a date object to DD.MM.YYYY format
+         * @param {Date} d - Date object to format
+         * @returns {string} Formatted date string
+         */
         function fmtDate(d) {
             const pad = (n) => String(n).padStart(2, '0');
             return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
         }
 
+        /**
+         * Initializes the filter controls (date slider and year dropdown)
+         * Sets up event listeners and prepares data for filtering
+         */
         function initFilters() {
+            // Sort daily data by date and create date labels
             dailySorted = [...daily].sort((a, b) => Number(a['Published At']) - Number(b['Published At']));
             dateLabels = dailySorted.map(d => new Date(Number(d['Published At'])));
             const minIndex = 0;
             const maxIndex = dateLabels.length - 1;
             currentRange = [minIndex, maxIndex];
 
+            // Get references to filter UI elements
             slider = document.getElementById('date-range-slider');
             lblStart = document.getElementById('range-start');
             lblEnd = document.getElementById('range-end');
             yearSelect = document.getElementById('year-select');
             resetBtn = document.getElementById('reset-filters');
 
+            //  INITIALIZE DATE RANGE SLIDER 
             if (slider && window.noUiSlider) {
+                // Destroy existing slider if it exists
                 if (slider.noUiSlider) {
                     slider.noUiSlider.destroy();
                 }
+
+                // Create new noUiSlider instance
                 noUiSlider.create(slider, {
                     start: [minIndex, maxIndex],
-                    connect: true,
-                    step: 1,
+                    connect: true,  // Connect the handles with a colored bar
+                    step: 1,        // Step by 1 day
                     range: {min: minIndex, max: maxIndex}
                 });
+
+                // Helper function to update date labels
                 const updateLabels = (s, e) => {
                     lblStart.textContent = fmtDate(dateLabels[s]);
                     lblEnd.textContent = fmtDate(dateLabels[e]);
                 };
+
+                // Initialize labels
                 updateLabels(minIndex, maxIndex);
+
+                // Add event listener for slider changes
                 slider.noUiSlider.on('update', (values) => {
                     const s = Math.round(Number(values[0]));
                     const e = Math.round(Number(values[1]));
                     currentRange = [s, e];
                     updateLabels(s, e);
+
+                    // Update all charts with new date range
                     renderLine();
                     renderWeekly();
                     renderScatter();
                 });
             }
 
-            // Build year ranges and dropdown
+            //  INITIALIZE YEAR DROPDOWN 
+            // Build year ranges map (year -> [startIndex, endIndex])
             yearRanges = {};
             dateLabels.forEach((d, i) => {
                 const y = d.getFullYear();
                 if (!(y in yearRanges)) yearRanges[y] = [i, i]; else yearRanges[y][1] = i;
             });
+
             if (yearSelect) {
-                // remove existing year options except "" (Alle Jahre)
+                // Remove existing year options except "" (Every year)
                 [...yearSelect.querySelectorAll('option')].filter(o => o.value !== '').forEach(o => o.remove());
+
+                // Add option for each year in the data
                 Object.keys(yearRanges).forEach(y => {
                     const opt = document.createElement('option');
                     opt.value = String(y);
                     opt.textContent = String(y);
                     yearSelect.appendChild(opt);
                 });
+
+                // Add event listener for year selection changes
                 yearSelect.addEventListener('change', () => {
                     const val = yearSelect.value;
                     if (!val) {
+                        // If "Every year" is selected, show all data
                         if (slider?.noUiSlider) {
                             slider.noUiSlider.set([minIndex, maxIndex]);
                         }
@@ -464,6 +626,7 @@
                         renderWeekly();
                         renderScatter();
                     } else {
+                        // If specific year is selected, filter to that year
                         const [s, e] = yearRanges[val];
                         currentRange = [s, e];
                         if (slider?.noUiSlider) {
@@ -476,14 +639,20 @@
                 });
             }
 
+            //  INITIALIZE RESET BUTTON 
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
+                    // Reset year dropdown to "Every year"
                     if (yearSelect) yearSelect.value = '';
+
+                    // Reset date range to full range
                     const minIndexR = 0, maxIndexR = dateLabels.length - 1;
                     currentRange = [minIndexR, maxIndexR];
                     if (slider?.noUiSlider) {
                         slider.noUiSlider.set([minIndexR, maxIndexR]);
                     }
+
+                    // Update all charts
                     renderLine();
                     renderWeekly();
                     renderScatter();
@@ -491,36 +660,47 @@
             }
         }
 
+        //  DATA LOADING AND PROCESSING 
+        /**
+         * Load all data files using Promise.all for parallel fetching
+         * Process the data and initialize the visualization
+         */
         Promise.all([
-            fetch('/afd_wiki.json').then(r => r.json()),
-            fetch('/afd_yt.json').then(r => r.json()),
-            fetch('/afd_wiki_daily.json').then(r => r.json()),
-            fetch('/afd_yt_daily.json').then(r => r.json()),
+            fetch('/afd_wiki.json').then(r => r.json()),          // Weekly Wikipedia data
+            fetch('/afd_yt.json').then(r => r.json()),            // Weekly YouTube data
+            fetch('/afd_wiki_daily.json').then(r => r.json()),    // Daily Wikipedia data
+            fetch('/afd_yt_daily.json').then(r => r.json()),      // Daily YouTube data
         ]).then(([wikiWeeklyJson, ytWeeklyJson, wikiDailyJson, ytDailyJson]) => {
-            // Parse wiki weekly
+            //  PARSE WEEKLY DATA 
+
+            // Parse weekly Wikipedia pageviews data
             wikiWeekly = (Array.isArray(wikiWeeklyJson) ? wikiWeeklyJson : []).map(r => {
-                // source has date under empty key "" and value under "Alternative_für_Deutschland"
+                // Source has date under empty key "" and value under "Alternative_für_Deutschland"
                 const dateStr = (r[""] || r.date || r.Date || r.Datum || '').toString();
                 const d = new Date(dateStr);
                 return {
-                    _date: d,
-                    _dateStr: d.toISOString().slice(0, 10),
-                    _value: Number(r['Alternative_für_Deutschland'] || 0)
+                    _date: d,                                      // Date object for comparisons
+                    _dateStr: d.toISOString().slice(0, 10),        // ISO date string (YYYY-MM-DD)
+                    _value: Number(r['Alternative_für_Deutschland'] || 0)  // Pageview count
                 };
-            }).filter(x => !isNaN(x._date.getTime()));
-            // Parse yt weekly (already with proper keys)
+            }).filter(x => !isNaN(x._date.getTime()));  // Filter out invalid dates
+
+            // Parse weekly YouTube video upload data
             ytWeekly = (Array.isArray(ytWeeklyJson) ? ytWeeklyJson : []).map(r => {
                 const raw = String(r['Published At'] || '');
+                // Handle different date formats (with/without time)
                 const iso = raw.includes('T') ? raw : raw.replace(' ', 'T');
                 const d = new Date(iso);
                 return {
                     _date: d,
                     _dateStr: isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10),
-                    'Number of Videos': Number(r['Number of Videos'] || 0)
+                    'Number of Videos': Number(r['Number of Videos'] || 0)  // Video count
                 };
-            }).filter(r => r._dateStr);
+            }).filter(r => r._dateStr);  // Filter out entries with invalid dates
 
-            // Parse wiki daily
+            //  PARSE DAILY DATA 
+
+            // Parse daily Wikipedia pageviews data
             wikiDaily = (Array.isArray(wikiDailyJson) ? wikiDailyJson : []).map(r => {
                 const dateStr = (r[""] || r.date || '').toString();
                 const d = new Date(dateStr);
@@ -530,7 +710,8 @@
                     _value: Number(r['Alternative_für_Deutschland'] || 0)
                 };
             }).filter(x => !isNaN(x._date.getTime()));
-            // Parse yt daily
+
+            // Parse daily YouTube video upload data
             const ytDaily = (Array.isArray(ytDailyJson) ? ytDailyJson : []).map(r => {
                 const raw = String(r['Published At'] || '');
                 const iso = raw.includes('T') ? raw : raw.replace(' ', 'T');
@@ -542,30 +723,38 @@
                 };
             }).filter(x => x._dateStr);
 
-            // Build combined weekly points by aligning dates
+            //  COMBINE DATA FOR VISUALIZATION 
+
+            // Build combined weekly points by aligning dates from both sources
             const ytWkMap = new Map(ytDaily.map(d => [d._dateStr, d['Number of Videos']]));
             const wkWkMap = new Map(wikiDaily.map(d => [d._dateStr, d._value]));
-            // Use union of weeks and fill missing values with 0 so we don't drop points
+
+            // Use union of all dates and fill missing values with 0
             const wkAllKeys = [...new Set([...ytWkMap.keys(), ...wkWkMap.keys()])].sort();
             combined = wkAllKeys.map(k => ({
                 'Number of Videos': ytWkMap.get(k) ?? 0,
                 'Wikipedia Pageviews': wkWkMap.get(k) ?? 0
             }));
 
-            // Build daily combined array expected by charts
+            // Build daily combined array with consistent format for charts
             const ytDailyMap = new Map(ytDaily.map(d => [d._dateStr, d._value]));
             const wkDailyMap = new Map(wikiDaily.map(d => [d._dateStr, d._value]));
             const dailyKeys = [...new Set([...ytDailyMap.keys(), ...wkDailyMap.keys()])].sort();
             daily = dailyKeys.map(k => ({
-                'Published At': new Date(k).getTime(),
+                'Published At': new Date(k).getTime(),  // Store as timestamp for easier sorting
                 'Number of Videos': ytDailyMap.get(k) ?? 0,
                 'Wikipedia Pageviews': wkDailyMap.get(k) ?? 0
             }));
 
-            // Init controls for daily combined series
+            //  INITIALIZE VISUALIZATION 
+
+            // Initialize filter controls with the processed data
             initFilters();
+
+            // Render all charts when Chart.js is ready
             whenChartReady(() => renderAll());
         }).catch(err => {
+            // Log any errors that occur during data loading
             console.error('Fehler beim Laden der AfD-Daten', err);
         });
     });
