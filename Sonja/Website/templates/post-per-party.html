@@ -1,9 +1,17 @@
 <!DOCTYPE html>
+<!-- 
+    Posts per Party Analysis Page
+    This page visualizes the relationship between social media activity (YouTube posts) 
+    and election results for German political parties in the 2021 and 2025 elections
+-->
 <html lang="en" class="light">
 <head>
+    <!-- Meta tags for character encoding and responsive design -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Posts per Party</title>
+
+    <!-- External libraries and frameworks -->
     <script src="https://cdn.tailwindcss.com" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -11,12 +19,17 @@
     <link rel="icon" type="image/png" href="{{ url_for('favicon') }}">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-900">
+<!-- Dark mode toggle button in the corner of the page -->
 {% include 'partials/dark_mode_toggle.html' %}
 
+<!-- Set the page title for the header component -->
 {% set page_title = 'Posts per Party' %}
 {% include 'partials/page_header.html' %}
 
-<!-- Introduction -->
+<!-- 
+    Introduction Section
+    Provides context about the data analysis and methodology
+-->
 <section class="max-w-7xl mx-auto mt-4 bg-white rounded-2xl shadow p-6 space-y-3">
     <h2 class="text-xl font-semibold">Introduction</h2>
     <p class="text-gray-700">During election campaigns, political parties increasingly use social media to spread their messages and reach voters. An important indicator of this activity is the number of posts published within a given period. In this analysis, we compare the social media activity of different parties on YouTube with their election results.</p>
@@ -25,7 +38,12 @@
     <p class="text-gray-700">We collected the number of YouTube posts published by parties during the election years 2021 and 2025 and compared these figures to the official election results. In addition, changes between the two years were calculated and visualized in tables and charts. This allows us to identify patterns and examine potential relationships between posting activity and electoral success.</p>
 </section>
 <div class="max-w-7xl mx-auto mt-6">
+    <!-- 
+        Filter Controls Section
+        Allows users to filter data by election period and select specific parties
+    -->
     <div class="flex items-center gap-3 flex-wrap justify-center mb-6">
+        <!-- Election period dropdown selector -->
         <label for="dataset" class="font-medium">Election period:</label>
         <select id="dataset" class="border rounded p-2 bg-white">
             <option value="first">Election 2025</option>
@@ -33,6 +51,7 @@
             <option value="both">Both elections</option>
         </select>
 
+        <!-- Party selection dropdown with checkboxes -->
         <label for="partyDropdown" class="font-medium">Parties:</label>
         <div class="relative inline-block">
             <button id="partyDropdown" type="button"
@@ -59,9 +78,13 @@
 
     </div>
 
+    <!-- Current view indicator -->
     <div id="subtitle" class="text-sm text-gray-500 mt-1 text-center mb-5">View: 2025</div>
 
-    <!-- Tabelle -->
+    <!-- 
+        Data Table Section
+        Displays party data in a sortable table format
+    -->
     <div class="overflow-x-auto shadow rounded-2xl mb-8 bg-white">
         <table id="partyTable" class="min-w-full border-collapse">
             <thead>
@@ -72,27 +95,30 @@
         </table>
     </div>
 
-    <!-- Charts -->
+    <!-- 
+        Data Visualization Section - Main Charts
+        Displays various charts to visualize the relationship between posts and election results
+    -->
     <section class="grid gap-8 lg:grid-cols-2">
-        <!-- Posts Chart Card -->
+        <!-- Posts Chart Card - Shows distribution of posts by party -->
         <div class="max-w-xl bg-white rounded-2xl shadow p-4">
             <div id="chartTitle" class="mb-2 font-semibold">Posts 2025 (Pie)</div>
             <canvas id="pieChart"></canvas>
         </div>
 
-        <!-- Election Chart Card -->
+        <!-- Election Chart Card - Shows election results by party -->
         <div class="max-w-xl bg-white rounded-2xl shadow p-4">
             <div id="electionChartTitle" class="mb-2 font-semibold">Election results 2025 (Pie)</div>
             <canvas id="electionPieChart"></canvas>
         </div>
 
-        <!-- Combined Chart Card (made large) -->
+        <!-- Combined Chart Card - Shows posts and election results together -->
         <div id="combinedCard" class="bg-white rounded-2xl shadow p-4 w-full lg:col-span-2">
             <div id="combinedChartTitle" class="mb-2 font-semibold">Posts and election results 2025</div>
             <canvas id="combinedChart"></canvas>
         </div>
 
-        <!-- Scatter nur bei "both" (made large) -->
+        <!-- Scatter plot - Shows correlation between changes in posts and election results -->
         <div id="scatterCard" class="bg-white rounded-2xl shadow p-4 w-full lg:col-span-2 hidden">
             <div class="flex items-center justify-between mb-2">
                 <div id="scatterTitle" class="font-semibold hidden">
@@ -103,7 +129,10 @@
         </div>
     </section>
 
-    <!-- Individual Party Charts -->
+    <!-- 
+        Individual Party Charts Section
+        Shows detailed charts for each selected party
+    -->
     <section id="partyChartsSection" class="mt-8">
             <h2 class="text-xl font-bold mb-4">Individual parties</h2>
             <div id="partyCharts" class="grid gap-8 lg:grid-cols-2">
@@ -111,8 +140,12 @@
             </div>
         </section>
 
-    <!-- Cards -->
+    <!-- 
+        Data Access Section
+        Provides cards for accessing and downloading raw data
+    -->
     <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        <!-- Posts data card -->
         <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
             <h2 class="text-xl font-bold text-indigo-700 mb-2">📂 Data (Posts)</h2>
             <p class="text-gray-600">Raw data for posts per party.</p>
@@ -147,6 +180,7 @@
             </div>
         </div>
 
+        <!-- Election data card -->
         <div class="block rounded-2xl bg-white shadow hover:shadow-lg transition p-6">
             <h2 class="text-xl font-bold text-indigo-700 mb-2">🗳️ Election data</h2>
             <p class="text-gray-600">Parties’ election results.</p>
@@ -183,6 +217,7 @@
             </div>
         </div>
 
+        <!-- Stats page link card -->
         <a href="{{ url_for('post_per_party_stats') }}"
            class="block rounded-2xl bg-white shadow hover:shadow-lg transition transform hover:-translate-y-1 p-6">
             <h2 class="text-xl font-bold text-indigo-700 mb-2">📈 Stats</h2>
@@ -190,7 +225,7 @@
         </a>
     </section>
 
-    <!-- JSON Viewer Modal -->
+    <!-- JSON Viewer Modal for displaying raw data -->
     <div id="jsonViewerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
             <div class="flex justify-between items-center border-b p-4">
@@ -210,8 +245,16 @@
 </div>
 
 <script defer>
+    /**
+     * Main JavaScript for Posts per Party data visualization
+     * Handles data loading, chart rendering, filtering, and interactive UI elements
+     */
 
-    // JSON Viewer functions
+    // ===== JSON VIEWER FUNCTIONALITY =====
+    /**
+     * Displays JSON data in a modal viewer
+     * @param {string} url - URL of the JSON file to fetch and display
+     */
     function viewJsonData(url) {
         fetch(url)
             .then(response => response.json())
@@ -232,6 +275,9 @@
             });
     }
 
+    /**
+     * Closes the JSON viewer modal
+     */
     function closeJsonViewer() {
         document.getElementById('jsonViewerModal').classList.add('hidden');
     }
@@ -243,7 +289,11 @@
         }
     });
 
-    // Download options toggle
+    // ===== DOWNLOAD FUNCTIONALITY =====
+    /**
+     * Toggles the visibility of download options dropdown
+     * @param {string} type - Type of data ('data' or 'election')
+     */
     function toggleDownloadOptions(type) {
         const optionsId = `${type}-download-options`;
         const options = document.getElementById(optionsId);
@@ -268,7 +318,11 @@
         }
     });
 
-    // Convert JSON to CSV and download
+    /**
+     * Converts JSON data to CSV format and triggers download
+     * @param {string} url - URL of the JSON file to convert
+     * @param {string} filename - Name for the downloaded file (without extension)
+     */
     function downloadCSV(url, filename) {
         fetch(url)
             .then(response => response.json())
@@ -366,6 +420,11 @@
             });
     }
 
+    // ===== DATA STORAGE AND STATE MANAGEMENT =====
+    /**
+     * Main data store for application state
+     * Holds posts and election data for both years and calculated differences
+     */
     let dataStore = {
         posts2025: [],
         posts2021: [],
@@ -374,13 +433,18 @@
         diffElection: new Map(),
     };
 
-    let currentPeriod = "first";
-    let pieChart, electionPieChart, combinedChart, scatterChart;
-    let partyCharts = new Map(); // Store individual party charts
-    let selectedParties = []; // Store selected parties
-    let sortState = {key: null, dir: 1};
+    // Application state variables
+    let currentPeriod = "first";  // Current selected time period (first=2025, second=2021, both=comparison)
+    let pieChart, electionPieChart, combinedChart, scatterChart;  // Chart instances
+    let partyCharts = new Map();  // Store individual party charts
+    let selectedParties = [];     // Store selected parties for filtering
+    let sortState = {key: null, dir: 1};  // Table sorting state
 
-    // === Parteifarben ===
+    // ===== PARTY COLORS AND FORMATTING =====
+    /**
+     * Map of party identifiers to their official brand colors
+     * Used for consistent color coding across all visualizations
+     */
     const PARTY_COLORS = new Map([
         ["cdu", "#000000"], ["csu", "#000000"],
         ["spd", "#E3000F"], ["fdp", "#FFED00"],
@@ -389,7 +453,19 @@
         ["afd", "#009EE0"], ["bsw", "#00B3A4"],
         ["sonstige", "#9CA3AF"],
     ]);
+
+    /**
+     * Normalizes party names to lowercase for consistent lookup
+     * @param {string} p - Party name to normalize
+     * @returns {string} Lowercase party name
+     */
     const norm = (p) => String(p).toLowerCase();
+
+    /**
+     * Formats party names for display with proper capitalization
+     * @param {string} p - Party name to format
+     * @returns {string} Properly formatted party name
+     */
     const pretty = (p) => {
         const m = {
             gruene: "Grüne", grüne: "Grüne", linke: "Linke",
@@ -399,8 +475,21 @@
         const k = norm(p);
         return m[k] || p;
     };
+
+    /**
+     * Formats percentage values with German locale
+     * @param {number} v - Value to format as percentage
+     * @returns {string} Formatted percentage string
+     */
     const fmtPct = (v) =>
         `${(Number(v) || 0).toLocaleString("de-DE", {maximumFractionDigits: 2})}%`;
+
+    /**
+     * Gets the appropriate color for a party based on its name
+     * Includes fallback logic for variant spellings
+     * @param {string} label - Party name
+     * @returns {string} Hex color code
+     */
     const getPartyColor = (label) => {
         const k = norm(label);
         if (PARTY_COLORS.has(k)) return PARTY_COLORS.get(k);
@@ -414,7 +503,11 @@
         return "#9CA3AF";
     };
 
-    // ---- Daten laden ----
+    // ===== DATA LOADING AND PROCESSING =====
+    /**
+     * Fetches and processes both posts and election data
+     * Initializes the application with the loaded data
+     */
     Promise.all([fetch("/data.json"), fetch("/election.json")])
         .then(async ([pRes, eRes]) => {
             if (!pRes.ok) throw new Error(`data.json HTTP ${pRes.status}`);
@@ -422,7 +515,7 @@
             return [await pRes.json(), await eRes.json()];
         })
         .then(([postsData, electData]) => {
-            // POSTS: neues Schema
+            // Process posts data for both election years
             const p2025 = postsData.electionPosts2025 || {};
             const p2021 = postsData.electionPosts2021 || {};
             const rows2025 = Object.entries(p2025).map(([party, posts]) => ({
@@ -434,7 +527,7 @@
                 posts: Number(posts) || 0
             }));
 
-            // ELECTION
+            // Process election results data
             const e25 = (electData.election2025 && electData.election2025[0]) || {};
             const e21 = (electData.election2021 && electData.election2021[0]) || {};
             const dE = electData.diffElection || {};
@@ -442,17 +535,22 @@
             dataStore.election2021 = new Map(Object.entries(e21).map(([k, v]) => [pretty(k), Number(v) || 0]));
             dataStore.diffElection = new Map(Object.entries(dE).map(([k, v]) => [pretty(k), Number(v) || 0]));
 
-            // electionCount mergen
+            // Merge posts data with election results
             dataStore.posts2025 = mergeElection(rows2025, dataStore.election2025);
             dataStore.posts2021 = mergeElection(rows2021, dataStore.election2021);
 
-            // Populate party dropdown
+            // Initialize UI components
             populatePartyDropdown();
-
             refresh();
         })
         .catch(err => console.error("Ladefehler:", err));
 
+    /**
+     * Merges posts data with election results for a given year
+     * @param {Array} rows - Array of objects with party and posts data
+     * @param {Map} map - Map of party names to election results
+     * @returns {Array} Combined data with posts and election results
+     */
     function mergeElection(rows, map) {
         const parties = new Set([...rows.map(r => r.party), ...map.keys()]);
         return [...parties].map(p => {
@@ -461,7 +559,11 @@
         });
     }
 
-    // Tabellenkopf mit Sortierung
+    // ===== TABLE RENDERING FUNCTIONS =====
+    /**
+     * Renders the table header with sortable columns
+     * @param {Array} columns - Array of column objects with key and label properties
+     */
     function renderHeader(columns) {
         const thead = document.getElementById("tableHead");
         thead.innerHTML = "";
@@ -469,8 +571,10 @@
             const th = document.createElement("th");
             th.className = "px-4 py-2 border-b cursor-pointer select-none";
             th.dataset.sort = col.key;
+            // Add sort indicators (▲/▼) to show current sort direction
             th.textContent = col.label + " " +
                 (sortState.key === col.key ? (sortState.dir === 1 ? "▲" : "▼") : "▲▼");
+            // Add click event for sorting
             th.addEventListener("click", () => {
                 if (sortState.key === col.key) sortState.dir *= -1;
                 else {
@@ -483,7 +587,13 @@
         });
     }
 
+    /**
+     * Renders the table for a single election year
+     * @param {Array} rows - Array of data rows to display
+     * @param {number} year - Election year (2021 or 2025)
+     */
     function renderTableSingle(rows, year) {
+        // Set up table columns for single year view
         renderHeader([
             {key: "party", label: "Party"},
             {key: "posts", label: `Posts ${year}`},
@@ -500,6 +610,7 @@
             ? rows.filter(r => selectedParties.includes(r.party))
             : rows.slice();
 
+        // Apply sorting if a sort key is set
         if (sortState.key) {
             data.sort((a, b) => {
                 const va = a[sortState.key], vb = b[sortState.key];
@@ -507,6 +618,7 @@
             });
         }
 
+        // Render table rows and calculate total
         let sumPosts = 0;
         data.forEach(row => {
             sumPosts += row.posts;
@@ -524,6 +636,7 @@
             tbody.appendChild(tr);
         });
 
+        // Render footer with totals
         tfoot.innerHTML = `
         <tr class="bg-gray-50 font-semibold">
           <td class="px-4 py-2 border-t">Summe</td>
@@ -533,7 +646,12 @@
       `;
     }
 
+    /**
+     * Renders the comparison table showing both election years side by side
+     * Includes columns for differences between years
+     */
     function renderTableBoth() {
+        // Create maps for easier data access
         const p25 = new Map((dataStore.posts2025 || []).map(r => [r.party, r.posts]));
         const p21 = new Map((dataStore.posts2021 || []).map(r => [r.party, r.posts]));
         const e25 = dataStore.election2025 || new Map();
@@ -548,6 +666,7 @@
             parties = parties.filter(party => selectedParties.includes(party));
         }
 
+        // Set up table columns for comparison view
         renderHeader([
             {key: "party", label: "Party"},
             {key: "posts2025", label: "Posts 2025"},
@@ -563,6 +682,7 @@
         tbody.innerHTML = "";
         tfoot.innerHTML = "";
 
+        // Create combined dataset with all values and differences
         let data = parties.map(p => {
             const v25 = p25.get(p) || 0;
             const v21 = p21.get(p) || 0;
@@ -580,6 +700,7 @@
             };
         });
 
+        // Apply sorting if a sort key is set
         if (sortState.key) {
             data.sort((a, b) => {
                 const va = a[sortState.key], vb = b[sortState.key];
@@ -587,6 +708,7 @@
             });
         }
 
+        // Render table rows and calculate totals
         let sum25 = 0, sum21 = 0;
         data.forEach(row => {
             sum25 += row.posts2025;
@@ -614,6 +736,7 @@
             tbody.appendChild(tr);
         });
 
+        // Render footer with totals and difference
         const totalDiff = sum25 - sum21;
         tfoot.innerHTML = `
         <tr class="bg-gray-50 font-semibold">
@@ -629,10 +752,16 @@
         </tr>
       `;
 
-        // Scatter rendern
+        // Render scatter plot showing correlation between post changes and election result changes
         renderScatter(data);
     }
 
+    // ===== CHART RENDERING FUNCTIONS =====
+    /**
+     * Renders a pie chart showing the distribution of posts by party
+     * @param {Array} rows - Array of data rows with party and posts information
+     * @param {number} year - Election year (2021 or 2025)
+     */
     function renderPie(rows, year) {
         const ctx = document.getElementById("pieChart").getContext("2d");
         if (pieChart) pieChart.destroy();
@@ -645,11 +774,13 @@
 
         if (filteredRows.length === 0) return;
 
+        // Prepare data for the chart
         const labels = filteredRows.map(r => r.party);
         const values = filteredRows.map(r => r.posts);
         const total = values.reduce((a, b) => a + b, 0);
         const backgroundColor = labels.map(getPartyColor);
 
+        // Create pie chart
         pieChart = new Chart(ctx, {
             type: "pie",
             data: {labels, datasets: [{data: values, backgroundColor}]},
@@ -669,13 +800,19 @@
             }
         });
 
+        // Update chart title
         document.getElementById("chartTitle").textContent = `1. Chart: Posts only (${year})`;
     }
 
+    /**
+     * Renders a pie chart showing the distribution of election results by party
+     * @param {number} year - Election year (2021 or 2025)
+     */
     function renderElectionPie(year) {
         const ctx = document.getElementById("electionPieChart").getContext("2d");
         if (electionPieChart) electionPieChart.destroy();
 
+        // Get election data for the selected year
         const electionMap = year === 2025 ? dataStore.election2025 : dataStore.election2021;
         if (!electionMap || electionMap.size === 0) return;
 
@@ -686,10 +823,12 @@
 
         if (filteredParties.length === 0) return;
 
+        // Prepare data for the chart
         const labels = filteredParties;
         const values = filteredParties.map(party => electionMap.get(party));
         const backgroundColor = labels.map(getPartyColor);
 
+        // Create pie chart
         electionPieChart = new Chart(ctx, {
             type: "pie",
             data: {labels, datasets: [{data: values, backgroundColor}]},
@@ -708,13 +847,20 @@
             }
         });
 
+        // Update chart title
         document.getElementById("electionChartTitle").textContent = `2. Chart: Election results only (${year})`;
     }
 
+    /**
+     * Renders a combined bar chart showing both posts and election results
+     * Posts are scaled to percentages to make them comparable with election results
+     * @param {number} year - Election year (2021 or 2025)
+     */
     function renderCombinedChart(year) {
         const ctx = document.getElementById("combinedChart").getContext("2d");
         if (combinedChart) combinedChart.destroy();
 
+        // Get data for the selected year
         const rows = year === 2025 ? dataStore.posts2025 : dataStore.posts2021;
         const electionMap = year === 2025 ? dataStore.election2025 : dataStore.election2021;
 
@@ -731,6 +877,7 @@
         // Skip if no matching parties
         if (parties.length === 0) return;
 
+        // Prepare data for the chart
         const labels = parties;
         const postValues = parties.map(p => {
             const row = rows.find(r => r.party === p);
@@ -740,10 +887,11 @@
         const electionValues = parties.map(p => electionMap.get(p) || 0);
         const backgroundColor = labels.map(getPartyColor);
 
-        // Scale the values to make them comparable in the chart
+        // Scale the post values to make them comparable with election percentages
         const maxPosts = Math.max(...postValues);
         const scaledPosts = postValues.map(v => (v / maxPosts) * 100);
 
+        // Create combined bar chart
         combinedChart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -801,9 +949,15 @@
             }
         });
 
+        // Update chart title
         document.getElementById("combinedChartTitle").textContent = `3. Chart: Posts and election results together (${year})`;
     }
 
+    // ===== PARTY SELECTION DROPDOWN =====
+    /**
+     * Initializes the party selection dropdown with checkboxes
+     * Populates the dropdown with all parties from both election years
+     */
     function populatePartyDropdown() {
         const partyCheckboxes = document.getElementById("partyCheckboxes");
         const dropdownButton = document.getElementById("partyDropdown");
@@ -877,7 +1031,10 @@
             updateDropdownButtonText();
         });
 
-        // Function to update selectedParties array based on checked checkboxes
+        /**
+         * Updates the selectedParties array based on checked checkboxes
+         * Refreshes all visualizations with the new selection
+         */
         function updateSelectedParties() {
             selectedParties = [];
             document.querySelectorAll(".party-checkbox:checked").forEach(checkbox => {
@@ -893,7 +1050,9 @@
             refresh();
         }
 
-        // Function to update dropdown button text
+        /**
+         * Updates the dropdown button text based on selected parties
+         */
         function updateDropdownButtonText() {
             const allCheckboxes = document.querySelectorAll(".party-checkbox");
             const checkedCheckboxes = document.querySelectorAll(".party-checkbox:checked");
@@ -910,6 +1069,11 @@
         }
     }
 
+    // ===== INDIVIDUAL PARTY CHARTS =====
+    /**
+     * Renders individual charts for each selected party
+     * Shows posts and election results for both years in a single chart per party
+     */
     function renderPartyCharts() {
         const container = document.getElementById("partyCharts");
         container.innerHTML = "";
@@ -948,6 +1112,11 @@
         });
     }
 
+    /**
+     * Renders a bar chart for a specific party showing posts and election results for both years
+     * @param {string} party - Party name
+     * @param {string} canvasId - ID of the canvas element to render the chart on
+     */
     function renderPartyChart(party, canvasId) {
         const ctx = document.getElementById(canvasId).getContext("2d");
 
@@ -962,6 +1131,7 @@
 
         const partyColor = getPartyColor(party);
 
+        // Create bar chart with four bars (posts and election results for both years)
         const chart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -1016,9 +1186,15 @@
             }
         });
 
+        // Store chart reference for later cleanup
         partyCharts.set(party, chart);
     }
 
+    // ===== SCATTER PLOT VISUALIZATION =====
+    /**
+     * Renders a scatter plot showing the correlation between changes in posts and election results
+     * @param {Array} rowsBoth - Combined data with differences between 2021 and 2025
+     */
     function renderScatter(rowsBoth) {
         const canvas = document.getElementById("scatterChart").getContext("2d");
         const titleEl = document.getElementById("scatterTitle");
@@ -1031,7 +1207,7 @@
             ? rowsBoth.filter(r => selectedParties.includes(r.party))
             : rowsBoth;
 
-        // Punkte bauen
+        // Create data points for scatter plot
         const points = filteredRows.map(r => ({
             x: r.diffPosts,
             y: r.diffElection,
@@ -1041,6 +1217,7 @@
             borderColor: getPartyColor(r.party),
         }));
 
+        // Hide scatter plot if no data points
         if (points.length === 0) {
             titleEl.classList.add("hidden");
             scatterCard.classList.add("hidden");
@@ -1051,7 +1228,7 @@
         scatterCard.classList.remove("hidden");
         if (saveBtn) saveBtn.classList.remove("hidden");
 
-        // Achsgrenzen mit Puffer
+        // Calculate axis limits with padding for better visualization
         const xs = points.map(p => p.x), ys = points.map(p => p.y);
         const pad = (arr, p = 0.1) => {
             const min = Math.min(...arr), max = Math.max(...arr);
@@ -1061,6 +1238,7 @@
         const [xmin, xmax] = pad(xs, 0.15);
         const [ymin, ymax] = pad(ys, 0.15);
 
+        // Create scatter plot
         scatterChart = new Chart(canvas, {
             type: "scatter",
             data: {
@@ -1118,10 +1296,16 @@
         });
     }
 
+    // ===== COMPARISON CHARTS FOR BOTH YEARS =====
+    /**
+     * Renders a bar chart comparing posts for both election years
+     * Replaces the pie chart with a bar chart when in comparison mode
+     */
     function renderPostsChartBoth() {
         const ctx = document.getElementById("pieChart").getContext("2d");
         if (pieChart) pieChart.destroy();
 
+        // Create maps for easier data access
         const p25 = new Map((dataStore.posts2025 || []).map(r => [r.party, r.posts]));
         const p21 = new Map((dataStore.posts2021 || []).map(r => [r.party, r.posts]));
 
@@ -1135,11 +1319,13 @@
 
         if (parties.length === 0) return;
 
+        // Prepare data for the chart
         const labels = parties;
         const values2025 = parties.map(p => p25.get(p) || 0);
         const values2021 = parties.map(p => p21.get(p) || 0);
         const backgroundColor = labels.map(getPartyColor);
 
+        // Create bar chart comparing posts for both years
         pieChart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -1191,13 +1377,19 @@
             }
         });
 
+        // Update chart title
         document.getElementById("chartTitle").textContent = "1. Chart: Posts only";
     }
 
+    /**
+     * Renders a bar chart comparing election results for both years
+     * Replaces the pie chart with a bar chart when in comparison mode
+     */
     function renderElectionChartBoth() {
         const ctx = document.getElementById("electionPieChart").getContext("2d");
         if (electionPieChart) electionPieChart.destroy();
 
+        // Get election data for both years
         const e25 = dataStore.election2025 || new Map();
         const e21 = dataStore.election2021 || new Map();
 
@@ -1211,11 +1403,13 @@
 
         if (parties.length === 0) return;
 
+        // Prepare data for the chart
         const labels = parties;
         const values2025 = parties.map(p => e25.get(p) || 0);
         const values2021 = parties.map(p => e21.get(p) || 0);
         const backgroundColor = labels.map(getPartyColor);
 
+        // Create bar chart comparing election results for both years
         electionPieChart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -1267,15 +1461,22 @@
             }
         });
 
+        // Update chart title
         document.getElementById("electionChartTitle").textContent = "2. Chart: Election results only";
     }
 
+    // ===== MAIN REFRESH FUNCTION =====
+    /**
+     * Main function to update all visualizations based on current filters
+     * Called whenever the time period or party selection changes
+     */
     function refresh() {
         const subtitle = document.getElementById("subtitle");
         const scatterTitle = document.getElementById("scatterTitle");
         const scatterCard = document.getElementById("scatterCard");
         const combinedCard = document.getElementById("combinedCard");
 
+        // Handle comparison view (both years)
         if (currentPeriod === "both") {
             subtitle.textContent = "View: 2025 vs. 2021";
             renderTableBoth();
@@ -1287,19 +1488,22 @@
             }
             combinedCard.classList.add("hidden");
             document.getElementById("combinedChartTitle").textContent = "—";
-            // Show scatter card
+
+            // Show scatter card for comparison view
             scatterCard.classList.remove("hidden");
 
-            // Render posts and election charts for both years
+            // Render comparison charts for both years
             renderPostsChartBoth();
             renderElectionChartBoth();
 
-            // Party charts for both years
+            // Render individual party charts
             renderPartyCharts();
             return;
         }
 
-        // Scatter ausblenden
+        // Handle single year view (2021 or 2025)
+
+        // Hide scatter plot in single year view
         if (scatterChart) {
             scatterChart.destroy();
             scatterChart = null;
@@ -1307,13 +1511,16 @@
         scatterTitle.classList.add("hidden");
         const saveBtn = document.getElementById("saveScatterBtn");
         if (saveBtn) saveBtn.classList.add("hidden");
+
         // Hide scatter card and show combined card in single-year view
         scatterCard.classList.add("hidden");
         combinedCard.classList.remove("hidden");
 
+        // Determine which year's data to display
         const year = currentPeriod === "first" ? 2025 : 2021;
         const rows = currentPeriod === "first" ? dataStore.posts2025 : dataStore.posts2021;
 
+        // Update UI and render all visualizations for the selected year
         subtitle.textContent = `View: ${year}`;
         renderTableSingle(rows, year);
         renderPie(rows, year);
@@ -1322,6 +1529,11 @@
         renderPartyCharts();
     }
 
+    // ===== EVENT LISTENERS =====
+    /**
+     * Event listener for the election period dropdown
+     * Updates the current period and refreshes all visualizations
+     */
     document.getElementById("dataset").addEventListener("change", (e) => {
         const v = e.target.value;
         currentPeriod = (v === "both") ? "both" : (v === "second" ? "second" : "first");
